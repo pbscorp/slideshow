@@ -1,0 +1,8 @@
+QM1: Which calendar, introduced in 1582, is responsible for establishing January 1st as New Year's Day in most of the world?
+CM1: A) Julian Calendar, B) Mayan Calendar, C) Gregorian Calendar, D) Lunar Calendar
+AM1: C) Gregorian Calendar. It was introduced by Pope Gregory XIII in 1582 to correct inaccuracies in the Julian calendar.
+QM2: In what year was the first-ever "ball drop" held in New York City's Times Square?
+CM2: A) 1900, B) 1907, C) 1920, D) 1945
+AM2: B) 1907. The first ball was made of iron and wood, weighing 700 pounds and featuring 100 25-watt light bulbs.
+
+

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex’s Toastmasters Icebreaker: From Wayne’s Fields to 2090’s Future</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Helvetica Neue', sans-serif;
+            background: #1a1a2e;
+            color: #ffffff;
+            overflow: hidden;
+        }
+        .slideshow-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .slide.active {
+            display: block;
+        }
+        .title {
+            font-size: 36px;
+            color: #00b7eb; /* Neon blue */
+            margin: 20px;
+        }
+        .subtitle, .text, .quote, .call-to-action, .contact {
+            font-size: 24px;
+            color: #ffffff;
+            margin: 10px;
+            margin-bottom: 5px;
+        }
+        .bullets {
+				margin-top: 80px;
+            text-align: left;
+            font-size: 26px;
+            color: #ffffff;
+            max-width: 40%;
+            margin-left: 10px;
+        }
+			ul {
+  				display: flex;
+ 				flex-direction: column;
+  				gap: 3rem;
+			}
+        .footer {
+            font-size: 18px;
+            color: #00ff85; /* Neon green */
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+        }
+        .icon, .image {
+            max-width: 50%;
+            position: absolute;
+            right: 20px;
+            top: 20%;
+        }
+        .image1 {
+            max-width: 50%;
+            position: absolute;
+            left: 20px;
+            top: 20%;
+        }
+        .logo {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 100px;
+        }
+			.image-text-container {
+  				display: flex; /* Make it a flex container */
+  				align-items: center; /* Center items vertically */
+  				justify-content: center; /* Center items horizontally */
+  				/* Add other styles like width, height, etc. for the container */
+			}
+			.image-text-container img {
+  				display: inline-block; /* Display images in line */
+  				vertical-align: middle; /* Align images vertically */
+  				/* Adjust image sizes and add margins as desired */
+  				width: 50%; /* Example width, adjust as needed */
+  				margin: 0 10px; /* Example margin */
+			}
+			.overlay-text {
+  				position: absolute;
+  				top: 80%; 
+  				left: 70%; 
+  				transform: translate(-50%, -50%); 
+  				//background-color: #000000; 
+  				color: white; 
+  				//padding: 10px 20px; 
+  				font-size: 30px; 
+  				text-align: right;
+  				white-space: nowrap;
+			}
+        .nav {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 10;
+        }
+        .nav button {
+            background: #00b7eb;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .nav button:hover {
+            background: #00ff85;
+        }
+        .volume-control {
+            margin: 5px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .fade-in {
+				 opacity: 0;
+            animation: fadeIn 2s ease-in-out forwards;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .pulse {
+            animation: pulse 1s infinite;
+        }
+        [aria-label] {
+            outline: none;
+        }
+        @media (max-width: 768px) {
+            .title { font-size: 24px; }
+            .subtitle, .text, .quote, .call-to-action, .contact { font-size: 18px; }
+            .bullets { font-size: 16px; max-width: 80%; }
+            .footer { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="slideshow-container">
+        <!-- Slide 1: Title Slide -->
+        <div class="slide" id="slide1">
+            <div class="title fade-in">From Wayne to 2090’s Future</div>
+            <div class="subtitle fade-in">Alex’s Toastmasters Icebreaker</div>
+            <div class="footer fade-in">Toastmasters 2090 – Wayne, NJ & Lunar Outposts</div>
+            <img class="logo" src="slide-03.jpeg" alt="Toastmasters 2090 Logo">
+            <div class="ximage" style="background: url('Slide-01.png') no-repeat center/cover; width: 100%; height: 100%; opacity: 0.7;"></div>
+            <audio id="audio1" src="Slide 01.m4a" aria-label="Slide 1 speech narration"></audio>
+        </div>
+
+        <!-- Slide 2: Welcome to My World -->
+        <div class="slide" id="slide2">
+            <div class="title fade-in">My Life in 2090</div>
+            <ul class="bullets">
+                <li class="fade-in">Retired data curator, shaping fair AI systems</li>
+                <li class="fade-in" style="animation-delay: 0.3s;">Living in Wayne’s smart city hub</li>
+                <li class="fade-in" style="animation-delay: 0.6s;">Neural interface, fusion-powered home, community mentor</li>
+            </. ul>
+            <img class="icon" src="images/neural-interface-brain.png" alt="Neural Interface Icon">
+            <img class="image" src="Slide-02.jpeg" alt="Futuristic Apartment">
+            <audio id="audio2" src="Slide 02.m4a" aria-label="Slide 2 speech narration"></audio>
+        </div>
+                               
+        <!-- Slide 3: Challenges of 2090 -->
+        <div class="slide" id="slide3">
+            <div class="title fade-in">Our World Today</div>
+            <ul class="bullets">
+                <li class="fade-in">Climate: Heatwaves, solar shades, carbon capture</li>
+                <li class="fade-in" style="animation-delay: 0.3s;">Digital divide: Neural interfaces vs. access gaps</li>
+                <li class="fade-in" style="animation-delay: 0.6s;">Mentoring kids to balance tech and humanity</li>
+            </ul>
+            <img class="icon" src="images/tech-equity-graph.png" alt="Tech Equity Graph">
+            <img class="image" src="Slide-03.png" alt="Community Hub">
+            <audio id="audio3" src="Slide 03.m4a" aria-label="Slide 4 speech narration"></audio>
+        </div>
+
+        <!-- Slide 4: Roots in Wayne, NJ -->
+        <div class="slide" id="slide4">
+            <div class="title fade-in">Born in 2020: Growing Up Near Wayne</div>
+            <ul class="bullets">
+                <li class="fade-in">Suburban fields and malls, pre-smart city</li>
+                <li class="fade-in" style="animation-delay: 0.3s;">Parents: Nurse and coder, teaching resilience</li>
+                <li class="fade-in" style="animation-delay: 0.6s;">Dreaming of space in VR adventures</li>
+            </ul>
+            <img class="icon" src="images/lunar-outpost-dome.png" alt="Lunar Outpost Icon">
+            <img class="image" src="Slide-04.jpeg" alt="Young Alex in VR">
+            <audio id="audio4" src="Slide 04.m4a" aria-label="Slide 3 speech narration"></audio>
+        </div>
+
+        <!-- Slide 5: Why Toastmasters? -->
+<div class="slide" id="slide5">
+            <div class="title fade-in">Finding My Voice at 70</div>
+            <ul class="bullets">
+                <li class="fade-in">Seeking unfiltered, human connection</li>
+                <li class="fade-in" style="animation-delay: 0.3s;">Physical and virtual club: A 2090 rebellion</li>
+                <li class="fade-in" style="animation-delay: 0.6s;">Goal: Lead discussions on lunar expansion, tech equity</li>
+            </ul>
+            <img class="icon" src="images/speech-bubble-my-voice.png" alt="Speech Bubble">
+            <img class="image" src="Slide-05.png" alt="Hybrid Meeting">
+            <audio id="audio5" src="Slide 05.m4a" aria-label="Slide 5 speech narration"></audio>
+        </div>
+
+        <!-- Slide 6: My Dream for the Future -->
+        <div class="slide" id="slide6">
+            <div class="title fade-in">Building Our Future with Words</div>
+            <div class="quote pulse">“Tech lights the way, but words build the world.”</div>
+            <div class="call-to-action fade-in">Join me in shaping 2090’s story!</div>
+            <img class="image1" src="Slide-06.jpeg" alt="Earth-Moon Connection">
+            <img class="image" src="Slide-06a.jpeg" alt="Alex Speaking">
+            <audio id="audio6" src="Slide 06.m4a" aria-label="Slide 6 speech narration"></audio>
+        </div>
+
+        <!-- Slide 7: Thank You -->
+        <div class="slide" id="slide7">
+            <div class="title fade-in">Thank You, Toastmasters!</div>
+            <div class="text fade-in">Let’s connect—on Earth or the Moon!</div>
+            <div class="contact fade-in">Contact: IWW.Alax-CommunityHub.is</div>
+				<div class="image-text-container">
+    				<img class="image1" src="Slide-07a.JPG" alt="Alex ID">
+            	<img class="image" src="Slide-07.jpeg" alt="Toastmasters Group">
+  					<div class="overlay-text">"It's Great to be a Toastmaster!"</div>
+				</div>
+            <audio id="audio7" src="Slide 07.m4a" aria-label="Slide 7 speech narration"></audio>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav">
+        <button onclick="prevSlide()">Previous</button>
+        <button onclick="nextSlide()">Next</button>
+        <button class="mute-toggle" onclick="toggleMute()" >Mute</button>
+        <input type="range" class="volume-control" min="0" max="1" step="0.1" value="0.5" onchange="adjustVolume(this.value)">
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 7;
+        let isMuted = false;
+
+        function showSlide(n) {
+            // Stop all audio
+            document.querySelectorAll('audio').forEach(audio => {
+                audio.pause();
+                audio.currentTime = 0;
+            });
+            // Hide all slides
+            document.querySelectorAll('.slide').forEach(slide => slide.classList.remove('active'));
+            // Show current slide
+            document.getElementById(`slide${n}`).classList.add('active');
+            // Play audio for current slide if not muted
+            const audio = document.getElementById(`audio${n}`);
+            if (audio && !isMuted) {
+                audio.volume = document.querySelector('.volume-control').value;
+                audio.play().catch(e => console.log('Audio play failed:', e));
+            }
+            currentSlide = n;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            document.querySelectorAll('audio').forEach(audio => audio.pause());
+            if (!isMuted && document.getElementById(`audio${currentSlide}`)) {
+                document.getElementById(`audio${currentSlide}`).play();
+            }
+            document.querySelector('.mute-toggle').textContent = isMuted ? 'Unmute' : 'Mute';
+        }
+
+        function adjustVolume(value) {
+            document.querySelectorAll('audio').forEach(audio => audio.volume = value);
+            if (!isMuted && document.getElementById(`audio${currentSlide}`)) {
+                document.getElementById(`audio${currentSlide}`).play();
+            }
+        }
+
+        // Auto-advance slides when audio ends
+        document.querySelectorAll('audio').forEach(audio => {
+            audio.addEventListener('ended', () => {
+                if (currentSlide < totalSlides) {
+                    nextSlide();
+                }
+            });
+        });
+
+        // Start with first slide
+        showSlide(1);
+
+        // How do I select all in word on an iPad interface trigger (2090 simulation)
+        window.addEventListener('neural-trigger', (e) => {
+            if (e.detail.command === 'next') nextSlide();
+            if (e.detail.command === 'prev') prevSlide();
+            if (e.detail.command === 'mute') toggleMute();
+            if (e.detail.command === 'volume' && e.detail.value) adjustVolume(e.detail.value);
+        });
+			toggleMute();
+
+    </script>
+</body>
+</html>
+

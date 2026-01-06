@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dynamic Table</title>
+  
+<style>
+    body {
+      background-color: #fff;
+      color: #000;
+      font-family: Arial, sans-serif;
+    }
+    .mediaButton { padding: 10px 20px; font-size: 18px; margin-right: 10px; }
+
+
+    #loginButton {
+      position: fixed;
+      top: 10px;
+      right: tttttt;
+      width: 48px;
+      height: 48px;
+      border-radius: 24px;
+      cursor: pointer;
+      background-image: url('media/signin_icon.jpeg');
+      /* your small icon */
+      background-size: cover;
+    }
+  </style>
+  <style>
+
+* {
+  box-sizing: border-box;
+}
+
+.flex-container {
+  display: flex;
+  align-items: top;
+  flex-wrap: wrap;
+}
+
+.flex-item1 {
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 18px;
+  text-align: center;
+  flex: 1 1 50%;
+  overflow: scroll;
+  display: block;
+
+}
+.flex-item2 {
+  background-color: #f1f1f1;
+  flex: 1 1 50%;
+  padding: 10px;
+  font-size: 14px;
+  text-align: left;
+  width: 100%;
+  max-height: 650px;
+  overflow: scroll;
+  display: block;
+}
+.flex-item2 h3 {
+    text-align: center;
+}
+
+@media (max-width: 600px) {
+  .flex-container {
+    flex-direction: column;
+  }
+}
+    table {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td,
+    th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #ddd;
+    }
+
+    th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #04AA6D;
+      color: white;
+    } 
+    .newEntry {
+      background-color: oklab(94.49% -0.03067 0.0074);
+      color: rgb(26, 88, 29);
+      border: 1px solid #ee0000;
+ 
+    }
+    .unused {
+      background-color: white(96.646% 0.00307 0.00084);
+      color: rgb(242, 18, 63);
+      border: 1px solid #ee0000;
+
+    }
+    .fade-target {
+    opacity: 0; /* Initially transparent */
+    transition: opacity 1.5s ease-in-out; /* Smooth transition over 1.5 seconds */
+    }
+
+    .fade-target.is-visible {
+      opacity: 1; /* Fully visible when this class is added */
+      
+    }
+
+    #mediaListTable tbody tr  th {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      text-align: left;
+      background-color: #92d4d9;
+      color: rgb(93, 48, 48);
+    }
+    #mediaUpload {
+      display: none;
+    }
+    tr {
+      transition: all 0.5s ease-in-out; 
+    }
+  </style>
+  <style>
+   .modal {
+    visibility: hidden;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top of other elements */
+    top: 40px;
+    max-width: 75%; 
+    max-height: 75%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(139, 215, 238, 0.938); /* light background with some transparency */
+    /* Center the modal content */
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+ .show {
+  visibility: visible;
+  display: inline-block;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+.hidden {
+  visibility: hidden;
+  display: none;
+}
+
+#toggleButton {
+    background-color: rgba(243, 227, 17, 0.958);
+    color-scheme: red;
+    border: 2px solid #c8f623;
+    border-radius: 50%;
+    font-weight: bold;
+}
+#authButton {
+  position:fixed;
+  top:10px;right:10px;
+  cursor:pointer;
+  font-size:25px;
+  background: #9acbb9;
+  color: #000;
+  border-radius: 50%; 
+  width: 35px;
+  height: 35px;
+  text-align: center;
+  vertical-align: middle;
+
+}
+  </style>
+</head>
+
+<body>
+  <!--
+  <img id="authButton" src="media/signin_icon.jpeg" alt="Login/Logout"
+    style="position:fixed;top:10px;right:10px;width:40px;height:40px;cursor:pointer;" />
+-->
+    <span  id="authButton">&#128100;</span>
+  <ul id="authMenu"
+    style="display:none;position:fixed;top:55px;right:10px;background:#fff;border:1px solid #ccc;padding:5px;">
+    <li id="loginOption" style="cursor:pointer;" title="login or create new account" >Login as Creator</li>
+    <li id="playerOption" style="cursor:pointer;" title="login or create new account" >Login as player</li>
+    <li id="logoutOption" style="cursor:pointer;">Logout</li>
+
+  </ul>
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.1/auth0-spa-js.production.js"></script>
+  <script src="js/initAuth0.js"></script>
+  <div id="contentArea" style="margin-top:5px; padding:10px; font-family:sans-serif;"></div>
+  <div id="table-container"></div>
+<script>
+  function openPopup(folder) {
+    //alert ('textFromPopup ' + textFromPopup); 
+    const popupWindow = window.open(`recordAudio.html?folder=${folder}`, 'Recorder', 'width=700, height=400');
+    console.log('open popup folder ' + folder);
+   // popupWindow.project = folder;
+}
+
+async function responseFromPopup(result) {
+     console.log('result from Recorder: ' + result);
+     const response = result.split(':');
+     if (response[0].trim() != "Success") {
+        alert('response from Recorder: ' + result);
+     } else {
+      await loadMediaList(response[2].split('/')[0].trim());
+      await hilightUnused();
+
+     }   
+}
+
+    async function createDynamicTable(type, headers, headersTitles, containerId, user) {
+      myUserType = type;
+      console.log('type = ' + myUserType);
+      console.log('player = ' + currentPlayer);
+      const container = document.getElementById(containerId);
+      if (!container) {
+        console.error(`Container with ID "${containerId}" not found.`);
+        return;
+      }
+      //alert(1.1);    
+      // Clear any existing content in the container
+      container.innerHTML = "";
+      const table = document.createElement('table');
+
+      const thead = document.createElement('thead');
+      const headerRow = document.createElement('tr');
+
+      headersTitles.forEach(headerText => {
+        const th = document.createElement('th');
+        th.textContent = headerText;
+        headerRow.appendChild(th);
+      });
+      if (user != "all") {
+        let th = document.createElement('th');
+        th.textContent = 'edit';
+        headerRow.appendChild(th);
+        th = document.createElement('th');
+        th.textContent = 'delete';
+        headerRow.appendChild(th);
+      };
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+      const tbody = document.createElement('tbody');
+      
+      if (!slidesExist || 1 ==1) {
+          slidesExist = await buildSlideshowArray();
+          console.log(slidesExist);
+          console.log(AllUsersArry.length);
+      }
+      let prevEmail = "";
+      let rowIndex = 0;
+      AllUsersArry.forEach(rowData => {
+        if (rowData.usersEmail != prevEmail) {
+          prevEmail = rowData.usersEmail;
+          rowIndex = 0;
+        }
+        const row = document.createElement('tr');
+        headers.forEach(headerText => {
+          const td = document.createElement('td');
+          if (headerText == "title") {
+            td.innerHTML = `<p><a href="${rowData.folder}/index.html" target="_self">${rowData.title}</a></p>`
+          } else {
+            td.textContent = rowData[headerText]; // 
+            console.log(' header text ' + headerText);
+            console.log(' td.textContent ' + td.textContent);
+          };
+          row.appendChild(td);
+        });
+        console.log(' td ' + td);
+        console.log(' user ' + user);
+        if (user != "all") {
+          var td = document.createElement('td');
+          td.innerHTML = `<p><button onclick="editSlideshow('${rowData.folder}')">Edit</button></p>`;
+          row.appendChild(td);
+          td = document.createElement('td');
+          td.innerHTML = `<p><button onclick="deleteFolder('${rowData.folder}')">delete</button></p>`;
+          row.appendChild(td);
+          console.log(' window.myUserIndex is ' + window.myUserIndex);
+        }
+        if (((user != "all") && (user != rowData.usersEmail))
+           || ((user == "all") && (!rowData.dateActive.trim() ))) {
+          console.log('ignoreing ' + user + ' ' + rowData.usersEmail);
+        } else {
+          tbody.appendChild(row);
+          noOfShows++;
+        }
+        rowIndex++;
+      });
+      table.appendChild(tbody);
+      // Append the table to the container
+      container.appendChild(table);
+      return true;
+    }
+  </script>
+
+  <script src="js/getHelp.js"></script>
+  <script defer src="js/editSlideShow.js"></script>
+
+  <script>
+    async function showPublicSlideshows() {
+      const content = document.getElementById("contentArea");
+      content.innerHTML = "<h2>🌐 Published Slideshows</h2>";
+      const myHeaders = ['title', 'folder', 'usersEmail'];
+      const myHeadersTitles = ['Slide Show', 'Name', 'by'];
+      await createDynamicTable('public', myHeaders, myHeadersTitles, 'table-container', 'all');
+    };
+
+    let currentUser = "";
+    
+    async function showUserDashboard(user) {
+      //alert("hey  10");
+      currentUser = user;
+      const content = document.getElementById("contentArea");
+          content.innerHTML = `<h2>👋🏻 Welcome ${user}</h2>
+            <p>Here are your slideshows:</p>`;
+          content.innerHTML += `
+            <p><button id='newBtn'>➕ Add Another Slideshow</button></p>`;
+      document.getElementById("newBtn").onclick = () => showProjectForm(user); 
+      const myHeaders = ['title', 'folder', 'usersEmail'];
+      const myHeadersTitles = ['Slide Show', 'folder', 'email'];
+      const response = await createDynamicTable('creator', myHeaders, myHeadersTitles, 'table-container', currentUser);
+    }
+    let currentPlayer = "";
+
+    async function showPlayerSlideshows(player) {
+      //alert("hey  10");
+      currentPlayer = player;
+
+      const content = document.getElementById("contentArea");
+          content.innerHTML = `<h2>👋🏻 Welcome Player ${player}</h2>
+            <p>Here are your slideshows:</p>`;
+         console.log('user = ' + currentUser);
+      const myHeaders = ['title', 'folder', 'usersEmail'];
+      const myHeadersTitles = ['Slide Show', 'folder', 'email'];
+      const response = await createDynamicTable('player', myHeaders, myHeadersTitles, 'table-container', 'all');
+    }
+
+  </script>
+
+  <script>
+    var AllUsersArry = []; // start empty
+    var userIndex = -1;
+    var myUserIndex;
+    var myUserIndexString = "999";
+    var usersEmail = "";
+    var slidesExist = false;
+    var noOfShows = 0;
+    var newUser = "true";
+
+    async function buildSlideshowArray() {
+      var usersArry = [];
+      var usersConfigArry = [];
+      var usersListArry = [];
+      AllUsersArry = []; // start empty
+      const response = await fetch("edscode-config-public.json?_=" + Date.now());
+      if (!response.ok) console.log("Cannot load config file ");
+      try {
+        const config = await response.json();
+        //alert(1.1);	
+        if (!config || config.length === 0) {
+          alert("No users found");
+        }
+        usersConfigArry = config.users;
+
+      } catch (error) {
+        alert(' error fetching public config file ' + error);
+      }
+      for (let i = 0; i < usersConfigArry.length; i++) {
+        //usersFolderArry = usersFoldersList.replace(/["']/g, '').split(',');
+
+        usersFolderArry = usersConfigArry[i].slideshowFoldersArray;
+        usersEmail = usersConfigArry[i].email;
+        if (currentUser == usersEmail) {
+          newUser = "false";
+          myUserIndex = i;
+
+        }
+          userIndex++;
+        for (let j = 0; j < usersFolderArry.length; j++) {
+          await getFolderConfilFile(usersFolderArry[j]);
+        };
+      };
+      console.log('return complete' + JSON.stringify(AllUsersArry));
+      return true;
+
+    }
+    async function getFolderConfilFile(folder) {
+      const response = await fetch(folder.trim() + "/config.json?_=" + Date.now());
+
+      if (!response.ok) console.log("Cannot load " + folder + " config file");
+      try {
+        const config = await response.json();
+        //alert(1.1);	
+        if (!config || config.length === 0) {
+          alert("No config found");
+        }
+        console.log(' config file folder ' + folder + ' email = ' + config.email + ' array ' + userIndex);
+        await addFolderArry(config);
+      } catch (error) {
+        //console.log(' error fetching directory ' + folder + ' config file ' + error);
+        return;
+      }
+      console.log('added to AllUsersArry ' + userIndex);
+      // console.log('AllUsersArry now ' + JSON.stringify(AllUsersArry));
+
+    }
+
+async function addFolderArry(folderArray) {
+    console.log("Work object:", JSON.stringify(folderArray));
+
+    // Add userIndex as a property to the object
+    folderArray.userIndex = userIndex;
+    folderArray.usersEmail = `${usersEmail}`;
+
+    console.log("Updated work object:", JSON.stringify(folderArray));
+
+    // Add it to the global work array
+    AllUsersArry.push(folderArray);
+
+    console.log("New object added:", JSON.stringify(folderArray));
+}
+</script>
+
+</body>
+
+</html>

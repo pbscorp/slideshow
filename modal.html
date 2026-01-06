@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+    body {
+      background-color: #fff;
+      color: #000;
+      font-family: Arial, sans-serif;
+    }
+    .mediaButton { padding: 10px 20px; font-size: 18px; margin-right: 10px; }
+
+
+    #loginButton {
+      position: fixed;
+      top: 10px;
+      right: tttttt;
+      width: 48px;
+      height: 48px;
+      border-radius: 24px;
+      cursor: pointer;
+      background-image: url('media/signin_icon.jpeg');
+      /* your small icon */
+      background-size: cover;
+    }
+  </style>
+  <style>
+
+* {
+  box-sizing: border-box;
+}
+
+.flex-container {
+  display: flex;
+  align-items: center;
+  border: 3px solid red;
+  flex-wrap: wrap;
+}
+
+.flex-item1 {
+  background-color: #f1f1f1;
+  border: 3px solid rgb(33, 94, 50);
+  padding: 10px;
+  font-size: 18px;
+  text-align: center;
+  flex: 1 1 50%;
+  max-height: 350px;
+  overflow: scroll;
+  display: block;
+
+}
+.flex-item2 {
+  background-color: #f1f1f1;
+  border: 3px solid rgb(23, 37, 222);
+  flex: 1 1 50%;
+  padding: 10px;
+  font-size: 14px;
+  text-align: left;
+  width: 100%;
+  max-height: 350px;
+  overflow: scroll;
+  display: block;
+}
+.flex-item2 h3 {
+    text-align: center;
+}
+
+/* On screens that are 400px wide or less, make the columns stack on top of each other instead of next to each other */
+@media (max-width: 600px) {
+  .flex-container {
+    flex-direction: column;
+  }
+}
+    table {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td,
+    th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #ddd;
+    }
+
+    th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #04AA6D;
+      color: white;
+    } 
+    .newEntry {
+      background-color: oklab(94.49% -0.03067 0.0074);
+      color: rgb(26, 88, 29);
+      border: 1px solid #ee0000;
+ 
+    }
+    .unused {
+      background-color: white(96.646% 0.00307 0.00084);
+      color: rgb(242, 18, 63);
+      border: 1px solid #ee0000;
+
+    }
+    .fade-target {
+    opacity: 0; /* Initially transparent */
+    transition: opacity 1.5s ease-in-out; /* Smooth transition over 1.5 seconds */
+    }
+
+    .fade-target.is-visible {
+      opacity: 1; /* Fully visible when this class is added */
+      
+    }
+
+    #mediaListTable tbody tr  th {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      text-align: left;
+      background-color: #92d4d9;
+      color: rgb(93, 48, 48);
+    }
+    #mediaUpload {
+      display: none;
+    }
+    tr {
+      transition: all 0.5s ease-in-out; /* Smooth transition for all properties over 0.5 seconds */
+    }
+   
+    #downloadLink { display: block; margin-top: 15px; font-size: 18px; }
+
+  </style>
+  <style>
+   .modal {
+    visibility: hidden;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top of other elements */
+    top: 40px;
+    width: 75%; /* Full width */
+    height: 75%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(139, 215, 238, 0.638); /* light background with some transparency */
+    /* Center the modal content */
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+ .show {
+  visibility: visible;
+  display: inline-block;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+.hidden {
+  visibility: hidden;
+  display: none;
+}
+
+#toggleButton {
+    background-color: rgba(243, 227, 17, 0.958);
+    border: 2px solid #c8f623;
+    border-radius: 50%;
+
+
+}
+  </style>
+</head>
+<body style="text-align:left">
+
+<h2>Popup</h2>
+   
+<div id="contentArea" style="margin-top:5px; padding:10px; font-family:sans-serif;">
+    <h2>Editing Jokes</h2>
+        <button onclick="showUserDashboard(currentUser)">← Done</button>
+        <span class="modal" id="myPopup" onclick="myFunction()"></span>
+        <h3>Slide name: text <button id="toggleButton" onclick="myFunction()">💡</button></h3>
+        <textarea id="textEditor" rows="8" style="width:100%"></textarea><br>
+        <button id="saveTextBtn">Save Text</button> 
+        <div class="flex-container">
+            <div class="flex-item1" id = "editMediaDiv">
+                <h3>Media Files</h3>
+                <label for="recordAudioButton">Record Audio: </label>
+                <button id="recordAudioButton" onclick="openPopup('${folder}')" >🎙️</button>
+                <label for="mediaUpload">Select file: 📁</label>
+                <input type="file" id="mediaUpload" multiple><br>
+                <label for='"uploadMediaBtn" id="uploadMediaLbl" style='display:none' > Upload Selected>:</label>
+                <button id="uploadMediaBtn" style='display:none'>⬆️</button>
+                <div id="mediaList">
+                </div>
+            </div>
+        <div class="flex-item2" id = "editConfigDiv">
+            <h3>Slideshow Configuration</h3>
+            <form id="configForm">
+                <table>
+                <tr>
+                    <td><label for="configTitle">title:</label></td>
+                    <td><input type="text" id="configTitle"></input></td>
+                </tr>
+                <tr>
+                    <td><label for="configDescription">Description:</label></td>
+                    <td><textarea id="configDescription"></textarea></td>
+                </tr>
+                <tr>
+                    <td><label for="configTheme">Theme:</label></td>
+                    <td><input type="text" id="configTheme" value="default"></td>
+                </tr>
+                <tr>
+                    <td><label for="configDate">Date Active:&nbsp;&nbsp;&nbsp;</label></td>
+                    <td><input type="date" readonly id="configDate" style='display:none' value=""></input></td>
+                </tr>
+                <tr>
+                    <td><label for="configWebsite">related Website:</label></td>
+                    <td><input type="text" id="configWebsite" value=""></input></td>
+                </tr>
+                <tr>
+                    <td><label for="configAbout">about:</label></td>
+                    <td><textarea id="configAbout"></textarea></td>
+                </tr>
+                <tr>
+                    <td><label for="configPublic">make Public:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                    <input type="checkbox" id="configPublic"></td>
+                    <td>
+                    <button type="submit">Update Slideshow</button>
+                    <button type="button" onclick="showUserDashboard(currentUser)">Cancel</button> 
+                    </td>
+                </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</div>
+     
+<script>
+// When the user clicks on div, open the popup
+function myFunction() {
+    var myModal = document.getElementById("myPopup");
+    //alert(myModal.classList);
+    myModal.classList.toggle("show");
+    //alert(myModal.classList);
+    if (!myModal.classList.contains("hidden")) {
+        myModal.innerHTML = "12345678901234567890 123456789012345678901 234567890123456789012345678901234567890";
+    }
+}
+</script>
+
+</body>
+</html>

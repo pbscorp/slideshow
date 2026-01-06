@@ -1,0 +1,40 @@
+Q1: What defines a planet in the universe?  
+A1: A planet is a celestial body that orbits a star, is massive enough to be rounded by its own gravity, and has cleared its orbital path of other debris.
+Q2: Which planet is the largest in our solar system?
+A2: Jupiter is the largest, with a diameter of about 143,000 kilometers and a mass more than twice that of all other planets combined.
+Q3: What planet is known for all of its rings?  
+A3: Saturn is famous for its stunning system of rings made mostly of ice and rock particles.
+Q4: Which planet is closest to the Sun?  
+A4: Mercury holds that title, orbiting the Sun in just 88 Earth days.
+Q5: What makes Venus so inhospitable?  
+A5: Its thick atmosphere traps heat through a runaway greenhouse effect, making it hotter than Mercury despite being farther from the Sun.
+Q6: How many planets are in our solar system?  
+A6: There are eight officially recognized planets—from Mercury to Neptune.
+Q7: What’s the coldest planet in the solar system?  
+A7: Neptune is the coldest, with average temperatures around -200°C due to its distance from the Sun.
+Q8: Are there planets beyond our solar system?  
+A8: Yes—thousands of exoplanets have been discovered orbiting distant stars.
+Q9: Which planet is known as the Red Planet?  
+A9: Mars, due to its iron-rich soil which gives the surface a reddish hue.
+Q10: What planet has the most moons?  
+A10: Jupiter leads the count with over 90 known moons.
+Q11: What’s Earth’s position in the solar system?  
+A11: Earth is the third planet from the Sun and the only one known to support life.
+Q12: Which planet has seasons like Earth?  
+A12: Mars has similar seasonal patterns due to its tilted axis, though they last longer.
+Q13: What is a gas giant?  
+A13: A gas giant is a large planet made mostly of hydrogen and helium, like Jupiter and Saturn.
+Q14: Which planets are considered ice giants?  
+A14: Uranus and Neptune, due to their icy compositions of water, ammonia, and methane.
+Q15: Can planets orbit more than one star?  
+A15: Yes, some exoplanets orbit binary or multiple star systems.
+Q16: What’s a terrestrial planet?  
+A16: These are rocky planets with solid surfaces—Mercury, Venus, Earth, and Mars.
+Q17: Which planet rotates the fastest?  
+A17: Jupiter, completing one rotation in just under 10 hours.
+Q18: Do planets emit light?  
+A18: No, they reflect the light of their host star; only stars emit their own light.
+Q19: Which planet spins sideways?  
+A19: Uranus has a tilted axis of about 98°, causing it to essentially roll around the Sun.
+Q20: How do planets form?  
+A20: They form from disks of gas and dust around young stars, gradually coalescing over millions of years.

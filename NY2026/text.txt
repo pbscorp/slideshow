@@ -1,0 +1,60 @@
+QM1: Which calendar, introduced in 1582, is responsible for establishing January 1st as New Year's Day in most of the world?
+CM1: A) Julian Calendar, B) Mayan Calendar, C) Gregorian Calendar, D) Lunar Calendar
+AM1: C) Gregorian Calendar. It was introduced by Pope Gregory XIII in 1582 to correct inaccuracies in the Julian calendar.
+QM2: In what year was the first-ever "ball drop" held in New York City's Times Square?
+CM2: A) 1900, B) 1907, C) 1920, D) 1945
+AM2: B) 1907. The first ball was made of iron and wood, weighing 700 pounds and featuring 100 25-watt light bulbs.
+QM3: Which country is traditionally the first to ring in the New Year due to its location near the International Date Line?
+CM3: A) New Zealand, B) Australia, C) Kiribati, D) Japan
+AM3: C) Kiribati. Specifically, the Line Islands (Kiritimati) are the first inhabited place on Earth to see the new year.
+QM4: What is the most common traditional food eaten in the Southern United States on New Year's Day for good luck?
+CM4: A) Cornbread, B) Black-eyed peas, C) Fried chicken, D) Mashed potatoes
+AM4: B) Black-eyed peas. Often served as "Hoppin' John," they are traditionally eaten with greens to represent luck and wealth.
+QM5: Which famous Scottish song is traditionally sung at midnight to bid farewell to the old year?
+CM5: A) Danny Boy, B) Loch Lomond, C) Auld Lang Syne, D) Skye Boat Song
+AM5: C) Auld Lang Syne. The title roughly translates to "times gone by" and was popularized by poet Robert Burns in 1788.
+QM6: In Spain, it is a tradition to eat twelve of what specific fruit at the stroke of midnight?
+CM6: A) Cherries, B) Grapes, C) Olives, D) Strawberries
+AM6: B) Grapes. One grape is eaten for each chime of the clock to bring good luck for each of the twelve months ahead.
+QM7: What was the first year that the Times Square ball did NOT drop since the tradition began?
+CM7: A) 1918, B) 1942, C) 1963, D) 2020
+AM7: B) 1942. The ceremony was suspended in 1942 and 1943 due to "dim-out" light restrictions in New York City during World War II.
+QM8: In ancient Rome, which month was the new year originally celebrated in before January?
+CM8: A) March, B) June, C) August, D) October
+AM8: A) March. The early Roman calendar began with the spring equinox, which is why September through December have names based on numbers 7 through 10.
+QM9: The Tournament of Roses Parade, held every New Year's Day, takes place in which California city?
+CM9: A) San Francisco, B) San Diego, C) Pasadena, D) Los Angeles
+AM9: C) Pasadena. The parade first began in 1890 as a way for the Valley Hunt Club to showcase the city's mild winter weather.
+QM10: What is the Dutch tradition of "Nieuwjaarsduik" that thousands of people participate in on January 1st?
+CM10: A) A giant feast, B) A polar bear plunge into the sea, C) A marathon run, D) Burning old Christmas trees
+AM10: B) A polar bear plunge. Since 1965, thousands have gathered at Scheveningen beach to dive into the freezing North Sea.
+QM11: According to statistics, what is the most common New Year's resolution made each year?
+CM11: A) Saving money, B) Learning a new hobby, C) Exercising/Losing weight, D) Traveling more
+AM11: C) Exercising/Losing weight. Health-related goals consistently top the list of resolutions in the U.S. and Europe.
+QM12: Which island nation is among the last places on Earth to celebrate the New Year?
+CM12: A) American Samoa, B) Hawaii, C) Fiji, D) Iceland
+AM12: A) American Samoa. It sits just on the other side of the International Date Line from its neighbor, Samoa.
+QM13: In Greek tradition, what is hidden inside the "Vasilopita" (New Year's Cake)?
+CM13: A) A ring, B) A coin, C) A bean, D) A small toy
+AM13: B) A coin. Whoever finds the coin in their slice is said to have good luck for the entire year.
+QM14: What is the name of the Roman God of beginnings and transitions, for whom the month of January is named?
+CM14: A) Jupiter, B) Mars, C) Janus, D) Saturn
+AM14: C) Janus. He is typically depicted with two faces, one looking back at the past and one looking forward to the future.
+QM15: In Scotland, the "First Footing" tradition says the first person to cross your threshold after midnight should be a male carrying what?
+CM15: A) A bottle of water, B) A piece of coal, C) A loaf of bread, D) A silver coin
+AM15: B) A piece of coal. This signifies that the house will be warm and prosperous in the coming year.
+QM16: Which city hosts the famous "Mummers Parade" every New Year's Day?
+CM16: A) Boston, B) Chicago, C) Philadelphia, D) New Orleans
+AM16: C) Philadelphia. The Mummers Parade is the oldest continuous folk parade in the United States, dating back to 1901.
+QM17: In what year did January 1st officially become the start of the New Year in the British Empire?
+CM17: A) 1066, B) 1550, C) 1752, D) 1800
+AM17: C) 1752. Before this change (the Calendar Act of 1751), the English New Year actually began on March 25th (Lady Day).
+QM18: What material was the current Waterford Crystal Times Square ball made of for the 2000 millennium celebration?
+CM18: A) Plastic, B) Glass, C) Crystal, D) Aluminum
+AM18: C) Crystal. The ball was redesigned for the year 2000 using 2,688 Waterford Crystal triangles.
+QM19: In Japan, what is the traditional "Bell Ringing" ceremony called that happens 108 times at temples?
+CM19: A) Joya no Kane, B) Hanami, C) Setsubun, D) Obon
+AM19: A) Joya no Kane. The bell is struck 108 times to banish the 108 human sins/desires and purify the soul for the new year.
+QM20: Which European country has a New Year's tradition of throwing old furniture out of the window?
+CM20: A) Italy, B) France, C) Germany, D) Sweden
+AM20: A) Italy. In some parts of Southern Italy, particularly Naples, people throw old pots and pans or furniture out the window to symbolize letting go of the past.

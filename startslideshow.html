@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script>
+	const queryString = window.location.search;
+	// Define the base URL and parameters
+	const urlParams = new URLSearchParams(queryString);
+	function forceReload() {
+		var url = window.location.href;
+		window.location.href = url + '&noCache=' + new Date().getTime();
+	}
+	var noCache = urlParams.get('noCache');
+	if (!noCache) {
+		forceReload();
+		window.close;
+	}
+
+</script>
+	<link rel="stylesheet" href="css/slideshow.css">
+</head>
+<div class="loader"></div>
+
+<script src="js/escapeHTML.js"></script>
+
+<script>			
+	var projName = urlParams.get('projName');
+	//alert("projName  " + projName);
+	if (!projName) {
+		projName = urlParams.get('ProjName');
+		//alert("ProjName  " + projName);
+	}
+	var txtHTMLdata = "";
+	const targetPage = "slideshowV100825.html?" + '&noCache=' + new Date().getTime();
+	//projName = "DTS";
+	// projName = "planets";
+	// projName = "Israel";
+	//projName = "Jokes";
+	//projName = "DTS";
+	//const project = "McFloon";  // or dynamic
+	//const myList = ["apple", "banana", "cherry"];
+
+ async function checkFileExists(filePath) {
+    try {
+        const response = await fetch(filePath, { method: 'HEAD' });
+        //alert(`Response for ${filePath}: Status ${response.status}, OK: ${response.ok}`);
+        if (response.ok) {
+         //   Fetch the content to check if it’s a real file or default page
+            const contentResponse = await fetch(filePath);
+            const text = await contentResponse.text();
+					
+           if (text.includes('<html>') || text.includes('<head>')) {
+              //alert(`File ${filePath} is a default page, not a real file`);
+              return false;
+            } else {
+               //alert(`File ${filePath} exists`);
+              
+					return true;
+            } 
+        }
+    } catch (error) {
+        alert(`Error checking ${filePath}: ${error.message}`);
+			if (error.message == "Load Failed") { // ignore this error
+				return true;
+			} else {
+        		return false;
+			}
+    }
+
+}
+	var aryMediaFiles = {}; // start empty
+
+	async function getFileExtention() {
+  
+	const aryValidSoundFileExt = ['.dff','.wav','.m4a', '.mp3', '.ogg', '.opus',
+									'.DFF','.WAV','.M4A', '.MP3', '.OGG', 'OPUS'];
+
+  	const aryValidImageFileExt = ['.jpeg','.jpg', '.png',
+								'.JPEG','.JPG', '.PNG',];
+ 
+  	const aryValidVideoFileExt = 
+		['.mp4', '.mov', '.wmv', '.avi', '.mkv', '.flv', 'mpeg',
+		 '.MP4','','.MOV', '.WMV', '.AVI', '.MKV', '.FLV', 'MPEG',
+		 '.m4v', '.webm', '.ogv', '.3gp', '.3g2', '.ts', 'mts',
+		 '.M4V', '.WEBM', '.OGV', '.3GP', '.3G2', '.TS', 'MTS'];
+		//alert("aryValidVideoFileExt = " + aryValidVideoFileExt);
+	 aryMediaFiles = {}; // start empty
+	const aryMediaExt = [];
+	
+  //alert("2.1.0");
+async function getMediaList(folder) {
+  //alert("2.1.1");
+  const project = folder;  // or dynamic
+  const response = await fetch(`getMediaList.php?project=${encodeURIComponent(project)}`);
+  const list = await response.json();
+  //alert("Loaded list:" + list);
+  return list;
+  }
+
+	var txtData = "";
+
+	var fileName = "";
+	const pushToArray = async function (myFileName, myExt, myValidExtentions, myMedia) {		//alert(" myMedia = " + myMedia);
+  		// If this media type doesn't exist, set it up as [ [], [] ]
+  		if (!aryMediaFiles[myMedia]) {
+    		aryMediaFiles[myMedia] = [ [], [] ];
+  		}
+
+ 
+      //var correctExt = "not found";
+   
+      for (let i = 0; i < myValidExtentions.length; i++) {
+         let fileExt = myValidExtentions[i];
+
+
+			//alert("projName " + projName);
+			let fileName = `${projName}/media/${myFileName}`;
+
+		 		//alert("Checking: " + fileName + fileExt);
+  		
+    		  
+      		//let exists = await checkFileExists(fileName + fileExt);
+        		//alert("Result: " + exists);
+    
+       
+        if ('.' + myExt == fileExt) {
+          //correctExt = fileExt;
+          aryMediaFiles[myMedia][0].push (fileName);
+          aryMediaFiles[myMedia][1].push (fileExt);
+
+          //alert("FOUND! in myMedia = " + myMedia + " " + myFileName + fileExt);
+			 //alert(aryMediaFiles[myMedia][0]);
+          break; // stop once found
+        }
+		
+		}
+		
+	};
+
+
+  try {
+	
+    // Fetch and parse the text file
+    const response = await fetch(projName + '/text.txt');
+    //alert("Fetched text.txt, status: " + response.status);
+	//alert(2);
+	const jsonMediaList = await getMediaList(projName);
+	const mediaList = JSON.parse(jsonMediaList);
+
+	//alert(mediaList);
+	
+
+    const data = await response.text();
+    //alert("File loaded. Length: " + data.length);
+	 txtHTMLdata = escapeHTML(data);
+	 
+    const lines = txtHTMLdata.trim().split('\n');
+    		//alert("Number of lines: " + lines.length);
+	 
+    //const mediaList = getMedisList();
+	 //alert('mediaList.length ' + mediaList.length);
+    for (let j = 0; j < mediaList.length; j++) {
+      let line = mediaList[j].trim();
+       //alert("Processing line " + j + ": " + line);
+      let fileName = `${line.split('.')[0]}`;
+ 		let fileExt = `${line.split('.')[1]}`;
+ 		// alert (fileName + '.' + fileExt);
+		await pushToArray(fileName, fileExt, aryValidImageFileExt, "image");
+		await pushToArray(fileName, fileExt, aryValidSoundFileExt, "sound");
+		await pushToArray(fileName, fileExt, aryValidVideoFileExt, "video");
+
+	}
+ 	 //await pushToArray("default", 'jpeg', aryValidImageFileExt, "image");
+	 //await pushToArray("default", 'jpeg', aryValidSoundFileExt, "sound");
+
+
+/*
+		alert(" all images = " + aryMediaFiles["image"][0]);
+		alert(" all image ext " + aryMediaFiles['image'][1]);
+
+		alert(" all video = " + aryMediaFiles["video"][0]);
+		alert(" all video ext " + aryMediaFiles['video'][1]);
+
+		alert(" all sound = " + aryMediaFiles["sound"][0]);
+		alert(" all sound ext " + aryMediaFiles['sound'][1]);
+*/
+ const payload = {
+  projName,
+  txtHTMLdata,
+  aryMediaFiles
+};
+
+// Store the JSON in sessionStorage
+sessionStorage.setItem("slideshowData", JSON.stringify(payload));
+
+// Navigate to the slideshow page
+	window.location.href = targetPage;
+	//window.open(targetPage, projName);
+  } catch (err) {
+    alert("catch Error: " + err.message);
+  }
+}
+
+getFileExtention();
+
+
+
+// Redirect the user
+
+	</script>
+</body>
+</html>	
