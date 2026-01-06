@@ -1,3 +1,23 @@
+# macOS system files
 .DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Clipboard / pasteboard temp files
+.com.apple.Pasteboard.*
+
+# iCloud placeholders
+*.icloud
+
+# Finder metadata
+.Spotlight-V100
+.Trashes
+
+# VS Code
 .vscode/
+
+# Node / build artifacts (if applicable)
 node_modules/
+dist/
+build/
