@@ -156,7 +156,7 @@
 
         function uploadRecording() {
             const formData = new FormData();
-            formData.append("audioFile", audioBlob, "recording_audio.opus");
+            formData.append("audioFile", audioBlob, "recording_audio.m4a");
             fetch(`uploadRecording.php?folder=${folder}`, {
                 method: "POST",
                 body: formData
