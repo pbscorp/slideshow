@@ -510,11 +510,11 @@ function removeFromSlideshowList(msg, path) {
   //alert(msg);
   if (msg.split(':')[0] != "success") {
     alert("folder" + path + ' not removed, will not remove from Array ');
+    console.log('delete folder fetch msg = ' + msg);
   } else {
     console.log('folder ' + path + ' removed, will now remove fromArray ' + myUserIndex);
     deleteSlideshowFolder(path);// index of users array in config file
     console.log('folder  removed');
-
     showUserDashboard(currentUser);
   };
 

@@ -1,124 +1,126 @@
 <!DOCTYPE html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Question & Answer Slideshow with Sequential Backgrounds</title>
-	<link rel="stylesheet" href="css/slideshow.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Question & Answer Slideshow with Sequential Backgrounds</title>
+  <link rel="stylesheet" href="css/slideshow.css">
 
-</head>	   
+</head>
+
 <body>
-<div id="initSlide" class='background-slde' style="background-image: url('media/default.jpeg');">
-	<div class="slide-container" id="slideContainer">
-		<div id="slide" class="slide active other-slide "></div>
-	</div>  
-</div>
+  <div id="initSlide" class='background-slde' style="background-image: url('media/default.jpeg');">
+    <div class="slide-container" id="slideContainer">
+      <div id="slide" class="slide active other-slide "></div>
+    </div>
+  </div>
 
-<div id="overlay" class="overlay-text title-slide"></div>
+  <div id="overlay" class="overlay-text title-slide"></div>
 
-<button class="nav-button prev" onclick="changeSlide(-1)">❮</button>
-<button id="nextButton" class="nav-button next" onclick="changeSlide(1)">❯</button>
-<button class="start-button mute-button" disabled id="start" onclick="startSlideshow()">open</button>
-<script src="js/escapeHTML.js"></script>
+  <button class="nav-button prev" onclick="changeSlide(-1)">❮</button>
+  <button id="nextButton" class="nav-button next" onclick="changeSlide(1)">❯</button>
+  <button class="start-button mute-button" disabled id="start" onclick="startSlideshow()">open</button>
+  <script src="js/escapeHTML.js"></script>
 
-<div id="customConfirmModal" class="modal">
+  <div id="customConfirmModal" class="modal">
     <!-- Modal content -->
     <div class="modal-content">
-        <div class="modal-header">
-            <h2>Confirmation</h2>
-        </div>
-        <div class="modal-body">
-            <p>Are you sure you want to proceed with this action?</p>
-        </div>
-        <div class="modal-footer">
-            <button id="cancelButton" class="btn cancel">Cancel</button>
-            <button id="confirmButton" class="btn confirm">Confirm</button>
-        </div>
+      <div class="modal-header">
+        <h2>Confirmation</h2>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to proceed with this action?</p>
+      </div>
+      <div class="modal-footer">
+        <button id="cancelButton" class="btn cancel">Cancel</button>
+        <button id="confirmButton" class="btn confirm">Confirm</button>
+      </div>
     </div>
-</div>
-
-
-
-
-
-
-
-
-<div id="alertOverlayID" class="alertOverlay hidden">
-  <div class="alertBox" role="alertdialog" aria-modal="true">
-    <p id="alertText"></p>
-    <button onclick="closeAlert()">OK</button>
   </div>
-</div>
 
-<script>
-function showAlert(message) {
-  document.getElementById("alertText").innerHTML = message;
-  document.getElementById("alertOverlayID").classList.remove("hidden");
-}
 
-function closeAlert() {
-  document.getElementById("alertOverlayID").classList.add("hidden");
-}
 
-</script>
- <script>
-  //showAlert('Hello there');
-  let currentSlide = 0;
-  let isMuted = false;
-  let slides = [];
-  let audioElements = []; // Array to store audio elements
-  let videoElements = []; // Array to store audio elements
-  let isStarted = false; // Flag to track if slideshow has started
-  let isMedia = false;
-  let isAudio = false;
-  let hasImage = false;		
-  var ssData = '';
-  var playlist = [];
-  let muteButton = document.querySelector('.start-button');
-  const rawData = sessionStorage.getItem("slideshowData");
-  if (rawData) {
-   ssData = JSON.parse(rawData);
-  } else {
-    alert("No slideshow data found in sessionStorage.");
-  }
-  const projName = ssData.projName;			const txtData = unescapeHTML(ssData.txtHTMLdata);
-  var g_audioFailed = false;
-  const text = txtData.trim().split('\n');
-</script>
-<script>         	
-		setMuteButton = function () {
-			//const muteButton = document.querySelector('.mute-toggle');
-			muteButton.classList.remove('mute');
-			muteButton.classList.remove('unmute');
-			muteButton.classList.add(!isMuted ? 'unmute' : 'mute');
-			muteButton.textContent = isMuted ? 'Unmute' : 'Mute';
-		}	
-</script>         	
-<script>         	
-	toggleMute = function () {
-    isMuted = !isMuted;
-    setMuteButton();
-    if (isMedia) {
-      if (isMuted) {
-        audioElements[currentSlide].pause();
-        if (isVideo) {
-          muteVideo();
+
+
+
+
+
+  <div id="alertOverlayID" class="alertOverlay hidden">
+    <div class="alertBox" role="alertdialog" aria-modal="true">
+      <p id="alertText"></p>
+      <button onclick="closeAlert()">OK</button>
+    </div>
+  </div>
+
+  <script>
+    function showAlert(message) {
+      document.getElementById("alertText").innerHTML = message;
+      document.getElementById("alertOverlayID").classList.remove("hidden");
+    }
+
+    function closeAlert() {
+      document.getElementById("alertOverlayID").classList.add("hidden");
+    }
+
+  </script>
+  <script>
+    //showAlert('Hello there');
+    let currentSlide = 1;
+    let isMuted = false;
+    let slides = [];
+    let audioElements = []; // Array to store audio elements
+    let videoElements = []; // Array to store audio elements
+    let isStarted = false; // Flag to track if slideshow has started
+    let isMedia = false;
+    let isAudio = false;
+    let hasImage = false;
+    var ssData = '';
+    var playlist = [];
+    let muteButton = document.querySelector('.start-button');
+    const rawData = sessionStorage.getItem("slideshowData");
+    if (rawData) {
+      ssData = JSON.parse(rawData);
+    } else {
+      alert("No slideshow data found in sessionStorage.");
+    }
+    const projName = ssData.projName; const txtData = unescapeHTML(ssData.txtHTMLdata);
+    var g_audioFailed = false;
+    const text = txtData.trim().split('\n');
+  </script>
+  <script>
+    setMuteButton = function () {
+      //const muteButton = document.querySelector('.mute-toggle');
+      muteButton.classList.remove('mute');
+      muteButton.classList.remove('unmute');
+      muteButton.classList.add(!isMuted ? 'unmute' : 'mute');
+      muteButton.textContent = isMuted ? 'Unmute' : 'Mute';
+    }	
+  </script>
+  <script>
+    toggleMute = function () {
+      isMuted = !isMuted;
+      setMuteButton();
+      if (isMedia) {
+        if (isMuted) {
+          audioElements[currentSlide].pause();
+          if (isVideo) {
+            muteVideo();
+          }
+        } else {
+          audioElements[currentSlide].play();
+          audioElements[currentSlide].onended = () => { changeSlide(1); };
+          if (isVideo) {
+            unMuteVideo();
+          }
         }
-      } else {
-        audioElements[currentSlide].play();
-        audioElements[currentSlide].onended = () => {changeSlide(1);};
-        if (isVideo) {
-          unMuteVideo();	
-        }	 
-      }
+      };
     };
-  };
 
-</script>
+  </script>
 
-<script>
-function customConfirm(message) {
-    return new Promise((resolve) => {
+  <script>
+    function customConfirm(message) {
+      return new Promise((resolve) => {
         const modal = document.getElementById('customConfirmModal');
         const confirmBtn = document.getElementById('confirmButton');
         const cancelBtn = document.getElementById('cancelButton');
@@ -126,132 +128,134 @@ function customConfirm(message) {
         modalMessage.textContent = message;
         modal.classList.add('show-modal');
         const handleConfirm = () => {
-            closeModal();
-            resolve(true);
+          closeModal();
+          resolve(true);
         };
 
         const handleCancel = () => {
-            closeModal();
-            resolve(false);
+          closeModal();
+          resolve(false);
         };
 
         const closeModal = () => {
-            modal.classList.remove('show-modal');
-            confirmBtn.removeEventListener('click', handleConfirm);
-            cancelBtn.removeEventListener('click', handleCancel);
+          modal.classList.remove('show-modal');
+          confirmBtn.removeEventListener('click', handleConfirm);
+          cancelBtn.removeEventListener('click', handleCancel);
         };
 
         confirmBtn.addEventListener('click', handleConfirm);
         cancelBtn.addEventListener('click', handleCancel);
 
         // Close if user clicks outside the modal
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                handleCancel();
-            }
+        window.onclick = function (event) {
+          if (event.target == modal) {
+            handleCancel();
+          }
         };
-    });
-}
+      });
+    }
 
-// Example usage:
+    // Example usage:
 
     async function testConfirm() {
       const isConfirmed = await customConfirm("Are you absolutely sure you want to delete this item?");
       if (isConfirmed) {
         alert("Item deleted!");
-    } else {
+      } else {
         alert("Deletion cancelled.");
+      }
     }
-  }
- // testConfirm();
-</script>
+    // testConfirm();
+  </script>
 
-<script>
-function startSlideshow() {
-  isStarted = true;
-  document.querySelector('.start-button').style.display = 'none'; // Hide start button.
-  document.querySelector('.start-button').textContent = 'Mute';
-  document.querySelector('.start-button').classList.add('mute-toggle');
-  document.querySelector('.start-button').onclick = toggleMute;
-  document.querySelector('.next').style.display = 'block';
-  document.querySelector('.prev').style.display = 'block';
-  updateSlides(0); // Trigger first slide with audio
-}
-</script>
+  <script>
+    function startSlideshow() {
+      isStarted = true;
+      document.querySelector('.start-button').style.display = 'none'; // Hide start button.
+      document.querySelector('.start-button').textContent = 'Mute';
+      document.querySelector('.start-button').classList.add('mute-toggle');
+      document.querySelector('.start-button').onclick = toggleMute;
+      document.querySelector('.next').style.display = 'block';
+      document.querySelector('.prev').style.display = 'block';
+      updateSlides(1); // Trigger first slide with audio
+    }
+  </script>
 
-<script>
+  <script>
 
-  const aryMediaFiles = ssData.aryMediaFiles;
-  const aryMediaExt = ssData.aryMediaExt;
+    const aryMediaFiles = ssData.aryMediaFiles;
+    const aryMediaExt = ssData.aryMediaExt;
 
-  const element = document.getElementById('initSlide');
-  const style = window.getComputedStyle(element);
-  let defaultImage = style.backgroundImage;
-  defaultImage = defaultImage.slice(4, -1); 
-  defaultImage = defaultImage.replace(/["']/g, ""); 
+    const element = document.getElementById('initSlide');
+    const style = window.getComputedStyle(element);
+    let defaultImage = style.backgroundImage;
+    defaultImage = defaultImage.slice(4, -1);
+    defaultImage = defaultImage.replace(/["']/g, "");
 
-  function getMediaFile(myBaseFile, myMedia) {
-      const baseFile = `${projName }/media/${myBaseFile}`;
-  		//alert(' baseFile ' + baseFile);  
-      if (!Array.isArray(aryMediaFiles[myMedia]) || !Array.isArray(aryMediaFiles[myMedia][0]) ) {
-          return false;
+    function getMediaFile(myBaseFile, myMedia) {
+      const baseFile = `${projName}/media/${myBaseFile}`;
+      console.log(' myMedia ' + myMedia + ' baseFile ' + baseFile);
+      if (!Array.isArray(aryMediaFiles[myMedia]) || !Array.isArray(aryMediaFiles[myMedia][0])) {
+        return false;
       }
       const index = aryMediaFiles[myMedia][0].indexOf(baseFile);
-    if (index === -1) {
+      if (index === -1) {
         return false;
       }
       const source = myBaseFile + aryMediaFiles[`${myMedia}`][1][index];
       const result = aryMediaFiles[`${myMedia}`][0][index] + aryMediaFiles[`${myMedia}`][1][index];
-    if (myMedia == "video") {
-      playlist.push(result);
-    }
+      console.log(' result = ' + result);
+
+      if (myMedia == "video") {
+        playlist.push(result);
+      }
       return result;
-  }
-</script>
-<script>
-  function setOverlayText(txt) {
-    if (txt.length) {
-      document.getElementById("overlay").innerHTML = `<p>${txt}</p>`;
-    } else {
-      document.getElementById("overlay").innerHTML = ``;
-    };
-  }
+    }
+  </script>
+  <script>
+    function setOverlayText(txt) {
+      if (txt.length) {
+        document.getElementById("overlay").innerHTML = `<p>${txt}</p>`;
+      } else {
+        document.getElementById("overlay").innerHTML = ``;
+      };
+    }
 
-function getStringAfterFirstColon(inputString) {
-  const firstColonIndex = inputString.indexOf(':');
-  if (firstColonIndex === -1) {
-    // If no colon is found, return the original string or an empty string, depending on requirements.
-    // For this example, it returns the original string.
-    return inputString;
-  } else {
-    // Return the substring starting from the character after the first colon.
-    return inputString.slice(firstColonIndex + 1);
-  }
+    function getStringAfterFirstColon(inputString) {
+      const firstColonIndex = inputString.indexOf(':');
+      if (firstColonIndex === -1) {
+        // If no colon is found, return the original string or an empty string, depending on requirements.
+        // For this example, it returns the original string.
+        return inputString;
+      } else {
+        // Return the substring starting from the character after the first colon.
+        return inputString.slice(firstColonIndex + 1);
+      }
 
-}
-</script>
- <script>	
-  newDefault = getMediaFile("default", "image");
-  //alert("test default = " + newDefault);
-	if (newDefault && newDefault != "false") {
-	 defaultImage = newDefault;
-	 document.getElementById('initSlide').style.backgroundImage = `url('${defaultImage}')`;
-	}
-	  
-	const	firstLine = text[0];	
-	
-	const titleType = firstLine.split(':')[0];
-	if (titleType == 'TITLE') {
-		const titleText = getStringAfterFirstColon(firstLine);
-		//alert(`<p>${sanitizeHTML(titleText)}</p>`);
-		//document.getElementById('slide').innerHTML += `<p>${sanitizeHTML(titleText)}</p>`;
-		setOverlayText(`${titleText}</p>`);
-	}
-	
-	
-</script>
- 
-<script>
+    }
+  </script>
+  <script>
+    newDefault = getMediaFile("default", "image");
+    //alert("test default = " + newDefault);
+    if (newDefault && newDefault != "false") {
+      defaultImage = newDefault;
+      document.getElementById('initSlide').style.backgroundImage = `url('${defaultImage}')`;
+    }
+
+    const firstLine = text[0];
+
+    const titleType = firstLine.split(':')[0];
+    if (titleType == 'TITLE') {
+      const titleText = getStringAfterFirstColon(firstLine);
+      //alert(`<p>${sanitizeHTML(titleText)}</p>`);
+      //document.getElementById('slide').innerHTML += `<p>${sanitizeHTML(titleText)}</p>`;
+      setOverlayText(`${titleText}</p>`);
+    }
+
+
+  </script>
+
+  <script>
     const emailRegex = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi;
     //alert('textlength = ' + text.length);
     var questionContent = "";
@@ -261,19 +265,28 @@ function getStringAfterFirstColon(inputString) {
     var correctAnswerCtr = 0;
     var inCorrectAnswerCtr = 0;
     var multiChoiceCtr = 0;
-
+    var resultBacground = getMediaFile('result', 'image');
+    var resultAudio= getMediaFile('result', 'sound');
+    var resultVideo = getMediaFile('result', 'video');
+    slides.push({
+      type: 'results',
+      content: "",
+      background: resultBacground,
+      audioSrc: resultAudio,
+      videoSrc: resultVideo
+    })
     text.forEach(text => {
-    
+
       const textline = sanitizeHTML(text.trim());
       //const line = text.trim();
       const line = textline.replace(emailRegex, email => {
-          return `<a href="mailto:${email}">${email}</a>`;
+        return `<a href="mailto:${email}">${email}</a>`;
       })
       //alert(line);
       // Match Q1:, A1:, Q2:, A2:, etc.
       // Match Q1:, A1:, Q2:, A2:, etc.
       const questionMatch = line.match(/^Q(\d+):(.+)/) || line.match(/^QM(\d+):(.+)/);
-      const answerMatch = line.match(/^A(\d+):(.+)/)|| line.match(/^AM(\d+):(.+)/);
+      const answerMatch = line.match(/^A(\d+):(.+)/) || line.match(/^AM(\d+):(.+)/);
       const multQuestionMatch = line.match(/^QM(\d+):(.+)/);
       const multChoiceMatch = line.match(/^CM(\d+):(.+)/);
       const multAnswerMatch = line.match(/^AM(\d+):(.+)/);
@@ -287,9 +300,9 @@ function getStringAfterFirstColon(inputString) {
         correctAnswer = "";
       }
       if (multAnswerMatch) {
-          correctAnswer = questionnNmber + ':' + otherContent.split('.')[0];
-          correctAnswerList += correctAnswer + '/';
-          console.log('correctAnswerList ' + correctAnswerList);
+        correctAnswer = questionnNmber + ':' + otherContent.split('.')[0];
+        correctAnswerList += correctAnswer + '/';
+        console.log('correctAnswerList ' + correctAnswerList);
       }
       if (multChoiceMatch) {
         multiChoiceCtr++;
@@ -298,177 +311,185 @@ function getStringAfterFirstColon(inputString) {
         var answerArray = otherContent.split(',');
         answerArray.forEach(answer => {
           choiceContent += li + answer + '</li>';
-          });
+        });
         choiceContent += '</ul';
         otherContent = choiceContent;
         console.log('choiceContent ' + choiceContent);
       }
       //console.log('otherContent ' + otherContent);
-    // alert('otherType = ' + otherType);
+      // alert('otherType = ' + otherType);
       const videoFilePath = getMediaFile(otherType, "video");
       //alert(videoFilePath);
       const imageFilePath = getMediaFile(otherType, "image");
       const soundFilePath = getMediaFile(otherType, "sound");
 
       if (questionMatch) {
-              slides.push({ 
-                  type: 'question', 
-                  content: otherContent.trim(), 
-                  background: `${imageFilePath}`,
-                  audioSrc: `${soundFilePath}`,
-                  videoSrc: `${videoFilePath}`
-              });
-          } else if (answerMatch) {
-              slides.push({ 
-                  type: 'answer', 
-                  content: otherContent.trim(), 
-                  background: `${imageFilePath}`,
-                  audioSrc: `${soundFilePath}`,
-                  videoSrc: `${videoFilePath}`
-              });
-          } else if (choiceContent) {
-              slides.push({ 
-                  type: 'multi-choice', 
-                  content: otherContent.trim(), 
-                  background: `${imageFilePath}`,
-                  audioSrc: `${soundFilePath}`,
-                  videoSrc: `${videoFilePath}`
-              });
-          } else  if (otherType != "TITLE") {
-              slides.push({ 
-                  type: 'other', 
-                  content: otherContent.trim(), 
-                  background: `${imageFilePath}`,
-                  audioSrc: `${soundFilePath}`,
-                  videoSrc: `${videoFilePath}`
-              });
-          }
+        slides.push({
+          type: 'question',
+          content: otherContent.trim(),
+          background: `${imageFilePath}`,
+          audioSrc: `${soundFilePath}`,
+          videoSrc: `${videoFilePath}`
+        });
+      } else if (answerMatch) {
+        slides.push({
+          type: 'answer',
+          content: otherContent.trim(),
+          background: `${imageFilePath}`,
+          audioSrc: `${soundFilePath}`,
+          videoSrc: `${videoFilePath}`
+        });
+      } else if (choiceContent) {
+        slides.push({
+          type: 'multi-choice',
+          content: otherContent.trim(),
+          background: `${imageFilePath}`,
+          audioSrc: `${soundFilePath}`,
+          videoSrc: `${videoFilePath}`
+        });
+      } else if (otherType != "TITLE") {
+        slides.push({
+          type: 'other',
+          content: otherContent.trim(),
+          background: `${imageFilePath}`,
+          audioSrc: `${soundFilePath}`,
+          videoSrc: `${videoFilePath}`
+        });
+      }
     });
     document.querySelector('.start-button').disabled = false;
 
-  //showAlert('Hello there we can start now');
+    //showAlert('Hello there we can start now');
 
-//alert("hey");
-</script>
+    //alert("hey");
+  </script>
 
-<script>
-  var currentAnswerCorrect;
-  var currentAnswerIncorrect;
-  function checkAnswer(questionnNmber, myAnswer) {
-    answer = questionnNmber + ':' + myAnswer.substring(0, 12);
-    console.log('********************* answer = ' + answer);
-    let index = correctAnswerList.indexOf(answer);
-    if (index == -1) {
-      //alert('incorrect');
-      currentAnswerCorrect = false;
-      currentAnswerIncorrect = true;
-      playIncorrectSoundPureJS();
-      inCorrectAnswerCtr++;
-    } else {
-      if (currentAnswerIncorrect != true) {
+  <script>
+    var currentAnswerCorrect;
+    var currentAnswerIncorrect;
+    function checkAnswer(questionnNmber, myAnswer) {
+      answer = questionnNmber + ':' + myAnswer.substring(0, 12);
+      console.log('********************* answer = ' + answer);
+      let index = correctAnswerList.indexOf(answer);
+      if (index == -1) {
+        //alert('incorrect');
+        currentAnswerCorrect = false;
+        currentAnswerIncorrect = true;
+        playIncorrectSoundPureJS();
+        inCorrectAnswerCtr++;
+      } else {
+        if (currentAnswerIncorrect != true) {
           currentAnswerCorrect = true;
           playCorrectSoundPureJS();
           correctAnswerCtr++;
+        }
+        changeSlide(1);
       }
-      changeSlide(1);
     }
-  }
 
-  function playCorrectSoundPureJS() {
-    const audioUrl = 'media/correct-answer-buzzer.wav';
-    const audio = new Audio(audioUrl);
-    audio.play();
-}
-  function playIncorrectSoundPureJS() {
-    const audioUrl = 'media/wrong-answer-buzzer.mp3';
-    const audio = new Audio(audioUrl);
-    audio.play();
-}
-  function playMesageScore(score) {
-    var audioUrl = 'media/correct-answer-buzzer.wav';
-    if (score > 99) {
-      audioUrl = 'media/excellent.opus';
-    } else if (score > 84) {
-      audioUrl = 'media/amazing.opus';
-    } else if (score > 50) {
-      audioUrl = 'media/surprising.opus';
-    } else if (score > 25) {
-      audioUrl = 'media/bewildering.opus';
-    } else if (score > 10) {
-      audioUrl = 'media/notgood.opus';
-    } else if (score > 5) {
-      audioUrl = 'media/poor.opus';
-    } else {
-      audioUrl = 'media/failed.opus';
+    function playCorrectSoundPureJS() {
+      const audioUrl = 'media/correct-answer-buzzer.wav';
+      const audio = new Audio(audioUrl);
+      audio.play();
     }
-    const audio = new Audio(audioUrl);
-    audio.play();
-}
-</script>
+    function playIncorrectSoundPureJS() {
+      const audioUrl = 'media/wrong-answer-buzzer.mp3';
+      const audio = new Audio(audioUrl);
+      audio.play();
+    }
+  </script>
 
-<script>
- //       alert("hello function set bg image");
+  <script>
+    //       alert("hello function set bg image");
 
-function setBackgroundImage(el, url) {
-  const img = new Image();
-  img.onload = function() {
-    //alert("Background image loaded:" + url);
-    el.style.backgroundImage = `url('${url}')`;
-  };
-  img.onerror = function() {
-    //alert("Failed to load the background image:" + url);
-	 el.style.backgroundImage = `url(${defaultImage}`;
-  };
-  img.src = url;
-}
+    function setBackgroundImage(el, url) {
+      const img = new Image();
+      img.onload = function () {
+        //alert("Background image loaded:" + url);
+        el.style.backgroundImage = `url('${url}')`;
+      };
+      img.onerror = function () {
+        //alert("Failed to load the background image:" + url);
+        el.style.backgroundImage = `url(${defaultImage}`;
+      };
+      img.src = url;
+    }
 
 
-function showMultichoiceResults() {
-  var message = correctAnswerCtr + ' Correct out of ' + multiChoiceCtr + ' Questions';
-  if (inCorrectAnswerCtr > 0) {
-      message += ', ' + inCorrectAnswerCtr + ' Incorrect ';
-  }
-  var correctGrade = (correctAnswerCtr / multiChoiceCtr) * 100;
-  if (correctGrade > 80){
-    message += '<span class="text-green blink-soft"> Good Job!</span></br>';
-  }
-    playMesageScore(correctGrade);
-
-  showAlert(message);
-  inCorrectAnswerCtr = 0;
-  correctAnswerCtr = 0;
-}
-</script>
-
-<script src = "js/updateSlides.js"></script>
-
-<script>
-function changeSlide(direction) {
-  if (isStarted) {
-      if (isVideo) {
-        unMuteVideo();
+    function showMultichoiceResults() {
+      var message = correctAnswerCtr + ' Correct out of ' + multiChoiceCtr + ' Questions';
+      if (inCorrectAnswerCtr > 0) {
+        message += ', ' + inCorrectAnswerCtr + ' Incorrect ';
       }
-      const prevSlide = currentSlide;
-      currentSlide += direction;
-      if (currentSlide < 0) {
+      var score = (correctAnswerCtr / multiChoiceCtr) * 100;
+      message += score.toFixed(2) + '%';
+
+      var audioUrl = 'media/correct-answer-buzzer.wav';
+      if (score > 99) {
+        audioUrl = 'media/excellent.m4a';
+        scoreLevel = "Excellent";
+      } else if (score > 84) {
+        audioUrl = 'media/amazing.m4a';
+        scoreLevel = "Amazing";
+      } else if (score > 50) {
+        audioUrl = 'media/surprising.m4a';
+        scoreLevel = "Surprising";
+      } else if (score > 25) {
+        audioUrl = 'media/bewildering.m4a';
+        scoreLevel = "bewildering";
+      } else if (score > 10) {
+        audioUrl = 'media/notgood.m4a';
+        scoreLevel = "not good";
+      } else if (score > 5) {
+        audioUrl = 'media/poor.m4a';
+        scoreLevel = "needs work";
+      } else {
+        audioUrl = 'media/failed.m4a';
+        scoreLevel = "try again";
+      }
+      const audio = new Audio(audioUrl);
+      audio.play();
+      if (score > 50) {
+        message += `<span class="text-red blink-hard"> ${scoreLevel}</span></br>`;
+      }
+
+      showAlert(message);
+
+      inCorrectAnswerCtr = 0;
+      correctAnswerCtr = 0;
+    }
+  </script>
+
+  <script src="js/updateSlides.js"></script>
+
+  <script>
+    function changeSlide(direction) {
+      if (isStarted) {
+        if (isVideo) {
+          unMuteVideo();
+        }
+        const prevSlide = currentSlide;
+        currentSlide += direction;
+        if (currentSlide < 0) {
           currentSlide = slides.length - 1;
-      } else if (currentSlide >= slides.length) {
+        } else if (currentSlide >= slides.length) {
           currentSlide = 0;
-      }
-      updateSlides(currentSlide);
-      if (audioElements[prevSlide]) {
+        }
+        updateSlides(currentSlide);
+        if (audioElements[prevSlide]) {
           audioElements[prevSlide].pause();
           audioElements[prevSlide].currentTime = 0;
+        }
       }
-  }
-}
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowLeft') {
-        changeSlide(-1);
-    } else if (event.key === 'ArrowRight') {
-        changeSlide(1);
     }
-});
-</script>
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') {
+        changeSlide(-1);
+      } else if (event.key === 'ArrowRight') {
+        changeSlide(1);
+      }
+    });
+  </script>
 </body>
+
 </html>

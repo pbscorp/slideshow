@@ -186,12 +186,14 @@ function createAndPlayVideo(file) {
 
 function updateSlides(slideNo) {
 
-	if (currentSlide == 0) {
+	if (slideNo == 0) {
 		 if (inCorrectAnswerCtr + correctAnswerCtr > 0) {
+			
             showMultichoiceResults();
+			isMedia = false;
           }
-	}
-	if (currentSlide != currentSlide) {
+	} 
+	if (slideNo != currentSlide) {
 		alert("slideNo " + slideNo + " not = currentSlide " + currentSlide);
 	}
 	const container = document.getElementById('slideContainer');
@@ -203,73 +205,77 @@ function updateSlides(slideNo) {
 	overlay.className = `overlay-text ${slides[slideNo].type}-slide`;
 	isVideo = false;
 	isAudio = false;
-	if (slides[slideNo].videoSrc == "false") {
-		isVideo = false;
-	} else {
+	if (slides[slideNo].videoSrc  && slides[slideNo].videoSrc != "false") {
 		isVideo = true;
-		isMedia = true;
-	}
-	if (slides[slideNo].audioSrc == "false") {
-		isAudio = false;
+		isMedia = true
 	} else {
+		isVideo = false;
+	}
+	console.log(slides[slideNo].audioSrc);
+	if (slides[slideNo].audioSrc && slides[slideNo].audioSrc != "false") {
 		isAudio = true;
 		isMedia = true;
+	} else {
+		isAudio = false;
 	}
 	if (isMedia) {	
 		muteButton.style.display = 'block';
 		setMuteButton();
 	}
-if (slides[slideNo].background  != "false") {
-		hasImage = true;
-	} else {
-		hasImage = false;
-}				
-const audio = document.createElement('audio');
-audioElements[slideNo] = audio;
-audio.src = slides[slideNo].audioSrc || ''; // Use hardcoded src or silence if not found
-if (hasImage) {
-	setBackgroundImage(slideDiv, slides[slideNo].background);
-}
-//alert(slides[slideNo].type);
-g_audioFailed = false;
-if (!isMuted && isAudio){
-	audio.play().catch(error => {
-	g_audioFailed = true;
-	alert(g_audioFailed + ' Audio play failed:' + error);
-	audio.src = ''; // Silence if blocked
-	audio.onended = () => changeSlide(1); // Still advance
-	});
-};
-g_audioFailed = false;
-if (slides[slideNo].type != "question") {
-	audio.onended = () => {
-	changeSlide(1);
+	if (slides[slideNo].background && slides[slideNo].background  != "false") {
+			hasImage = true;
+		} else {
+			hasImage = false;
+	}				
+	const audio = document.createElement('audio');
+	audioElements[slideNo] = audio;
+	if (isAudio) {
+		audio.src = slides[slideNo].audioSrc || ''; // Use hardcoded src or silence if not found
 	}
-};
-var displayText = slides[slideNo].content;
-if (slides[slideNo].type == "answer") {
-	if(currentAnswerCorrect) {
-		var newDisplayText = '<span class="text-red blink-hard"> Correct!</span></br>' + displayText
-		displayText = newDisplayText;
+	if (hasImage) {
+		setBackgroundImage(slideDiv, slides[slideNo].background);
 	}
-	currentAnswerCorrect = null;
-	currentAnswerIncorrect = null; 
-}
-setOverlayText(displayText);     
-if (isVideo) {
-	//overlay.classList.remove('other-slide');
-	slideDiv.classList.add('active');
-	overlay.classList.add('video-slide');
-	const video = createAndPlayVideo(slides[slideNo].videoSrc);
+	console.log(' isAudio ' + isAudio + ' type ' + slides[slideNo].type + ' scr = ' + audio.src);
+	g_audioFailed = false;
+	if (!isMuted && isAudio){
+		audio.play().catch(error => {
+		g_audioFailed = true;
+		alert(g_audioFailed + ' Audio play failed:' + error);
+		audio.src = ''; // Silence if blocked
+		audio.onended = () => changeSlide(1); // Still advance
+		});
+	};
+	g_audioFailed = false;
+	if (slides[slideNo].type != "question") {
+		audio.onended = () => {
+		changeSlide(1);
+		}
+	};
+	var displayText = slides[slideNo].content;
+	if (slides[slideNo].type == "answer") {
+		if(currentAnswerCorrect) {
+			var newDisplayText = '<span class="text-red blink-hard"> Correct!</span></br>' + displayText
+			displayText = newDisplayText;
+		}
+		currentAnswerCorrect = null;
+		currentAnswerIncorrect = null; 
+	}
+	setOverlayText(displayText);     
+	if (isVideo) {
+		//overlay.classList.remove('other-slide');
+		slideDiv.classList.add('active');
+		overlay.classList.add('video-slide');
+		const video = createAndPlayVideo(slides[slideNo].videoSrc);
 
-} else if (isAudio) {
-	slideDiv.classList.add('active');
-	slideDiv.appendChild(audio);
-	container.appendChild(slideDiv);
-} else {
-	slideDiv.classList.add('active');
-	container.appendChild(slideDiv);
-}
-//alert("update5 slide no " + slideNo);
+	} else if (isAudio) {
+		slideDiv.classList.add('active');
+		slideDiv.appendChild(audio);
+		container.appendChild(slideDiv);
+	} else {
+		slideDiv.classList.add('active');
+		container.appendChild(slideDiv);
+	}
+	//alert("update5 slide no " + slideNo);
+
 };
 																									

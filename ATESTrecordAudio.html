@@ -54,11 +54,35 @@
     <button id="uploadBtn" style="display:none" disabled>⬆️ Upload </button>
 
     <button id="close-button"   onclick="window.close()">❌ cancel</button>
-    </br></br></br>
+
     <a id="downloadLink" style="display:none">⬇️ Download Recording</a>
 
     <audio id="audioPlayer" controls style="display:none; margin-top:20px;"></audio>
 
+</script>
+    <script>
+// 1. Get Microphone Access (MediaDevices API)
+navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+        // 2. Create MediaRecorder
+        const mediaRecorder = new MediaRecorder(stream);
+        // 3. Start Recording (capture audio chunks)
+        mediaRecorder.start();
+        // 4. Stop Recording & Handle Data (Blob)
+        mediaRecorder.addEventListener('dataavailable', event => {
+            const audioBlob = new Blob([event.data], { type: 'audio/wav' });
+            // Use audioBlob to play or download the recording
+        });
+        // 5. Stop the recorder
+        // mediaRecorder.stop();
+    })
+    .catch(error => console.error('Error accessing microphone:', error));
+
+
+
+
+    </script>
+<!--
     <script>
    		const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
@@ -77,7 +101,6 @@
             const recordBtn = document.getElementById("recordBtn");
             const playBtn = document.getElementById("playBtn");
             const uploadBtn = document.getElementById("uploadBtn");
-            const downloadLink = document.getElementById("downloadLink");
 
             if (!isRecording) {
                 try {
@@ -98,7 +121,6 @@
                     recordBtn.textContent = "🛑 Stop Recording";
                     playBtn.style.display="none";
                     uploadBtn.style.display="none";
-                    downloadLink.style.display="none";
                 } catch (err) {
                     alert("Microphone permission denied or unsupported browser.");
                     console.error(err);
@@ -115,8 +137,6 @@
             const url = URL.createObjectURL(audioBlob);
             const playBtn = document.getElementById("playBtn");
             const uploadBtn = document.getElementById("uploadBtn");
-            const downloadLink = document.getElementById("downloadLink");
-            
             const closeBtn = document.getElementById("closeBtn");
             const recordBtn = document.getElementById("recordBtn");
 
@@ -132,8 +152,7 @@
             //download.style.display = "block";
             playBtn.style.display="inline";
             uploadBtn.style.display="inline";
-            downloadLink.style.display="inline";
-            
+
             playBtn.disabled = false;
             uploadBtn.disabled = false;
 
@@ -144,7 +163,6 @@
         function playRecording() {
             const audioPlayer = document.getElementById("audioPlayer");
             const playBtn = document.getElementById("playBtn");
-            const downloadLink = document.getElementById("downloadLink");
             const uploadBtn = document.getElementById("uploadBtn");
             const closeBtn = document.getElementById("closeBtn");
             audioPlayer.style.display = "block";
@@ -155,8 +173,7 @@
             }
             playBtn.style.display="inline";
             uploadBtn.style.display="inline";
-            downloadLink.style.display="inline";
-            
+
             playBtn.disabled = false;
             uploadBtn.disabled = false;         
         }
@@ -199,7 +216,7 @@
             return "";
         }
     </script>
-
+-->
 </body>
 
 </html>

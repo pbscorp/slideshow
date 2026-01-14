@@ -1,40 +1,45 @@
-Q1: What defines a planet in the universe?  
-A1: A planet is a celestial body that orbits a star, is massive enough to be rounded by its own gravity, and has cleared its orbital path of other debris.
-Q2: Which planet is the largest in our solar system?
-A2: Jupiter is the largest, with a diameter of about 143,000 kilometers and a mass more than twice that of all other planets combined.
-Q3: What planet is known for all of its rings?  
-A3: Saturn is famous for its stunning system of rings made mostly of ice and rock particles.
-Q4: Which planet is closest to the Sun?  
-A4: Mercury holds that title, orbiting the Sun in just 88 Earth days.
-Q5: What makes Venus so inhospitable?  
-A5: Its thick atmosphere traps heat through a runaway greenhouse effect, making it hotter than Mercury despite being farther from the Sun.
-Q6: How many planets are in our solar system?  
-A6: There are eight officially recognized planets—from Mercury to Neptune.
-Q7: What’s the coldest planet in the solar system?  
-A7: Neptune is the coldest, with average temperatures around -200°C due to its distance from the Sun.
-Q8: Are there planets beyond our solar system?  
-A8: Yes—thousands of exoplanets have been discovered orbiting distant stars.
-Q9: Which planet is known as the Red Planet?  
-A9: Mars, due to its iron-rich soil which gives the surface a reddish hue.
-Q10: What planet has the most moons?  
-A10: Jupiter leads the count with over 90 known moons.
-Q11: What’s Earth’s position in the solar system?  
-A11: Earth is the third planet from the Sun and the only one known to support life.
-Q12: Which planet has seasons like Earth?  
-A12: Mars has similar seasonal patterns due to its tilted axis, though they last longer.
-Q13: What is a gas giant?  
-A13: A gas giant is a large planet made mostly of hydrogen and helium, like Jupiter and Saturn.
-Q14: Which planets are considered ice giants?  
-A14: Uranus and Neptune, due to their icy compositions of water, ammonia, and methane.
-Q15: Can planets orbit more than one star?  
-A15: Yes, some exoplanets orbit binary or multiple star systems.
-Q16: What’s a terrestrial planet?  
-A16: These are rocky planets with solid surfaces—Mercury, Venus, Earth, and Mars.
-Q17: Which planet rotates the fastest?  
-A17: Jupiter, completing one rotation in just under 10 hours.
-Q18: Do planets emit light?  
-A18: No, they reflect the light of their host star; only stars emit their own light.
-Q19: Which planet spins sideways?  
-A19: Uranus has a tilted axis of about 98°, causing it to essentially roll around the Sun.
-Q20: How do planets form?  
-A20: They form from disks of gas and dust around young stars, gradually coalescing over millions of years.
+QM1:Which planet is known as the Red Planet?
+CM1:Venus,Mars,Jupiter,Saturn
+AM1:Mars, It gets its reddish color from iron oxide (rust) on its surface.
+QM2:Which planet has the most extensive ring system?
+CM2:Neptune,Uranus,Saturn,Jupiter
+AM2:Saturn, Its rings are made mostly of ice particles with a smaller amount of rocky debris.
+QM3:Which is the smallest planet in our solar system?
+CM3:Mercury,Mars,Venus,Pluto
+AM3:Mercury, It is only slightly larger than Earth's Moon.
+QM4:Which planet is the hottest in our solar system?
+CM4:Mercury,Mars,Venus,Jupiter
+AM4:Venus, Its thick atmosphere traps heat in a runaway greenhouse effect.
+QM5:What is the largest planet in our solar system?
+CM5:Saturn,Neptune,Jupiter,Uranus
+AM5:Jupiter, It is so large that all the other planets could fit inside it twice.
+QM6:Which planet is famous for its Great Red Spot?
+CM6:Mars,Jupiter,Saturn,Neptune
+AM6:Jupiter, The spot is a giant spinning storm that has been observed for hundreds of years.
+QM7:Which planet rotates on its side?
+CM7:Uranus,Neptune,Saturn,Mercury
+AM7:Uranus, Its equator is nearly at a right angle to its orbit.
+QM8:Which planet was the first to be discovered using mathematical calculations?
+CM8:Uranus,Saturn,Mars,Neptune
+AM8:Neptune, Astronomers predicted its existence before they actually saw it through a telescope.
+QM9:Which planet is closest to the Sun?
+CM9:Venus,Earth,Mercury,Mars
+AM9:Mercury, It orbits the Sun every 88 Earth days.
+QM10:Which planet has the strongest winds in the solar system?
+CM10:Jupiter,Neptune,Saturn,Mars
+AM10:Neptune, Winds there can reach speeds of more than 1200 miles per hour.
+QM11:Which planet is often called Earth's twin?
+CM11:Mars,Venus,Mercury,Neptune
+AM11:Venus, It is similar in size and mass to Earth.
+QM12:What planet has the most moons currently recognized?
+CM12:Jupiter,Saturn,Uranus,Neptune
+AM12:Saturn, It has over 140 moons, outnumbering Jupiter's count.
+QM13:Which planet is known for having a prominent hexagon storm at its north pole?
+CM13:Jupiter,Uranus,Saturn,Neptune
+AM13:Saturn, This six-sided jet stream is a unique feature not seen on any other planet.
+QM14:Which planet has a day that is longer than its year?
+CM14:Mercury,Mars,Venus,Jupiter
+AM14:Venus, It takes longer to rotate on its axis than it does to orbit the Sun.
+QM15:Which planet is the only one known to support life?
+CM15:Mars,Earth,Venus,Jupiter
+AM15:Earth, It is the only place in the universe where life has been confirmed to exist.

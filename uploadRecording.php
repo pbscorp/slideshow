@@ -2,7 +2,7 @@
 $targetDirectory = $_GET['folder'] . "/media/";
 if (isset($_FILES['audioFile'])) {
    // $fileName = "audio_" . time() . ".webm";
-    $fileName = "audio_" . time() . ".opus";
+    $fileName = "audio_" . time() . ".m4a";
    
     $targetFile = $targetDirectory . $fileName;
 
