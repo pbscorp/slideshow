@@ -300,8 +300,8 @@
         correctAnswer = "";
       }
       if (multAnswerMatch) {
-        correctAnswer = questionnNmber + ':' + otherContent.split('.')[0];
-        correctAnswerList += correctAnswer + '/';
+        correctAnswer = questionnNmber + ':' + otherContent.split(',')[0];
+        correctAnswerList += correctAnswer.replace(/\s/g, '') + '/';
         console.log('correctAnswerList ' + correctAnswerList);
       }
       if (multChoiceMatch) {
@@ -368,7 +368,7 @@
     var currentAnswerCorrect;
     var currentAnswerIncorrect;
     function checkAnswer(questionnNmber, myAnswer) {
-      answer = questionnNmber + ':' + myAnswer.substring(0, 12);
+      answer = questionnNmber + ':' + myAnswer.replace(/\s/g, '').substring(0, 10);
       console.log('********************* answer = ' + answer);
       let index = correctAnswerList.indexOf(answer);
       if (index == -1) {

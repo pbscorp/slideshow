@@ -1,0 +1,45 @@
+QM1: What is the most abundant element in the universe?
+CM1: Hydrogen,Oxygen,Carbon,Helium
+AM1: Hydrogen, It makes up about 75% of the universe’s normal matter.
+QM2: What galaxy do we live in?
+CM2: Andromeda Galaxy,Milky Way Galaxy,Sombrero Galaxy,Whirlpool Galaxy
+AM2: Milky Way Galaxy, It contains over 100 billion stars.
+QM3: What is the name of the force that keeps planets in orbit?
+CM3: Magnetism,Gravity,Nuclear Force,Dark Energy
+AM3: Gravity, It is the weakest force but acts over vast distances.
+QM4: What is the age of the universe estimated to be?
+CM4: 4.5 billion years,9 billion years,13.8 billion years,20 billion years
+AM4: 13.8 billion years, This estimate comes from cosmic background radiation measurements.
+QM5: What type of celestial object is a supernova?
+CM5: A forming star,A dying star,A comet,A galaxy
+AM5: A dying star, It is a massive explosion at the end of a star’s life.
+QM6: What is the name of the radiation left over from the Big Bang?
+CM6: Solar Radiation,Cosmic Microwave Background,Gamma Rays,X-rays
+AM6: Cosmic Microwave Background, It provides a snapshot of the early universe.
+QM7: What is a black hole’s boundary called?
+CM7: Singularity,Event Horizon,Photon Ring,Accretion Disk
+AM7: Event Horizon, Beyond this point nothing can escape.
+QM8: What is dark matter primarily detected through?
+CM8: Direct light emission,Gravitational effects,Radio waves,Heat radiation
+AM8: Gravitational effects, It does not emit or absorb light.
+QM9: What is the largest known structure in the universe?
+CM9: Galaxy,Galaxy Cluster,Supercluster,Great Wall
+AM9: Great Wall, It spans billions of light-years.
+QM10: What does a light-year measure?
+CM10: Time,Distance,Brightness,Energy
+AM10: Distance, It is how far light travels in one year.
+QM11: What is the name of our nearest star?
+CM11: Alpha Centauri,Betelgeuse,The Sun,Sirius
+AM11: The Sun, It provides the energy necessary for life on Earth.
+QM12: What kind of galaxy is the Milky Way?
+CM12: Elliptical,Irregular,Spiral,Lenticular
+AM12: Spiral, It has distinct arms winding around its center.
+QM13: What is the term for planets outside our solar system?
+CM13: Asteroids,Exoplanets,Dwarf planets,Meteoroids
+AM13: Exoplanets, Thousands have been discovered so far.
+QM14: What happens at the center of most galaxies?
+CM14: A supernova,A neutron star,A black hole,A quasar only
+AM14: A black hole, Most are supermassive black holes.
+QM15: What tool allows astronomers to see distant objects in space?
+CM15: Microscope,Telescope,Satellite,Radar
+AM15: Telescope, It collects and focuses light from far away objects.
