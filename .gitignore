@@ -3,7 +3,8 @@
 .AppleDouble
 .LSOverride
 ._*
-
+*config*.json
+*mediaList.json
 # Clipboard / pasteboard temp files
 .com.apple.Pasteboard.*
 
