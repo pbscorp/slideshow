@@ -126,7 +126,7 @@
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 1.2); 
         }
 
-    .question-slide p {
+    .question-slide p, .multiQuestion-slide p {
         position: relative;
         z-index: 2;
         color: red;

@@ -39,7 +39,7 @@
         console.log('  slideNamesArray ' + slideNamesArray);
         let baseName = newFileNodeList[i].value.split('.')[0];
         let index = slideNamesArray.indexOf(baseName);
-        if (index == -1 && !baseName.includes("default", "voice"))  {
+        if (index == -1 && baseName != 'default') {
           console.log('found not used index = ' + index);
           newFileNodeList[i].classList.add("unused");
         } else {
@@ -57,18 +57,16 @@
       //alert(" hilightUnused end ");
   }
   var selectedFilesArray = [];
-
-// voice JS
-  let textarea = document.getElementById('textEditor');
-  let voicePlayer = document.getElementById('player');
-  let voiceControls = document.getElementById('voiceControls');
-  let saveVoiceBtn = document.getElementById('saveVoiceBtn');
-
-  let voiceMenu = document.getElementById('contextMenu');
-  
-  const content = document.getElementById("contentArea");
 // When the user clicks on div, open the popup
-let selectedText = '';
+
+async function editSlideshow(folder) {
+  const textarea = document.getElementById('textEditor');
+  const player = document.getElementById('player');
+  const voiceControls = document.getElementById('voiceControls');
+  const saveVoiceBtn = document.getElementById('saveVoiceBtn');
+
+  const menu = document.getElementById('contextMenu');
+  let selectedText = '';
   let longPressTimer;
 
   // Get selected text
@@ -84,15 +82,15 @@ let selectedText = '';
   function showMenu(x, y) {
     selectedText = getSelectionText();
     if (!selectedText) return;
-    voiceMenu.style.left = x + 'px';
-    voiceMenu.style.top = y + 'px';
-    voiceMenu.style.display = 'block';
+    menu.style.left = x + 'px';
+    menu.style.top = y + 'px';
+    menu.style.display = 'block';
     voiceControls.style.display = "none";
   }
 
   // Hide menu
   function hideMenu() {
-    voiceMenu.style.display = 'none';
+    menu.style.display = 'none';
   }
 
 
@@ -120,11 +118,10 @@ let selectedText = '';
         );
         break;
       case 'writeSoundFile':
-        voiceControls.style.display = "inline";
+        voiceControls.style.display = "block";
         saveVoiceBtn.style.display = "none";
-        voiceName.style.display = "none";
-        document.getElementById(`saveVoiceBtn`).innerText = "save as";
         writeSoundFile(selectedText);
+        saveVoiceBtn.style.display = "block";
 
         break;
     }
@@ -147,22 +144,14 @@ let selectedText = '';
     textarea.focus();
   }
 
-  async function saveVoice() {
-    if (document.getElementById(`saveVoiceBtn`).innerText == "done") {
-          document.getElementById(`voiceControls`).style.display = "none";
-          return;
-    };
-
-    voiceFile = "voice.mp3";
+  async function saveVoice(folder, voiceFile) {
     newBase = document.getElementById(`voiceName`).value;
     newFile = newBase + '.' + voiceFile.split('.')[1];
     //if (!confirm("renameMedia " + newFile + "?")) return;
-    const res = await fetch(`filemanager.php?action=rename&proj=${currentFolder}&oldFile=${voiceFile}&newFile=${newFile}`);
+    const res = await fetch(`filemanager.php?action=rename&proj=${folder}&oldFile=${voiceFile}&newFile=${newFile}`);
     const txt = await res.text();
     console.log('text from rename request = ' + txt);
-    document.getElementById(`saveVoiceBtn`).innerText = "done";
-    document.getElementById(`voiceName`).style.display = "none";
-    await loadMediaList(currentFolder);
+    await loadMediaList(folder);
     //
     try {
       hilightUnused();
@@ -173,7 +162,7 @@ let selectedText = '';
   }
 
   async function writeSoundFile (selectedText) {
-    let recordKey = "temp";
+    let recordKey = "";
     let text = selectedText.trim();
     let inx = selectedText.trim().indexOf(':');
         console.log('text = ' + text + ' inx = ' + inx);
@@ -182,12 +171,12 @@ let selectedText = '';
         text = selectedText.substring(inx +1, selectedText.length - inx +2);
     }
     const start = textarea.selectionStart;
-    const folder = currentFolder;
-    console.log('recordKey = ' + recordKey + ' folder = ' + folder);
+    const folder = "Jokes";
+    console.log('recordKey = ' + recordKey + ' selectedText = ' + text);
     if (!selectedText) return;
 
     try {
-      const resp = await fetch('tts.php', {
+      const resp = await fetch('http://localhost:3000/api/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text, folder }),
@@ -211,21 +200,15 @@ let selectedText = '';
       const blob = new Blob([byteArray], { type: 'audio/mpeg' });
       const url = URL.createObjectURL(blob);
       console.log(' url = ' + url);
-      voicePlayer.src = url;
-      voicePlayer.play();
-      document.getElementById(`voiceName`).value = recordKey;
-      document.getElementById(`voiceName`).style.display = "inline";
-      document.getElementById(`saveVoiceBtn`).style.display = "inline";
-
+      player.src = url;
+      player.play();
     } catch (e) {
       console.error(e);
-      alert('Error calling TTS API ' + e);
+      alert('Error calling TTS API' + e);
     }
   };
-debugger;
-currentFolder = "";
-async function editSlideshow(folder) {
-  currentFolder = folder;
+
+  const content = document.getElementById("contentArea");
   content.innerHTML = `<h2>Editing folder ${folder}</h2>
         <button onclick="showUserDashboard(currentUser)">← Done</button>
         <span class="modal" id="myPopup" onclick="getHelp()"></span>
@@ -234,9 +217,8 @@ async function editSlideshow(folder) {
         <textarea id="textEditor" rows="15" cols="120"></textarea>
         <div id="voiceControls" style = "display: none;">
           <br /><br /><audio id="player" controls></audio>
-          <br /><br /><button id="saveVoiceBtn" onclick = "saveVoice()" style = "display: inline;">save file as </button>
-          <input style = "display: none;" type="text" size="10" id = "voiceName" value = "voice">
-          <br/><br/>
+          <br /><br /><button id="saveVoiceBtn" onclick = "saveVoice(folder, voiceFile)" style = "display: none;">save as </button>
+          <input type = "text" id = "voiceName" value = "voice">
         </div>
         <div id="contextMenu">
           <div onclick="handleAction('copy')">📋 Copy</div>
@@ -304,16 +286,18 @@ async function editSlideshow(folder) {
   // load text.txt
 
   // Desktop right-click
+
  textarea = document.getElementById('textEditor');
- voicePlayer = document.getElementById('player');
+ player = document.getElementById('player');
  voiceControls = document.getElementById('voiceControls');
  saveVoiceBtn = document.getElementById('saveVoiceBtn');
- voiceMenu = document.getElementById('contextMenu');
 
+ menu = document.getElementById('contextMenu');
   textarea.addEventListener('contextmenu', e => {
     e.preventDefault();
     showMenu(e.pageX, e.pageY);
   });
+
   // Mobile long-press
   textarea.addEventListener('touchstart', e => {
     longPressTimer = setTimeout(() => {
@@ -332,7 +316,6 @@ document.getElementById("configForm").onsubmit = async function (e) {
     e.preventDefault();
     await updateProject(folder)
 }
-
 async function updateProject(folder) {
   const slideshow = folder;
   const title = document.getElementById("configTitle").value.trim();
@@ -459,7 +442,6 @@ async function updateProject(folder) {
     }
     await hilightUnused();
   };
-
   const fileInput = document.getElementById("mediaUpload");
 
   fileInput.addEventListener('change', handleFileSelection);

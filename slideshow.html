@@ -179,7 +179,37 @@
   vertical-align: middle;
 
 }
-  </style>
+</style>
+
+<style>
+#contextMenu {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 10px rgba(0,0,0,.2);
+  display: none;
+  z-index: 9999;
+  min-width: 160px;
+}
+
+#contextMenu div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+#contextMenu div:hover {
+  background: #f0f0f0;
+}
+
+#saveVoiceBtn {
+  border-radius: 25px;
+  background-color: blue;
+  width: 90px;
+  color: white;
+  padding: 4px;
+  font-weight: bold;
+}
+</style>
 </head>
 
 <body>
@@ -306,6 +336,7 @@ async function responseFromPopup(result) {
 
   <script src="js/getHelp.js"></script>
   <script defer src="js/editSlideShow.js"></script>
+
 
   <script>
     async function showPublicSlideshows() {

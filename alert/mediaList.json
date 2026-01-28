@@ -1,15 +1,11 @@
 [
     "AM1.jpg",
+    "AM1.mp3",
     "AM2.jpg",
-    "AM3.png",
-    "QM1.m4a",
-    "QM1X.wav",
-    "audio_1768070349.m4a",
-    "audio_1768071940.m4a",
-    "bewildering.opus",
-    "default.jpeg",
-    "failed.opus",
-    "notgood.opus",
-    "poor.opus",
-    "surprising.opus"
+    "AM2.mp3",
+    "CM1.mp3",
+    "CM2.mp3",
+    "QM1.mp3",
+    "QM2.mp3",
+    "default.jpeg"
 ]

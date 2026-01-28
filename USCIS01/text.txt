@@ -1,0 +1,27 @@
+QM1: What is the supreme law of the land in the United States?
+CM1: A) The Declaration of Independence, B) The Constitution, C) The Bill of Rights, D) The Articles of Confederation
+AM1: B) The Constitution. It was written in 1787 and establishes the basic framework of the U.S. government.
+QM2: What does the Constitution do?
+CM2: A) Protects basic rights of Americans, B) Sets up the government, C) Defines the government, D) All of these answers
+AM2: D) All of these answers. It is the fundamental document that organizes the three branches of government and protects civil liberties.
+QM3: The idea of self-government is in the first three words of the Constitution. What are these words?
+CM3: A) We the People, B) Congress shall make, C) Four score and, D) In God We
+AM3: A) We the People. These words signify that the government's power comes from the citizens it serves.
+QM4: What is an amendment?
+CM4: A) A law passed by a city, B) A change or addition to the Constitution, C) A speech by the President, D) A ruling by the Supreme Court
+AM4: B) A change or addition to the Constitution. There have been 27 amendments ratified since the Constitution was created.
+QM5: What do we call the first ten amendments to the Constitution?
+CM5: A) The Preamble, B) The Declaration of Rights, C) The Bill of Rights, D) The Federalist Papers
+AM5: C) The Bill of Rights. These were added in 1791 to guarantee specific individual freedoms.
+QM6: What is one right or freedom from the First Amendment?
+CM6: A) Vote, B) Trial by jury, C) Speech, D) Bear arms
+AM6: C) Speech. The First Amendment protects five freedoms: speech, religion, assembly, press, and the right to petition the government.
+QM7: How many amendments does the Constitution have?
+CM7: A) 10, B) 21, C) 27, D) 50
+AM7: C) 27. The most recent amendment, regarding Congressional pay raises, was ratified in 1992.
+QM8: What did the Declaration of Independence do?
+CM8: A) Freed the slaves, B) Declared our independence from Great Britain, C) Ended the Civil War, D) Established the Supreme Court
+AM8: B) Declared our independence from Great Britain. It was adopted on July 4, 1776.
+QM9: What are two rights in the Declaration of Independence?
+CM9: A) Life and Liberty, B) Voting and Speech, C) Trial by jury and Taxes, D) Bearing arms and Religion
+AM9: A) Life and Liberty. Thomas Jefferson famously wrote that all men are endowed with rights to "Life, Liberty and the pursuit of Happiness."

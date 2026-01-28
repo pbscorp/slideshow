@@ -1,0 +1,126 @@
+QM10: What is the economic system in the United States?
+CM10: A) Socialist economy, B) Communist economy, C) Capitalist economy, D) Barter economy
+AM10: C) Capitalist economy. It is also frequently referred to as a "market economy."
+QM11: Name one branch or part of the government.
+CM11: A) Military, B) Congress, C) United Nations, D) State Department
+AM11: B) Congress. The three branches are the Legislative (Congress), Executive (President), and Judicial (Courts).
+QM12: What stops one branch of government from becoming too powerful?
+CM12: A) The Bill of Rights, B) The President, C) Checks and balances, D) The Federal Reserve
+AM12: C) Checks and balances. This system, along with the separation of powers, ensures no single branch dominates.
+QM13: Who is in charge of the executive branch?
+CM13: A) The Speaker of the House, B) The Chief Justice, C) The President, D) The Secretary of State
+AM13: C) The President. The President serves as both the head of state and the head of government.
+QM14: Who makes federal laws?
+CM14: A) The President, B) The Supreme Court, C) Congress, D) The Governors
+AM14: C) Congress. Congress consists of two parts: the Senate and the House of Representatives.
+QM15: What are the two parts of the U.S. Congress?
+CM15: A) The President and Cabinet, B) The Senate and House of Representatives, C) The Supreme Court and District Courts, D) The FBI and CIA
+AM15: B) The Senate and House of Representatives. This is known as a bicameral legislature.
+QM16: How many U.S. Senators are there?
+CM16: A) 50, B) 100, C) 435, D) 270
+AM16: B) 100. There are two senators for each of the 50 states.
+QM17: We elect a U.S. Senator for how many years?
+CM17: A) 2, B) 4, C) 6, D) 10
+AM17: C) 6. Senatorial elections are staggered so that about one-third of the Senate is up for election every two years.
+QM18: The House of Representatives has how many voting members?
+CM18: A) 100, B) 200, C) 435, D) 538
+AM18: C) 435. The number of representatives per state is based on the state's population as determined by the Census.
+QM19: We elect a U.S. Representative for how many years?
+CM19: A) 2, B) 4, C) 6, D) 8
+AM19: A) 2. All 435 members of the House are up for election every even-numbered year.
+QM20: Who does a U.S. Senator represent?
+CM20: A) Only the people in their city, B) All people of the state, C) Only people who voted for them, D) The state legislature
+AM20: B) All people of the state. Unlike Representatives, who represent a specific district, Senators represent the entire state.
+QM21: Why do some states have more Representatives than other states?
+CM21: A) Because they were the first states, B) Because of the state's population, C) Because they have more land area, D) Because they pay more taxes
+AM21: B) Because of the state's population. California currently has the most representatives, while several states have only one.
+QM22: We elect a President for how many years?
+CM22: A) 2, B) 4, C) 6, D) 8
+AM22: B) 4. A President can serve a maximum of two terms according to the 22nd Amendment.
+QM23: In what month do we vote for President?
+CM23: A) January, B) June, C) November, D) December
+AM23: C) November. Election Day is the Tuesday after the first Monday in November.
+QM24: What is the name of the President of the United States now?
+CM24: A) Joe Biden, B) Donald Trump, C) JD Vance, D) Kamala Harris
+AM24: B) Donald Trump. He was inaugurated as the 47th President on January 20, 2025.
+QM25: What is the name of the Vice President of the United States now?
+CM25: A) Kamala Harris, B) Mike Pence, C) JD Vance, D) Tim Walz
+AM25: C) JD Vance. He took office on January 20, 2025.
+QM26: If the President can no longer serve, who becomes President?
+CM26: A) The Speaker of the House, B) The Vice President, C) The Secretary of State, D) The Chief Justice
+AM26: B) The Vice President. This has happened nine times in U.S. history due to death or resignation.
+QM27: If both the President and the Vice President can no longer serve, who becomes President?
+CM27: A) The Secretary of Defense, B) The Speaker of the House, C) The Senate Majority Leader, D) The First Lady
+AM27: B) The Speaker of the House. This is established by the Presidential Succession Act of 1947.
+QM28: Who is the Commander in Chief of the military?
+CM28: A) The Secretary of Defense, B) The President, C) The Chairman of the Joint Chiefs of Staff, D) The Vice President
+AM28: B) The President. This civilian control of the military is a core principle of the U.S. government.
+QM29: Who vetoes bills?
+CM29: A) The Vice President, B) The President, C) The Speaker of the House, D) The Chief Justice
+AM29: B) The President. Congress can override a veto with a two-thirds vote in both the House and the Senate.
+QM30: What does the President’s Cabinet do?
+CM30: A) Makes laws, B) Advises the President, C) Commands the military, D) Interprets the Constitution
+AM30: B) Advises the President. The Cabinet includes the Vice President and the heads of 15 executive departments.
+QM31: What are two Cabinet-level positions?
+CM31: A) Secretary of State and Secretary of Labor, B) Speaker of the House and Chief Justice, C) Governor and Mayor, D) Senator and Representative
+AM31: A) Secretary of State and Secretary of Labor. All Cabinet secretaries (except the Attorney General) use the title "Secretary."
+QM32: What does the judicial branch do?
+CM32: A) Executes laws, B) Reviews laws, C) Makes laws, D) Vetoes laws
+AM32: B) Reviews laws. It also explains laws, resolves disputes, and decides if a law goes against the Constitution.
+QM33: What is the highest court in the United States?
+CM33: A) The District Court, B) The Court of Appeals, C) The Supreme Court, D) The International Court
+AM33: C) The Supreme Court. It consists of nine justices who serve life terms.
+QM34: How many justices are on the Supreme Court?
+CM34: A) 7, B) 9, C) 11, D) 15
+AM34: B) 9. The number of justices is set by Congress and has remained at nine since 1869.
+QM35: Who is the Chief Justice of the United States now?
+CM35: A) Clarence Thomas, B) Sonia Sotomayor, C) John Roberts, D) Samuel Alito
+AM35: C) John Roberts. He has served as Chief Justice since 2005.
+QM36: Under our Constitution, some powers belong to the federal government. What is one power of the federal government?
+CM36: A) To provide schooling, B) To print money, C) To give a driver’s license, D) To provide protection (police)
+AM36: B) To print money. Other federal powers include declaring war, creating an army, and making treaties.
+QM37: Under our Constitution, some powers belong to the states. What is one power of the states?
+CM37: A) Print money, B) Declare war, C) Give a driver’s license, D) Make treaties
+AM37: C) Give a driver’s license. States also provide schooling, safety (fire/police), and approve zoning and land use.
+QM38: What is the capital of the United States?
+CM38: A) New York, NY, B) Washington, D.C., C) Philadelphia, PA, D) Los Angeles, CA
+AM38: B) Washington, D.C. It is a federal district, not a state, and was founded in 1790.
+QM39: What are the two major political parties in the United States?
+CM39: A) Reform and Green, B) Democratic and Republican, C) Federalist and Whig, D) Libertarian and Socialist
+AM39: B) Democratic and Republican. The Republican Party is often called the GOP (Grand Old Party).
+QM40: What is the political party of the President now?
+CM40: A) Democratic, B) Republican, C) Independent, D) Libertarian
+AM40: B) Republican. President Donald Trump is a member of the Republican Party.
+QM41: What is the name of the Speaker of the House of Representatives now?
+CM41: A) Mike Johnson, B) Hakeem Jeffries, C) Nancy Pelosi, D) Mitch McConnell
+AM41: A) Mike Johnson. He has served as Speaker since October 2023.
+QM42: There are four amendments to the Constitution about who can vote. Describe one of them.
+CM42: A) Only people with jobs can vote, B) Citizens eighteen and older can vote, C) Only people who pay taxes can vote, D) You must own land to vote
+AM42: B) Citizens eighteen and older can vote. This was established by the 26th Amendment in 1971.
+QM43: What is one responsibility that is only for United States citizens?
+CM43: A) Pay taxes, B) Obey laws, C) Serve on a jury, D) Work for the government
+AM43: C) Serve on a jury. Citizens also have the responsibility to vote in federal elections.
+QM44: Name one right only for United States citizens.
+CM44: A) Freedom of speech, B) Freedom of religion, C) Vote in a federal election, D) Right to bear arms
+AM44: C) Vote in a federal election. Non-citizens can enjoy many constitutional rights but cannot vote in federal contests.
+QM45: What are two rights of everyone living in the United States?
+CM45: A) Vote and run for office, B) Freedom of expression and freedom of religion, C) Serve on a jury and pay lower taxes, D) Travel to space and own a business
+AM45: B) Freedom of expression and freedom of religion. The Bill of Rights protects everyone within U.S. borders, regardless of citizenship.
+QM46: What do we show loyalty to when we say the Pledge of Allegiance?
+CM46: A) The President, B) The Congress, C) The United States, D) The state we live in
+AM46: C) The United States. We specifically show loyalty to the flag and the Republic for which it stands.
+QM47: What is one promise you make when you become a United States citizen?
+CM47: A) To never travel abroad, B) To give up loyalty to other countries, C) To join a political party, D) To vote in every election
+AM47: B) To give up loyalty to other countries. This is part of the Oath of Allegiance taken during the naturalization ceremony.
+QM48: How old do citizens have to be to vote for President?
+CM48: A) 16, B) 18, C) 21, D) 25
+AM48: B) 18. The voting age was lowered from 21 to 18 during the Vietnam War.
+QM49: When is the last day you can send in federal income tax forms?
+CM49: A) January 1, B) April 15, C) July 4, D) December 31
+AM49: B) April 15. This is the general deadline unless it falls on a weekend or holiday.
+QM50: Who was the first President?
+CM50: A) Thomas Jefferson, B) Abraham Lincoln, C) George Washington, D) Benjamin Franklin
+AM50: C) George Washington. He served two terms from 1789 to 1797 and is often called the "Father of His Country."
+
+
+

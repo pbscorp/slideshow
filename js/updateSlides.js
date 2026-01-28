@@ -246,7 +246,7 @@ function updateSlides(slideNo) {
 		});
 	};
 	g_audioFailed = false;
-	if (slides[slideNo].type != "question") {
+	if (!slides[slideNo].type.includes("question", "muli-choice")) {
 		audio.onended = () => {
 		changeSlide(1);
 		}
