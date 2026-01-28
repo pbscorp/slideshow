@@ -3,8 +3,6 @@
 .AppleDouble
 .LSOverride
 ._*
-*config*.json
-*mediaList.json
 # Clipboard / pasteboard temp files
 .com.apple.Pasteboard.*
 
@@ -22,3 +20,14 @@
 node_modules/
 dist/
 build/
+
+# slideshow data
+*config*.json
+*mediaList.json
+media/*.*
+*/media/*.*
+*/config*.json
+*/mediaList.json
+*/index.html
+*/text.txt
+
