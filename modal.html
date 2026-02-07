@@ -33,9 +33,14 @@
 
 .flex-container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   border: 3px solid red;
   flex-wrap: wrap;
+  max-height: 450px;
+  background-color: #f1f1f1;
+
+
+
 }
 
 .flex-item1 {
@@ -45,7 +50,7 @@
   font-size: 18px;
   text-align: center;
   flex: 1 1 50%;
-  max-height: 350px;
+  max-height:inherit;
   overflow: scroll;
   display: block;
 
@@ -58,7 +63,7 @@
   font-size: 14px;
   text-align: left;
   width: 100%;
-  max-height: 350px;
+  max-height:inherit;
   overflow: scroll;
   display: block;
 }
@@ -128,6 +133,7 @@
       background-color: #92d4d9;
       color: rgb(93, 48, 48);
     }
+
     #mediaUpload {
       display: none;
     }
@@ -179,11 +185,25 @@
    
 <div id="contentArea" style="margin-top:5px; padding:10px; font-family:sans-serif;">
     <h2>Editing Jokes</h2>
-        <button onclick="showUserDashboard(currentUser)">← Done</button>
-        <span class="modal" id="myPopup" onclick="myFunction()"></span>
-        <h3>Slide name: text <button id="toggleButton" onclick="myFunction()">💡</button></h3>
-        <textarea id="textEditor" rows="8" style="width:100%"></textarea><br>
-        <button id="saveTextBtn">Save Text</button> 
+ 
+    <button onclick="showUserDashboard(currentUser)">← Done</button>
+        <span class="modal" id="myPopup" onclick="getHelp()"></span>
+        <h3>Slide name: text <button id="toggleButton" onclick="getHelp('text')">?💡?</button></h3>
+
+        <textarea id="textEditor" rows="15" cols="120"></textarea>
+        <br/><button class="saveBtn" id="saveTextBtn">Save Text</button>
+       <div id="voiceControls" style = "display: none;">
+        <br /><br /><audio id="player" controls></audio>
+        <br /><p id="recordKeysText" style = "display: inline;">  loading to your media folder&nbsp;</p>
+        <p id="voiceSelectionPara"> Your Presentor : <span id="voiceSelectionDropdown"></span></p>
+        </div>
+        <div id="contextMenu">
+          <div onclick="handleAction('copy')">📋 Copy</div>
+          <div onclick="handleAction('paste')">Paste 📋</div>
+          <div onclick="handleAction('uppercase')">🔠 Uppercase</div>
+          <div onclick="handleAction('search')">🔍 Search Google images</div>
+          <div onclick="handleAction('writeSoundFile')">📢 Make Sound File</div>
+        </div>
         <div class="flex-container">
             <div class="flex-item1" id = "editMediaDiv">
                 <h3>Media Files</h3>
@@ -191,9 +211,80 @@
                 <button id="recordAudioButton" onclick="openPopup('${folder}')" >🎙️</button>
                 <label for="mediaUpload">Select file: 📁</label>
                 <input type="file" id="mediaUpload" multiple><br>
-                <label for='"uploadMediaBtn" id="uploadMediaLbl" style='display:none' > Upload Selected>:</label>
-                <button id="uploadMediaBtn" style='display:none'>⬆️</button>
+                <label for="uploadMediaBtn" id="uploadMediaLbl" style="display:none">Upload Selected</label>
+                <button id="uploadMediaBtn" style="display:none">⬆️</button>
                 <div id="mediaList">
+                   <table  class= 'fade-target is-visible' id = 'mediaListTable'>
+                  <tbody><tr><th>file</th><th>re-name</th><th>remove</th></tr><tr class="newrow">
+                 <td> <input class="filename" size="10" type="text" readonly="" value="AM1.jpg"></td>
+                 <td> <input class="newname" id="newname0" size="6" value="AM1" <="" input="">&nbsp;&nbsp;&nbsp;<button onclick="renameMedia('USCIS01','AM1.jpg','0')">rename</button></td>
+                <td><button onclick="deleteMedia('USCIS01','AM1.jpg')">delete</button></td>
+                 </tr><tr class="newrow">
+                 <td> <input class="filename" size="10" type="text" readonly="" value="AM1.mp3"></td>
+                 <td> <input class="newname" id="newname1" size="6" value="AM1" <="" input="">&nbsp;&nbsp;&nbsp;<button onclick="renameMedia('USCIS01','AM1.mp3','1')">rename</button></td>
+                <td><button onclick="deleteMedia('USCIS01','AM1.mp3')">delete</button></td>
+                 </tr><tr class="newrow">
+                 <td> <input class="filename" size="10" type="text" readonly="" value="AM2.jpg"></td>
+                 <td> <input class="newname" id="newname2" size="6" value="AM2" <="" input="">&nbsp;&nbsp;&nbsp;<button onclick="renameMedia('USCIS01','AM2.jpg','2')">rename</button></td>
+                <td><button onclick="deleteMedia('USCIS01','AM2.jpg')">delete</button></td>
+                 </tr><tr class="newrow">
+                 <td> <input class="filename" size="10" type="text" readonly="" value="AM2.mp3"></td>
+                 <td> <input class="newname" id="newname3" size="6" value="AM2" <="" input="">&nbsp;&nbsp;&nbsp;<button onclick="renameMedia('USCIS01','AM2.mp3','3')">rename</button></td>
+                <td><button onclick="deleteMedia('USCIS01','AM2.mp3')">delete</button></td>
+                 </tr><tr class="newrow">
+                 <td> <input class="filename" size="10" type="text" readonly="" value="AM2.png"></td>
+                 <td> <input class="newname" id="newname4" size="6" value="AM2" <="" input="">&nbsp;&nbsp;&nbsp;<button onclick="renameMedia('USCIS01','AM2.png','4')">rename</button></td>
+                <td><button onclick="deleteMedia('USCIS01','AM2.png')">delete</button></td>
+                 </tr><tr class="newrow">
+                 <td> <input class="filename" size="10" type="text" readonly="" value="AM3.jpg"></td>
+                 <td> <input class="newname" id="newname5" size="6" value="AM3" <="" input="">&nbsp;&nbsp;&nbsp;<button onclick="renameMedia('USCIS01','AM3.jpg','5')">rename</button></td>
+                <td><button onclick="deleteMedia('USCIS01','AM3.jpg')">delete</button></td>
+                 </tr><tr class="newrow">
+                 <td> <input class="filename" size="10" type="text" readonly="" value="AM3.mp3"></td>
+                 <td> <input class="newname" id="newname6" size="6" value="AM3" <="" input="">&nbsp;&nbsp;&nbsp;<button onclick="renameMedia('USCIS01','AM3.mp3','6')">rename</button></td>
+                <td><button onclick="deleteMedia('USCIS01','AM3.mp3')">delete</button></td>
+                 </tr><tr class="newrow">
+                 <td> <input class="filename" size="10" type="text" readonly="" value="QM1.jpg"></td>
+                 <td> <input class="newname" id="newname7" size="6" value="QM1" <="" input="">&nbsp;&nbsp;&nbsp;<button onclick="renameMedia('USCIS01','QM1.jpg','7')">rename</button></td>
+                <td><button onclick="deleteMedia('USCIS01','QM1.jpg')">delete</button></td>
+                 </tr><tr class="newrow">
+                 <td> <input class="filename" size="10" type="text" readonly="" value="QM1.mp3"></td>
+                 <td> <input class="newname" id="newname8" size="6" value="QM1" <="" input="">&nbsp;&nbsp;&nbsp;<button onclick="renameMedia('USCIS01','QM1.mp3','8')">rename</button></td>
+                <td><button onclick="deleteMedia('USCIS01','QM1.mp3')">delete</button></td>
+                 </tr><tr class="newrow">
+                 <td> <input class="filename" size="10" type="text" readonly="" value="QM1.png"></td>
+                 <td> <input class="newname" id="newname9" size="6" value="QM1" <="" input="">&nbsp;&nbsp;&nbsp;<button onclick="renameMedia('USCIS01','QM1.png','9')">rename</button></td>
+                <td><button onclick="deleteMedia('USCIS01','QM1.png')">delete</button></td>
+                 </tr><tr class="newrow">
+                 <td> <input class="filename" size="10" type="text" readonly="" value="QM2.gif"></td>
+                 <td> <input class="newname" id="newname10" size="6" value="QM2" <="" input="">&nbsp;&nbsp;&nbsp;<button onclick="renameMedia('USCIS01','QM2.gif','10')">rename</button></td>
+                <td><button onclick="deleteMedia('USCIS01','QM2.gif')">delete</button></td>
+                 </tr><tr class="newrow">
+                 <td> <input class="filename" size="10" type="text" readonly="" value="QM2.jpg"></td>
+                 <td> <input class="newname" id="newname11" size="6" value="QM2" <="" input="">&nbsp;&nbsp;&nbsp;<button onclick="renameMedia('USCIS01','QM2.jpg','11')">rename</button></td>
+                <td><button onclick="deleteMedia('USCIS01','QM2.jpg')">delete</button></td>
+                 </tr><tr class="newrow">
+                 <td> <input class="filename" size="10" type="text" readonly="" value="QM2.mp3"></td>
+                 <td> <input class="newname" id="newname12" size="6" value="QM2" <="" input="">&nbsp;&nbsp;&nbsp;<button onclick="renameMedia('USCIS01','QM2.mp3','12')">rename</button></td>
+                <td><button onclick="deleteMedia('USCIS01','QM2.mp3')">delete</button></td>
+                 </tr><tr class="newrow">
+                 <td> <input class="filename" size="10" type="text" readonly="" value="QM3.jpg"></td>
+                 <td> <input class="newname" id="newname13" size="6" value="QM3" <="" input="">&nbsp;&nbsp;&nbsp;<button onclick="renameMedia('USCIS01','QM3.jpg','13')">rename</button></td>
+                <td><button onclick="deleteMedia('USCIS01','QM3.jpg')">delete</button></td>
+                 </tr><tr class="newrow">
+                 <td> <input class="filename" size="10" type="text" readonly="" value="QM3.mp3"></td>
+                 <td> <input class="newname" id="newname14" size="6" value="QM3" <="" input="">&nbsp;&nbsp;&nbsp;<button onclick="renameMedia('USCIS01','QM3.mp3','14')">rename</button></td>
+                <td><button onclick="deleteMedia('USCIS01','QM3.mp3')">delete</button></td>
+                 </tr><tr class="newrow">
+                 <td> <input class="filename" size="10" type="text" readonly="" value="default.jpg"></td>
+                 <td> <input class="newname" id="newname15" size="6" value="default" <="" input="">&nbsp;&nbsp;&nbsp;<button onclick="renameMedia('USCIS01','default.jpg','15')">rename</button></td>
+                <td><button onclick="deleteMedia('USCIS01','default.jpg')">delete</button></td>
+                 </tr><tr class="newrow">
+                 <td> <input class="filename" size="10" type="text" readonly="" value="voice.mp3"></td>
+                 <td> <input class="newname unused" id="newname16" size="6" value="voice" <="" input="">&nbsp;&nbsp;&nbsp;<button onclick="renameMedia('USCIS01','voice.mp3','16')">rename</button></td>
+                <td><button onclick="deleteMedia('USCIS01','voice.mp3')">delete</button></td>
+                 </tr></tbody>
+                 </table>
                 </div>
             </div>
         <div class="flex-item2" id = "editConfigDiv">
@@ -214,7 +305,7 @@
                 </tr>
                 <tr>
                     <td><label for="configDate">Date Active:&nbsp;&nbsp;&nbsp;</label></td>
-                    <td><input type="date" readonly id="configDate" style='display:none' value=""></input></td>
+                    <td><input type="date" readonly id="configDate" style="display:none" value=""></input></td>
                 </tr>
                 <tr>
                     <td><label for="configWebsite">related Website:</label></td>
@@ -237,7 +328,6 @@
         </div>
     </div>
 </div>
-     
 <script>
 // When the user clicks on div, open the popup
 function myFunction() {
