@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 
 
 ini_set('log_errors', 1);
-ini_set('error_log', '/tmp/php-tts-errors.log'); // creates a log file you can tail
+ini_set('error_log', 'tmp/php-tts-errors.log'); // creates a log file you can tail
 
 // Allow JSON requests from browser
 header('Content-Type: application/json');
@@ -36,6 +36,8 @@ if (!isset($input['text']) || trim($input['text']) === '') {
 
 $text = $input['text'];
 $folder = $input['folder'];
+$recordKey = $input['recordKey'];
+$voice = $input['defaultPresenter'];
 
 // Load API key from environment or config
 $apiKey = getenv('INWORLD_API_KEY');  // set this in your hosting env panel
@@ -47,6 +49,7 @@ $apiKey = $config['INWORLD_API_KEY'] ?? null;
 if (!$apiKey) {
     http_response_code(500);
     echo json_encode(['error' => 'INWORLD_API_KEY not configured']);
+    
     exit;
 }
 
@@ -54,7 +57,7 @@ $url = 'https://api.inworld.ai/tts/v1/voice';
 
 $payload = [
     'text' => $text,
-    'voice_id' => 'default-wg3fvsjtsajw7wc-kn3k2a__mcfloon',
+    'voice_id' => $voice,
     'audio_config' => [
         'audio_encoding' => 'MP3',
         'speaking_rate' => 1,
@@ -104,7 +107,7 @@ if (!isset($result['audioContent'])) {
 $audioContent = $result['audioContent'];
 $audioBuffer = base64_decode($audioContent);
 
-file_put_contents("$folder/media/voice.mp3", $audioBuffer);
+file_put_contents("$folder/media/$recordKey.mp3", $audioBuffer);
 
 echo json_encode([
     'audioContent' => $result['audioContent'],

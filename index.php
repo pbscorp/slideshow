@@ -14,7 +14,7 @@ const queryString = window.location.search;
 			
 			//alert("projName  " + projName);
 			
-			const targetPage = "slideshow.html";
+			var targetPage = "slideshow.html";
 			
 			if (projName) {
 		

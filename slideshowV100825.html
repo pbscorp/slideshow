@@ -158,7 +158,7 @@
     // Example usage:
 
     async function testConfirm() {
-      const isConfirmed = await customConfirm("Are you absolutely sure you want to delete this item?");
+      const isConfirmed = await customConfirm("Are you sure you want to delete this item?");
       if (isConfirmed) {
         alert("Item deleted!");
       } else {
@@ -269,6 +269,17 @@
     var resultAudio= getMediaFile('result', 'sound');
     var resultVideo = getMediaFile('result', 'video');
     var multiQuestionImage="";
+ // from https://from pixabay.com/sound-effects/search/timer/?content_type=authentic&theme=film+%26+special+effects   
+    var questionAudioSrc2 = "media/suspenseful-boom-3sec.mp3";
+    var choiceAudioSrc2 = "media/stimer-with-chime-12s.mp3";
+    var answerAudioSrc2 = "media/suspenseful-boom-3sec.mp3";
+
+    var questionAudioSrc2 = "media/threeSecQuite.m4a";
+    var choiceAudioSrc2 = "media/tiking30sec.m4a";
+    var answerAudioSrc2 = "media/fifteenSecQuite.m4a";
+    var threeSecQuite = "media/threeSecQuite.m4a";
+    var fifteenSecQuite = "media/fifteenSecQuite.m4a";
+
     slides.push({
       type: 'results',
       content: "",
@@ -295,6 +306,7 @@
       const otherType = line.split(':')[0];
       const slideKey = line.split(':')[0];
       var otherContent = getStringAfterFirstColon(line);
+
       if (questionMatch) {
         questionContent = otherContent;
         questionnNmber = slideKey;
@@ -303,7 +315,7 @@
       if (multAnswerMatch) {
         correctAnswer = questionnNmber + ':' + otherContent.split(',')[0];
         correctAnswerList += correctAnswer.replace(/\s/g, '') + '/';
-        console.log('correctAnswerList ' + correctAnswerList);
+        //console.log('correctAnswerList ' + correctAnswerList);
       }
       if (multChoiceMatch) {
         multiChoiceCtr++;
@@ -315,22 +327,34 @@
         });
         choiceContent += '</ul';
         otherContent = choiceContent;
-        console.log('choiceContent ' + choiceContent);
+        //console.log('choiceContent ' + choiceContent);
       }
       //console.log('otherContent ' + otherContent);
       // alert('otherType = ' + otherType);
       var videoFilePath = getMediaFile(otherType, "video");
-      //alert(videoFilePath);
       var imageFilePath = getMediaFile(otherType, "image");
       var soundFilePath = getMediaFile(otherType, "sound");
+      //questionAudioSrc2 = 
+      console.log(slideKey + '   XXXXXXXXsoundFilePath >>' + soundFilePath + ' = ' + (soundFilePath));
+      if (!soundFilePath) {
+        console.log(soundFilePath + " not found");
+      }
 
       if (multQuestionMatch) {
         multiQuestionImage = `${imageFilePath}`;
+        if (soundFilePath) {
+          soundFilePath = soundFilePath;
+          sound2FilePath = threeSecQuite;
+        } else {
+          soundFilePath = fifteenSecQuite;
+          sound2FilePath = '';
+        }
         slides.push({
           type: 'multiQuestion',
           content: otherContent.trim(),
           background: `${imageFilePath}`,
           audioSrc: `${soundFilePath}`,
+          audioSrc2: `${sound2FilePath}`,
           videoSrc: `${videoFilePath}`
         });
       } else if (questionMatch) {
@@ -342,11 +366,21 @@
           videoSrc: `${videoFilePath}`
         });
       } else if (answerMatch) {
+        if (soundFilePath) {
+          soundFilePath = soundFilePath;
+          sound2FilePath = threeSecQuite;
+        } else {
+          soundFilePath = threeSecQuite;
+          sound2FilePath = "";
+        }
+        //console.log('=============soundFilePath >>' + soundFilePath + ' = ' + (soundFilePath));
+        //console.log('=============soundFilePath >>' + sound2FilePath + ' = ' + (sound2FilePath));
         slides.push({
           type: 'answer',
           content: otherContent.trim(),
           background: `${imageFilePath}`,
           audioSrc: `${soundFilePath}`,
+          audioSrc2: `${sound2FilePath}`,
           videoSrc: `${videoFilePath}`
         });
       } else if (choiceContent) {
@@ -354,11 +388,19 @@
            imageFilePath = multiQuestionImage;
         }
         multiQuestionImage = '';
+        if (soundFilePath) {
+          soundFilePath = soundFilePath;
+          sound2FilePath = choiceAudioSrc2;
+        } else {
+          soundFilePath = choiceAudioSrc2;
+          sound2FilePath = "";
+        }
         slides.push({
           type: 'multi-choice',
           content: otherContent.trim(),
           background: `${imageFilePath}`,
           audioSrc: `${soundFilePath}`,
+          audioSrc2: `${sound2FilePath}`,
           videoSrc: `${videoFilePath}`
         });
       } else if (otherType != "TITLE") {
@@ -367,6 +409,7 @@
           content: otherContent.trim(),
           background: `${imageFilePath}`,
           audioSrc: `${soundFilePath}`,
+          audioSrc2: "",
           videoSrc: `${videoFilePath}`
         });
       }
@@ -381,16 +424,20 @@
   <script>
     var currentAnswerCorrect;
     var currentAnswerIncorrect;
+
+	function inCorrectAnswer() {
+        currentAnswerCorrect = false;
+        currentAnswerIncorrect = true;
+        playIncorrectSoundPureJS();
+        inCorrectAnswerCtr++;
+	}
     function checkAnswer(questionnNmber, myAnswer) {
       answer = questionnNmber + ':' + myAnswer.replace(/\s/g, '').substring(0, 10);
       console.log('********************* answer = ' + answer);
       let index = correctAnswerList.indexOf(answer);
       if (index == -1) {
         //alert('incorrect');
-        currentAnswerCorrect = false;
-        currentAnswerIncorrect = true;
-        playIncorrectSoundPureJS();
-        inCorrectAnswerCtr++;
+       inCorrectAnswer();
       } else {
         if (currentAnswerIncorrect != true) {
           currentAnswerCorrect = true;

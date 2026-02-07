@@ -58,185 +58,22 @@
   }
   var selectedFilesArray = [];
 
-// voice JS
-  let textarea = document.getElementById('textEditor');
-  let voicePlayer = document.getElementById('player');
-  let voiceControls = document.getElementById('voiceControls');
-  let saveVoiceBtn = document.getElementById('saveVoiceBtn');
-
-  let voiceMenu = document.getElementById('contextMenu');
-  
-  const content = document.getElementById("contentArea");
-// When the user clicks on div, open the popup
-let selectedText = '';
-  let longPressTimer;
-
-  // Get selected text
-  function getSelectionText() {
-
-    return textarea.value.substring(
-      textarea.selectionStart,
-      textarea.selectionEnd
-    );
-  }
-
-  // Show menu
-  function showMenu(x, y) {
-    selectedText = getSelectionText();
-    if (!selectedText) return;
-    voiceMenu.style.left = x + 'px';
-    voiceMenu.style.top = y + 'px';
-    voiceMenu.style.display = 'block';
-    voiceControls.style.display = "none";
-  }
-
-  // Hide menu
-  function hideMenu() {
-    voiceMenu.style.display = 'none';
-  }
-
-
-  // Actions
-  function handleAction(action) {
-    switch(action) {
-      case 'copy':
-        navigator.clipboard.writeText(selectedText);
-        break;
-
-      case 'paste':
-        handlePaste();
-        break;
-
-      case 'uppercase':
-        const start = textarea.selectionStart;
-        const end = textarea.selectionEnd;
-        textarea.setRangeText(selectedText.toUpperCase(), start, end, 'end');
-        break;
-
-      case 'search':
-        window.open(
-          'https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(selectedText),
-          '_blank'
-        );
-        break;
-      case 'writeSoundFile':
-        voiceControls.style.display = "inline";
-        saveVoiceBtn.style.display = "none";
-        voiceName.style.display = "none";
-        document.getElementById(`saveVoiceBtn`).innerText = "save as";
-        writeSoundFile(selectedText);
-
-        break;
-    }
-    hideMenu();
-  }
-
-  async function handlePaste() {
-    try {
-      const text = await navigator.clipboard.readText();
-      const start = textarea.selectionStart;
-      const end = textarea.selectionEnd;
-
-      // Use setRangeText to replace selection or insert at cursor
-      textarea.setRangeText(text, start, end, 'end'); 
-      console.log('Text pasted from clipboard');
-    } catch (err) {
-      // Note: Some browsers will show a prompt the first time you try to read
-      console.error('Failed to read clipboard: ', err);
-    }
-    textarea.focus();
-  }
-
-  async function saveVoice() {
-    if (document.getElementById(`saveVoiceBtn`).innerText == "done") {
-          document.getElementById(`voiceControls`).style.display = "none";
-          return;
-    };
-
-    voiceFile = "voice.mp3";
-    newBase = document.getElementById(`voiceName`).value;
-    newFile = newBase + '.' + voiceFile.split('.')[1];
-    //if (!confirm("renameMedia " + newFile + "?")) return;
-    const res = await fetch(`filemanager.php?action=rename&proj=${currentFolder}&oldFile=${voiceFile}&newFile=${newFile}`);
-    const txt = await res.text();
-    console.log('text from rename request = ' + txt);
-    document.getElementById(`saveVoiceBtn`).innerText = "done";
-    document.getElementById(`voiceName`).style.display = "none";
-    await loadMediaList(currentFolder);
-    //
-    try {
-      hilightUnused();
-    } catch (err) {
-      alert("the saveVoice request failed: " + err.message);
-    }
-    //
-  }
-
-  async function writeSoundFile (selectedText) {
-    let recordKey = "temp";
-    let text = selectedText.trim();
-    let inx = selectedText.trim().indexOf(':');
-        console.log('text = ' + text + ' inx = ' + inx);
-    if ((inx > -1) && inx < 10 ) {
-        recordKey = selectedText.substring(0, inx);
-        text = selectedText.substring(inx +1, selectedText.length - inx +2);
-    }
-    const start = textarea.selectionStart;
-    const folder = currentFolder;
-    console.log('recordKey = ' + recordKey + ' folder = ' + folder);
-    if (!selectedText) return;
-
-    try {
-      const resp = await fetch('tts.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text, folder }),
-      });
-      console.log(resp);
-      if (!resp.ok) {
-        alert('TTS request failed' + resp);
-        return;
-      }
-
-      const data = await resp.json();
-      const audioBase64 = data.audioContent;
-
-      // Convert base64 to a Blob URL usable by <audio>
-      const byteChars = atob(audioBase64);
-      const byteNumbers = new Array(byteChars.length);
-      for (let i = 0; i < byteChars.length; i++) {
-        byteNumbers[i] = byteChars.charCodeAt(i);
-      }
-      const byteArray = new Uint8Array(byteNumbers);
-      const blob = new Blob([byteArray], { type: 'audio/mpeg' });
-      const url = URL.createObjectURL(blob);
-      console.log(' url = ' + url);
-      voicePlayer.src = url;
-      voicePlayer.play();
-      document.getElementById(`voiceName`).value = recordKey;
-      document.getElementById(`voiceName`).style.display = "inline";
-      document.getElementById(`saveVoiceBtn`).style.display = "inline";
-
-    } catch (e) {
-      console.error(e);
-      alert('Error calling TTS API ' + e);
-    }
-  };
-debugger;
 currentFolder = "";
 async function editSlideshow(folder) {
   currentFolder = folder;
+    const content = document.getElementById("contentArea");
+
   content.innerHTML = `<h2>Editing folder ${folder}</h2>
         <button onclick="showUserDashboard(currentUser)">← Done</button>
         <span class="modal" id="myPopup" onclick="getHelp()"></span>
         <h3>Slide name: text <button id="toggleButton" onclick="getHelp('text')">?💡?</button></h3>
 
         <textarea id="textEditor" rows="15" cols="120"></textarea>
-        <div id="voiceControls" style = "display: none;">
-          <br /><br /><audio id="player" controls></audio>
-          <br /><br /><button id="saveVoiceBtn" onclick = "saveVoice()" style = "display: inline;">save file as </button>
-          <input style = "display: none;" type="text" size="10" id = "voiceName" value = "voice">
-          <br/><br/>
+        <br/><button class="saveBtn" id="saveTextBtn">Save Text</button>
+       <div id="voiceControls" style = "display: none;">
+        <br /><br /><audio id="player" controls></audio>
+        <br /><p id="recordKeysText" style = "display: inline;">  loading to your media folder&nbsp;</p>
+        <p id="voiceSelectionPara"> Your Presentor : <span id="voiceSelectionDropdown"></span></p>
         </div>
         <div id="contextMenu">
           <div onclick="handleAction('copy')">📋 Copy</div>
@@ -245,7 +82,6 @@ async function editSlideshow(folder) {
           <div onclick="handleAction('search')">🔍 Search Google images</div>
           <div onclick="handleAction('writeSoundFile')">📢 Make Sound File</div>
         </div>
-        <button id="saveTextBtn">Save Text</button> 
         <div class="flex-container">
             <div class="flex-item1" id = "editMediaDiv">
                 <h3>Media Files</h3>
@@ -304,11 +140,17 @@ async function editSlideshow(folder) {
   // load text.txt
 
   // Desktop right-click
- textarea = document.getElementById('textEditor');
- voicePlayer = document.getElementById('player');
- voiceControls = document.getElementById('voiceControls');
- saveVoiceBtn = document.getElementById('saveVoiceBtn');
- voiceMenu = document.getElementById('contextMenu');
+  textarea = document.getElementById('textEditor');
+  voicePlayer = document.getElementById('player');
+  voiceControls = document.getElementById('voiceControls');
+  saveVoiceBtn = document.getElementById('saveVoiceBtn');
+  voiceMenu = document.getElementById('contextMenu');
+  textarea = document.getElementById('textEditor');
+  voicePlayer = document.getElementById('player');
+  voiceControls = document.getElementById('voiceControls');
+  recordKeysText = document.getElementById('recordKeysText');
+  voiceMenu = document.getElementById('contextMenu');
+  createVoiceDropdown();
 
   textarea.addEventListener('contextmenu', e => {
     e.preventDefault();
@@ -457,6 +299,7 @@ async function updateProject(folder) {
       alert("error updating text " + err);
 
     }
+    await loadMediaList(folder);
     await hilightUnused();
   };
 

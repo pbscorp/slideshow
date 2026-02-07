@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Right click in textarea</title>
+</head>
+<body>
+<style>
+#contextMenu {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 10px rgba(0,0,0,.2);
+  display: none;
+  z-index: 9999;
+  min-width: 160px;
+}
+
+#contextMenu div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+#contextMenu div:hover {
+  background: #f0f0f0;
+}
+
+#saveVoiceBtn {
+  border-radius: 25px;
+  background-color: blue;
+  width: 90px;
+  color: white;
+  padding: 4px;
+  font-weight: bold;
+}
+.text-green {
+  color: green;
+}
+.text-red {
+  color: red;
+}
+</style>
+<textarea id="textEditor" rows="15" cols="120">
+QM1: What is the most abundant element in the universe?
+CM1: Hydrogen,Oxygen,Carbon,Helium
+AM1: Hydrogen, It makes up about 75% of the universe’s normal matter.
+QM2: What galaxy do we live in?
+CM2: Andromeda Galaxy,Milky Way Galaxy,Sombrero Galaxy,Whirlpool Galaxy
+AM2: Milky Way Galaxy, It contains over 100 billion stars.
+QM3: What is the name of the force that keeps planets in orbit?
+CM3: Magnetism,Gravity,Nuclear Force,Dark Energy
+AM3: Gravity, It is the weakest force but acts over vast distances.
+</textarea>
+<div id="voiceControls" style = "display: none;">
+<br /><br /><audio id="player" controls></audio>
+<br /><p id="recordKeysText" style = "display: inline;">  loading to your media folder&nbsp;</p>
+<p id="voiceSelectionPara"> Your Presentor : <span id="voiceSelectionDropdown"></span></p>
+</div>
+<div id="contextMenu">
+  <div onclick="handleAction('copy')">📋 Copy</div>
+  <div onclick="handleAction('paste')">Paste 📋</div>
+  <div onclick="handleAction('uppercase')">🔠 Uppercase</div>
+  <div onclick="handleAction('search')">🔍 Search Google images</div>
+  <div onclick="handleAction('writeSoundFile')">📢 Make Sound File</div>
+</div>
+
+  <script src="js/voice.js"></script>
+  <script>
+
+window.addEventListener('load', (event) => {
+  createVoiceDropdown();
+});
+  </script>
+</body>
+</html>

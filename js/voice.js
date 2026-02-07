@@ -1,13 +1,82 @@
 // voice.js
-const textarea = document.getElementById('textEditor');
-const voicePlayer = document.getElementById('player');
-const voiceControls = document.getElementById('voiceControls');
-const saveVoiceBtn = document.getElementById('saveVoiceBtn');
-const audioName = document.getElementById('voiceName');
-
-const menu = document.getElementById('contextMenu');
+let textarea = document.getElementById('textEditor');
+let voicePlayer = document.getElementById('player');
+let voiceControls = document.getElementById('voiceControls');
+let recordKeysText = document.getElementById('recordKeysText');
+var recordKeyCtr = 0;
+let voiceMenu = document.getElementById('contextMenu');
+let currentFolder = "test";
 let selectedText = '';
 let longPressTimer;
+let defaultPresenter = "default-wg3fvsjtsajw7wc-kn3k2a__mcfloon";
+var recordKey = "voice";
+var selectedTextArray = [];
+var playListArry = [];
+var playerStarted = false;
+
+// Data source for the dropdown options
+const presenters = ['Clive', 'default-wg3fvsjtsajw7wc-kn3k2a__mcfloon', 'Ashley', 'Hades'];
+
+// Function to create and insert the dropdown
+function createVoiceDropdown() {
+
+  textarea.addEventListener('contextmenu', e => {
+    e.preventDefault();
+    showMenu(e.pageX, e.pageY);
+  });
+// Mobile long-press
+  textarea.addEventListener('touchstart', e => {
+    longPressTimer = setTimeout(() => {
+      const touch = e.touches[0];
+      showMenu(touch.pageX, touch.pageY);
+    }, 600);
+  });
+
+  textarea.addEventListener('touchend', () => {
+    clearTimeout(longPressTimer);
+  });
+
+  // Click outside closes menu
+  document.addEventListener('click', hideMenu);
+
+  // 1. Reference the container element
+  const container = document.getElementById('voiceSelectionDropdown');
+
+  // 2. Create the <select> element
+  const selectElement = document.createElement('select');
+  selectElement.id = 'voiceSelect'; // Assign an ID for potential future reference
+
+  // 3. Create and add a default, disabled option (optional)
+  const defaultOption = document.createElement('option');
+  defaultOption.text = 'Select one';
+  defaultOption.value = '';
+  defaultOption.disabled = true;
+  defaultOption.selected = true;
+  selectElement.appendChild(defaultOption);
+
+  // 4. Iterate over the data and create <option> elements
+  presenters.forEach(presenter => {
+    const presenterArray = presenter.split("_");
+    const presenterName = presenterArray.findLast(word => word.length > 0).replace(/^./, char => char.toUpperCase());
+    const option = document.createElement('option');
+    option.value = presenter; // Set the value
+    option.text = presenterName;         // Set the display text
+    selectElement.appendChild(option);   // Add the option to the select element
+  });
+
+  // 5. Insert the <select> element into the paragraph's container
+  container.appendChild(selectElement);
+
+  // Optional: Add an event listener to handle changes
+  selectElement.addEventListener('change', function() {
+    console.log(`You selected: ${this.value}`);
+    defaultPresenter = `${this.value}`;
+    writeSoundFile(selectedText);
+    // You can add further actions here
+  });
+}
+
+// Call the function to generate the dropdown when the page loads (or at an appropriate time)
 
 // Get selected text
 function getSelectionText() {
@@ -17,42 +86,26 @@ function getSelectionText() {
   );
 }
 
-// Show menu
+// Show voiceMenu
 function showMenu(x, y) {
   selectedText = getSelectionText();
   if (!selectedText) return;
-  menu.style.left = x + 'px';
-  menu.style.top = y + 'px';
-  menu.style.display = 'block';
+  voiceMenu.style.left = x + 'px';
+  voiceMenu.style.top = y + 'px';
+  voiceMenu.style.display = 'block';
   voiceControls.style.display = "none";
 }
 
-// Hide menu
+// Hide voiceMenu
 function hideMenu() {
-  menu.style.display = 'none';
+  voiceMenu.style.display = 'none';
 }
 
-// Desktop right-click
-textarea.addEventListener('contextmenu', e => {
-  e.preventDefault();
-  showMenu(e.pageX, e.pageY);
+/* Desktop right-click
+window.addEventListener('load', (event) => {
+  createVoiceDropdown();
 });
-
-// Mobile long-press
-textarea.addEventListener('touchstart', e => {
-  longPressTimer = setTimeout(() => {
-    const touch = e.touches[0];
-    showMenu(touch.pageX, touch.pageY);
-  }, 600);
-});
-
-textarea.addEventListener('touchend', () => {
-  clearTimeout(longPressTimer);
-});
-
-// Click outside closes menu
-document.addEventListener('click', hideMenu);
-
+*/
 // Actions
 function handleAction(action) {
   switch(action) {
@@ -76,13 +129,10 @@ function handleAction(action) {
         '_blank'
       );
       break;
-    case 'writeSoundFile':
-      voiceControls.style.display = "block";
-      saveVoiceBtn.style.display = "none";
-      writeSoundFile(selectedText);
-      saveVoiceBtn.style.display = "block";
-
-      break;
+      case 'writeSoundFile':
+        voiceControls.style.display = "inline";
+        writeSoundFile(selectedText);
+        break;
   }
   hideMenu();
 }
@@ -103,46 +153,91 @@ async function handlePaste() {
   textarea.focus();
 }
 
-async function saveVoice(folder, voiceFile) {
+async function saveVoice() {
+  if (document.getElementById(`saveVoiceBtn`).innerText == "done") {
+        document.getElementById(`voiceControls`).style.display = "none";
+        return;
+  };
+
+  voiceFile = "voice.mp3";
   newBase = document.getElementById(`voiceName`).value;
   newFile = newBase + '.' + voiceFile.split('.')[1];
   //if (!confirm("renameMedia " + newFile + "?")) return;
-  const res = await fetch(`filemanager.php?action=rename&proj=${folder}&oldFile=${voiceFile}&newFile=${newFile}`);
+  const res = await fetch(`filemanager.php?action=rename&proj=${currentFolder}&oldFile=${voiceFile}&newFile=${newFile}`);
   const txt = await res.text();
-  console.log('text from rename request = ' + txt);
-  await loadMediaList(folder);
-  //
+
   try {
-    hilightUnused();
+  console.log('text from rename request = ' + txt);
+  document.getElementById(`saveVoiceBtn`).innerText = "done";
+  document.getElementById(`voiceName`).style.display = "none";
+  if (currentFolder != "test") {
+      await loadMediaList(currentFolder);
+      await hilightUnused();
+  }
   } catch (err) {
     alert("the saveVoice request failed: " + err.message);
   }
-  //
 }
 
-async function writeSoundFile (selectedText) {
-  let recordKey = "";
-  let text = selectedText.trim();
+async function writeSoundFile (selectedTextSlected) {
+  playListArry = [];
+   playerStarted = false;
+
+  selectedTextArray = selectedTextSlected.trim().split('\n');
+  recordKeysText.innerText = " loading to your media folder ";
+
+  await selectedTextArray.forEach(selectedText => {
+    writeEachSoundFile(selectedText);
+    console.log('selectedTextArray.length = ' + selectedTextArray.length);
+  });
+}
+function startVoicePlayer(next) {
+  if (playListArry[next]){
+    console.log( '>>>>>>>>>>next playing = ' + next +  ' url ' + playListArry[next]);
+    voicePlayer.src = playListArry[next];
+    voicePlayer.play(next);
+      next++;
+    voicePlayer.onended = () => {
+      startVoicePlayer(next);
+    }
+  }
+}
+async function writeEachSoundFile(selectedText) {
+  recordKey = "voice";
+  recordKeyCtr++;
+  let text = selectedText.trim();;
+
   let inx = selectedText.trim().indexOf(':');
       console.log('text = ' + text + ' inx = ' + inx);
   if ((inx > -1) && inx < 10 ) {
       recordKey = selectedText.substring(0, inx);
       text = selectedText.substring(inx +1, selectedText.length - inx +2);
+  } else {
+    recordKey = "voice" + recordKeyCtr;
   }
+  const regex = /,([^,]*)$/;
+  const replacement = " or $1";
+  const str = text;
+  if (recordKey.substring(0, 2) == 'CM') {
+    text = str.replace(regex, replacement)
+  }
+const result = str.replace(regex, replacement)
+  recordKeysText.innerHTML += recordKey + "&nbsp";
   const start = textarea.selectionStart;
-  const folder = "Jokes";
-  console.log('recordKey = ' + recordKey + ' selectedText = ' + text);
+  const folder = currentFolder;
+  console.log('recordKey = ' + recordKey + ' folder = ' + folder);
   if (!selectedText) return;
 
   try {
-      const resp = await fetch('/tts.php', {
+    const resp = await fetch('tts.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text }),
+      body: JSON.stringify({ text, folder, recordKey, defaultPresenter }),
+      //ßbody: JSON.stringify({ text, folder }),
     });
     console.log(resp);
     if (!resp.ok) {
-      alert('TTS request failed' + JSON.stringify(resp));
+      alert('TTS request failed' + resp);
       return;
     }
 
@@ -159,10 +254,17 @@ async function writeSoundFile (selectedText) {
     const blob = new Blob([byteArray], { type: 'audio/mpeg' });
     const url = URL.createObjectURL(blob);
     console.log(' url = ' + url);
-    voicePlayer.src = url;
-    voicePlayer.play();
+    //voicePlayer.src = url;
+    playListArry.push(`${url}`);
+    if (!playerStarted) {
+      playerStarted = true;
+      console.log(' playerStarted = ' + playerStarted);
+      startVoicePlayer(0);
+    }
+
+    console.log(' recordKeyCtr = ' + recordKeyCtr  + ' selectedTextArray.length = ' + selectedTextArray.length);
   } catch (e) {
     console.error(e);
-    alert('Error calling TTS API' + e);
+    alert('Error calling TTS API ' + e);
   }
-};
+}

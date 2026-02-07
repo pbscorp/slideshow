@@ -239,18 +239,51 @@ function updateSlides(slideNo) {
 	g_audioFailed = false;
 	if (!isMuted && isAudio){
 		audio.play().catch(error => {
-		g_audioFailed = true;
-		alert(g_audioFailed + ' Audio play failed:' + error);
-		audio.src = ''; // Silence if blocked
-		audio.onended = () => changeSlide(1); // Still advance
-		});
+				g_audioFailed = true;
+				alert(g_audioFailed + ' Audio play failed:' + error);
+			});
 	};
+
+	console.log(' slideNo ' + slideNo + ' src and type = ' + slides[slideNo].audioSrc + ' ' + slides[slideNo].type );
+	console.log(' slideNo ' + slideNo + ' src2 and type = ' + slides[slideNo].audioSrc2 + ' ' + slides[slideNo].type );
+
 	g_audioFailed = false;
-	if (!slides[slideNo].type.includes("question", "muli-choice")) {
+	if (!isMuted && isAudio) {
+		console.log(' now playing ' + slides[slideNo].audioSrc);
+		audio.onended = () => {
+			if (slides[slideNo].audioSrc2.length) {
+				audio.src = slides[slideNo].audioSrc2;
+				audio.play();
+				audio.onended = () => {
+					if (slides[slideNo].type == "multi-choice") {
+						inCorrectAnswer();
+					}
+					changeSlide(1);
+					}
+			} else {
+				if (slides[slideNo].type == "multi-choice") {
+					inCorrectAnswer();
+				}
+					changeSlide(1);
+			}
+		};
+	} else if (slides[slideNo].type == "multi-choice") {
+		audio.play();
+			audio.onended = () => {
+				inCorrectAnswer();
+				changeSlide(1);
+				}
+		 
+	}
+	//const excludeAdvancingSlide = "Xquestion, Xmuli-choice, Xanswer";
+	/*if (excludeAdvancingSlide.indexOf(slides[slideNo].type) == -1 ) {
+		if (!isMuted && isAudio) {
+		console.log('advance  slides[slideNo].type. = ' + slides[slideNo].type);
 		audio.onended = () => {
 		changeSlide(1);
 		}
 	};
+	*/
 	var displayText = slides[slideNo].content;
 	if (slides[slideNo].type == "answer") {
 		if(currentAnswerCorrect) {
