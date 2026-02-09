@@ -208,10 +208,10 @@ async function writeEachSoundFile(selectedText) {
   let text = selectedText.trim();;
 
   let inx = selectedText.trim().indexOf(':');
-      console.log('text = ' + text + ' inx = ' + inx);
+      //console.log('text = ' + text + ' inx = ' + inx);
   if ((inx > -1) && inx < 10 ) {
       recordKey = selectedText.substring(0, inx);
-      text = selectedText.substring(inx +1, selectedText.length - inx +2);
+      text = selectedText.substring(inx +1);
   } else {
     recordKey = "voice" + recordKeyCtr;
   }
@@ -219,13 +219,14 @@ async function writeEachSoundFile(selectedText) {
   const replacement = " or $1";
   const str = text;
   if (recordKey.substring(0, 2) == 'CM') {
-    text = str.replace(regex, replacement)
+    text = str.replace(regex, replacement);
+    console.log('text = ' + text + ' str = ' + str);
   }
 const result = str.replace(regex, replacement)
   recordKeysText.innerHTML += recordKey + "&nbsp";
   const start = textarea.selectionStart;
   const folder = currentFolder;
-  console.log('recordKey = ' + recordKey + ' folder = ' + folder);
+  //console.log('recordKey = ' + recordKey + ' folder = ' + folder);
   if (!selectedText) return;
 
   try {
@@ -262,7 +263,7 @@ const result = str.replace(regex, replacement)
       startVoicePlayer(0);
     }
 
-    console.log(' recordKeyCtr = ' + recordKeyCtr  + ' selectedTextArray.length = ' + selectedTextArray.length);
+    //console.log(' recordKeyCtr = ' + recordKeyCtr  + ' selectedTextArray.length = ' + selectedTextArray.length);
   } catch (e) {
     console.error(e);
     alert('Error calling TTS API ' + e);
