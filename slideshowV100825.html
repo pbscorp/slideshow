@@ -270,14 +270,10 @@
     var resultVideo = getMediaFile('result', 'video');
     var multiQuestionImage="";
  // from https://from pixabay.com/sound-effects/search/timer/?content_type=authentic&theme=film+%26+special+effects   
-    var questionAudioSrc2 = "media/suspenseful-boom-3sec.mp3";
-    var choiceAudioSrc2 = "media/stimer-with-chime-12s.mp3";
-    var answerAudioSrc2 = "media/suspenseful-boom-3sec.mp3";
 
-    var questionAudioSrc2 = "media/threeSecQuite.m4a";
-    var choiceAudioSrc2 = "media/tiking30sec.m4a";
-    var answerAudioSrc2 = "media/fifteenSecQuite.m4a";
+    var thirtySecTicking = "media/thirtySecTicking.m4a";
     var threeSecQuite = "media/threeSecQuite.m4a";
+    var nineSecQuite = "media/nineSecQuite.m4a";
     var fifteenSecQuite = "media/fifteenSecQuite.m4a";
 
     slides.push({
@@ -334,7 +330,6 @@
       var videoFilePath = getMediaFile(otherType, "video");
       var imageFilePath = getMediaFile(otherType, "image");
       var soundFilePath = getMediaFile(otherType, "sound");
-      //questionAudioSrc2 = 
       console.log(slideKey + '   XXXXXXXXsoundFilePath >>' + soundFilePath + ' = ' + (soundFilePath));
       if (!soundFilePath) {
         console.log(soundFilePath + " not found");
@@ -346,7 +341,7 @@
           soundFilePath = soundFilePath;
           sound2FilePath = threeSecQuite;
         } else {
-          soundFilePath = fifteenSecQuite;
+          soundFilePath = threeSecQuite;
           sound2FilePath = '';
         }
         slides.push({
@@ -370,7 +365,7 @@
           soundFilePath = soundFilePath;
           sound2FilePath = threeSecQuite;
         } else {
-          soundFilePath = threeSecQuite;
+          soundFilePath = nineSecQuite;
           sound2FilePath = "";
         }
         //console.log('=============soundFilePath >>' + soundFilePath + ' = ' + (soundFilePath));
@@ -390,9 +385,9 @@
         multiQuestionImage = '';
         if (soundFilePath) {
           soundFilePath = soundFilePath;
-          sound2FilePath = choiceAudioSrc2;
+          sound2FilePath = thirtySecTicking;
         } else {
-          soundFilePath = choiceAudioSrc2;
+          soundFilePath = thirtySecTicking;
           sound2FilePath = "";
         }
         slides.push({
