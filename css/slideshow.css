@@ -251,9 +251,10 @@
             background-color: white;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             position: relative;
-				align-items: center;
+				    align-items: center;
             text-align: center;
             overflow: hidden;
+            opacity: 1;
 				//border: 3px solid green;
         
  				margin: 0 auto;

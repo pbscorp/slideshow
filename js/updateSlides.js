@@ -234,8 +234,12 @@ function updateSlides(slideNo) {
 	}
 	if (hasImage) {
 		setBackgroundImage(slideDiv, slides[slideNo].background);
+		document.getElementById('initSlide').style.opacity = '1.0';
+	} else {
+		document.getElementById('initSlide').style.opacity = '0.7';
 	}
-	console.log(' isAudio ' + isAudio + ' type ' + slides[slideNo].type + ' scr = ' + audio.src);
+	//console.log(' hasImage ' + hasImage + ' background ' + slides[slideNo].background);
+	//console.log(' isAudio ' + isAudio + ' type ' + slides[slideNo].type + ' scr = ' + audio.src);
 	g_audioFailed = false;
 	if (!isMuted && isAudio){
 		audio.play().catch(error => {

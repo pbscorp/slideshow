@@ -63,7 +63,10 @@
    		const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
 		var folder = urlParams.get('folder');
-
+        var filename = urlParams.get('filename');
+        if (!filename) {
+            filename = "temp";
+        }
         let mediaRecorder;
         let audioChunks = [];
         let audioBlob = null;
@@ -163,8 +166,8 @@
 
         function uploadRecording() {
             const formData = new FormData();
-            formData.append("audioFile", audioBlob, "recording_audio.m4a");
-            fetch(`uploadRecording.php?folder=${folder}`, {
+            formData.append("audioFile", audioBlob, `recording_audio.m4a`);
+            fetch(`uploadRecording.php?folder=${folder}&filename=${filename}`, {
                 method: "POST",
                 body: formData
             })

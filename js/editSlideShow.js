@@ -58,6 +58,11 @@
   }
   var selectedFilesArray = [];
 
+       // <h3>Slide name: text <button class="helpButton" onclick="getHelp('text')">?💡?</button></h3>
+       //<h3><span>text </span><span> <a class="helpButton" href="SlideQuestionSpecs.txt" target="_blank">🤔</a></span></h3>
+       //<a href="#" onclick="window.open('https://www.example.com','name','width=600,height=400'); return false;">
+
+        //<span class="modal" id="myPopup" onclick="getHelp()"></span>
 currentFolder = "";
 async function editSlideshow(folder) {
   currentFolder = folder;
@@ -65,9 +70,7 @@ async function editSlideshow(folder) {
 
   content.innerHTML = `<h2>Editing folder ${folder}</h2>
         <button onclick="showUserDashboard(currentUser)">← Done</button>
-        <span class="modal" id="myPopup" onclick="getHelp()"></span>
-        <h3>Slide name: text <button id="toggleButton" onclick="getHelp('text')">?💡?</button></h3>
-
+        <h3><span>text </span><span> <a href="#" onclick="window.open('help/SlideQuestionSpecs.html','help','width=800,height=800'); return false;">🤔</a></span></h3>
         <textarea id="textEditor" rows="15" cols="120"></textarea>
         <br/><button class="saveBtn" id="saveTextBtn">Save Text</button>
        <div id="voiceControls" style = "display: none;">
@@ -84,7 +87,7 @@ async function editSlideshow(folder) {
         </div>
         <div class="flex-container">
             <div class="flex-item1" id = "editMediaDiv">
-                <h3>Media Files</h3>
+                <h3>Media Files<span> <a href="#" onclick="window.open('help/fileUpload.html','help','width=800,height=800'); return false;">🤔</a></span></h3>
                 <label for="recordAudioButton">Record Audio: </label>
                 <button id="recordAudioButton" onclick="openPopup('${folder}')" >🎙️</button>
                 <label for="mediaUpload">Select file: 📁</label>
