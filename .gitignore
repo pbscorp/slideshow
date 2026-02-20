@@ -14,7 +14,7 @@
 .Trashes
 
 # VS Code
-# .vscode/
+.vscode/
 
 # Node / build artifacts (if applicable)
 node_modules/
