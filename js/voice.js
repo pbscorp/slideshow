@@ -3,6 +3,7 @@ let textarea = document.getElementById('textEditor');
 let voicePlayer = document.getElementById('player');
 let voiceControls = document.getElementById('voiceControls');
 let recordKeysText = document.getElementById('recordKeysText');
+let refreshMediaBtn = document.getElementById(`refreshMediaBtn`);
 var recordKeyCtr = 0;
 let voiceMenu = document.getElementById('contextMenu');
 let currentFolder = "test";
@@ -34,6 +35,7 @@ function createVoiceDropdown() {
 
   textarea.addEventListener('touchend', () => {
     clearTimeout(longPressTimer);
+
   });
 
   // Click outside closes menu
@@ -69,7 +71,7 @@ function createVoiceDropdown() {
 
   // Optional: Add an event listener to handle changes
   selectElement.addEventListener('change', function() {
-    console.log(`You selected: ${this.value}`);
+    //console.log(`You selected: ${this.value}`);
     defaultPresenter = `${this.value}`;
     writeSoundFile(selectedText);
     // You can add further actions here
@@ -82,7 +84,7 @@ function createVoiceDropdown() {
 function getSelectionText() {
   return textarea.value.substring(
     textarea.selectionStart,
-    textarea.selectionEnd
+    textarea.selectionEnd + 1
   );
 }
 
@@ -93,19 +95,14 @@ function showMenu(x, y) {
   voiceMenu.style.left = x + 'px';
   voiceMenu.style.top = y + 'px';
   voiceMenu.style.display = 'block';
-  voiceControls.style.display = "none";
 }
 
 // Hide voiceMenu
 function hideMenu() {
   voiceMenu.style.display = 'none';
+
 }
 
-/* Desktop right-click
-window.addEventListener('load', (event) => {
-  createVoiceDropdown();
-});
-*/
 // Actions
 function handleAction(action) {
   switch(action) {
@@ -131,10 +128,15 @@ function handleAction(action) {
       break;
       case 'writeSoundFile':
         voiceControls.style.display = "inline";
+        refreshMediaBtn.style.display = "inline";
+        saveTextBtn.style.display = "none";
         writeSoundFile(selectedText);
         break;
+      case 'recordVoice':
+        recordVoiceFile(selectedText);
+        break;
   }
-  hideMenu();
+  //hideMenu();
 }
 
 async function handlePaste() {
@@ -153,31 +155,6 @@ async function handlePaste() {
   textarea.focus();
 }
 
-async function saveVoice() {
-  if (document.getElementById(`saveVoiceBtn`).innerText == "done") {
-        document.getElementById(`voiceControls`).style.display = "none";
-        return;
-  };
-
-  voiceFile = "voice.mp3";
-  newBase = document.getElementById(`voiceName`).value;
-  newFile = newBase + '.' + voiceFile.split('.')[1];
-  //if (!confirm("renameMedia " + newFile + "?")) return;
-  const res = await fetch(`filemanager.php?action=rename&proj=${currentFolder}&oldFile=${voiceFile}&newFile=${newFile}`);
-  const txt = await res.text();
-
-  try {
-  console.log('text from rename request = ' + txt);
-  document.getElementById(`saveVoiceBtn`).innerText = "done";
-  document.getElementById(`voiceName`).style.display = "none";
-  if (currentFolder != "test") {
-      await loadMediaList(currentFolder);
-      await hilightUnused();
-  }
-  } catch (err) {
-    alert("the saveVoice request failed: " + err.message);
-  }
-}
 
 async function writeSoundFile (selectedTextSlected) {
   playListArry = [];
@@ -214,6 +191,9 @@ async function writeEachSoundFile(selectedText) {
       text = selectedText.substring(inx +1);
   } else {
     recordKey = "voice" + recordKeyCtr;
+  }
+  if (recordKey == 'TITLE') {
+    return;
   }
   const regex = /,([^,]*)$/;
   const replacement = " or $1";
@@ -268,4 +248,32 @@ const result = str.replace(regex, replacement)
     console.error(e);
     alert('Error calling TTS API ' + e);
   }
+}
+
+async function recordVoiceFile (selectedText) {
+  playListArry = [];
+   playerStarted = false;
+
+  selectedTextArray = selectedText.trim().split('\n');
+  if (selectedTextArray > 1) {
+    alert('choose only one slide name to be recorded');
+    return;
+  }
+ 
+  recordKey = "voice";
+  recordKeyCtr++;
+  let text = selectedText.trim();
+  let inx = selectedText.trim().indexOf(':');
+      //console.log('text = ' + text + ' inx = ' + inx);
+  if ((inx > -1) && inx < 10 ) {
+      recordKey = selectedText.substring(0, inx);
+      text = selectedText.substring(inx +1);
+  } else {
+     alert('select slide name to be recorded');
+    return;
+  }
+  const folder = currentFolder;
+  //alert('will create file ' + recordKey + ' in folder ' + folder);
+  const popupWindow = window.open(`recordAudio.html?folder=${folder}&filename=${recordKey}`, 'Recorder', 'width=700, height=400');
+
 }

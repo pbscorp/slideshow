@@ -1,5 +1,22 @@
 
-  async function hilightNewEntries() {
+  
+  function openPopup(folder) {
+    //alert ('textFromPopup ' + textFromPopup); 
+    const popupWindow = window.open(`recordAudio.html?folder=${folder}`, 'Recorder', 'width=700, height=400');
+    console.log('open popup folder ' + folder);
+   // popupWindow.project = folder;
+}
+async function responseFromPopup(result) {
+     console.log('result from Recorder: ' + result);
+     const response = result.split(':');
+     if (response[0].trim() != "Success") {
+        alert('response from Recorder: ' + result);
+     } else {
+      await loadMediaList(response[2].split('/')[0].trim());
+      await hilightUnused();
+     }   
+}
+async function hilightNewEntries() {
     document.getElementById('mediaListTable').classList.remove('is-visible');
     //document.getElementById('mediaListTable').classList.add('fade-target');
     newFileNodeList = document.querySelectorAll(".newname");
@@ -64,6 +81,13 @@
 
         //<span class="modal" id="myPopup" onclick="getHelp()"></span>
 currentFolder = "";
+async function refreshMedia(folder) {
+    await loadMediaList(folder);
+    await hilightUnused();
+    refreshMediaBtn.style.display = "none";
+    saveTextBtn.style.display = "block";
+
+  }
 async function editSlideshow(folder) {
   currentFolder = folder;
     const content = document.getElementById("contentArea");
@@ -73,6 +97,7 @@ async function editSlideshow(folder) {
         <h3><span>text </span><span> <a href="#" onclick="window.open('help/SlideQuestionSpecs.html','help','width=800,height=800'); return false;">🤔</a></span></h3>
         <textarea id="textEditor" rows="15" cols="120"></textarea>
         <br/><button class="saveBtn" id="saveTextBtn">Save Text</button>
+            <button class="saveBtn" id="refreshMediaBtn" onclick="refreshMedia('${folder}')"  style="display: none;">Refresh-media</button>
        <div id="voiceControls" style = "display: none;">
         <br /><br /><audio id="player" controls></audio>
         <br /><p id="recordKeysText" style = "display: inline;">  loading to your media folder&nbsp;</p>
@@ -84,6 +109,7 @@ async function editSlideshow(folder) {
           <div onclick="handleAction('uppercase')">🔠 Uppercase</div>
           <div onclick="handleAction('search')">🔍 Search Google images</div>
           <div onclick="handleAction('writeSoundFile')">📢 Make Sound File</div>
+          <div onclick="handleAction('recordVoice')">&#x1f399; Record Voice</div>
         </div>
         <div class="flex-container">
             <div class="flex-item1" id = "editMediaDiv">
@@ -150,9 +176,9 @@ async function editSlideshow(folder) {
   voiceMenu = document.getElementById('contextMenu');
   textarea = document.getElementById('textEditor');
   voicePlayer = document.getElementById('player');
-  voiceControls = document.getElementById('voiceControls');
+  refreshMediaBtn = document.getElementById(`refreshMediaBtn`);
   recordKeysText = document.getElementById('recordKeysText');
-  voiceMenu = document.getElementById('contextMenu');
+  saveTextBtn = document.getElementById('saveTextBtn');
   createVoiceDropdown();
 
   textarea.addEventListener('contextmenu', e => {

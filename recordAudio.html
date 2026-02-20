@@ -48,7 +48,7 @@
 </head>
 <body>
 
-    <h2>Voice Recorder</h2>
+    <h2>Voice Recorder <span id="fileID"></span></h2>
     <button id="recordBtn" style="display:inline">🎙️ Start </button>
     <button id="playBtn" style="display:none" disabled>▶️ Play </button>
     <button id="uploadBtn" style="display:none" disabled>⬆️ Upload </button>
@@ -64,7 +64,9 @@
         const urlParams = new URLSearchParams(queryString);
 		var folder = urlParams.get('folder');
         var filename = urlParams.get('filename');
-        if (!filename) {
+        if (filename) {
+            document.getElementById('fileID').innerText = filename;
+        } else {
             filename = "temp";
         }
         let mediaRecorder;
