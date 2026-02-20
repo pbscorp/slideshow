@@ -14,12 +14,12 @@
 .Trashes
 
 # VS Code
-.vscode/
+# .vscode/
 
 # Node / build artifacts (if applicable)
 node_modules/
-dist/
-build/
+# dist/
+# build/
 
 # slideshow data
 *config*.json
