@@ -140,7 +140,7 @@
       muteButton.classList.remove('mute');
       muteButton.classList.remove('unmute');
       muteButton.classList.add(!isMuted ? 'unmute' : 'mute');
-      muteButton.textContent = isMuted ? 'Unmute' : 'Mute';
+      muteButton.textContent = isMuted ? 'Unmute/Play' : 'Mute/Pause';
     }	
   </script>
   <script>
@@ -225,7 +225,7 @@
     function startSlideshow() {
       isStarted = true;
       document.querySelector('.start-button').style.display = 'none'; // Hide start button.
-      document.querySelector('.start-button').textContent = 'Mute';
+      document.querySelector('.start-button').textContent = 'Mute/Pause';
       document.querySelector('.start-button').classList.add('mute-toggle');
       document.querySelector('.start-button').onclick = toggleMute;
       document.querySelector('.next').style.display = 'block';

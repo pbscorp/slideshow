@@ -122,7 +122,7 @@ function handleAction(action) {
 
     case 'search':
       window.open(
-        'https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(selectedText),
+        'https://www.google.com/search?tbm=isch&q=' + encodeURIComponent(selectedText.slice(0, -1)),
         '_blank'
       );
       break;
