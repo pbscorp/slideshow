@@ -425,7 +425,6 @@ source {
     justify-content: center;
     align-items: center;
     visibility: hidden; /* Control visibility with JS */
-    opacity: 0;
     transition: visibility 0s, opacity 0.3s linear;
 }
 

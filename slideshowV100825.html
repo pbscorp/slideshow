@@ -26,7 +26,7 @@
     <!-- Modal content -->
     <div class="modal-content">
       <div class="modal-header">
-        <h2>Confirmation</h2>
+        <h2>⋆✴︎˚｡⋆Congratulations!⋆✴︎˚｡⋆</h2>
       </div>
       <div class="modal-body">
         <p>Are you sure you want to proceed with this action?</p>
@@ -38,13 +38,6 @@
     </div>
   </div>
 
-
-
-
-
-
-
-
   <div id="alertOverlayID" class="alertOverlay hidden">
     <div class="alertBox" role="alertdialog" aria-modal="true">
       <p id="alertText"></p>
@@ -53,11 +46,47 @@
   </div>
 
   <script>
+
+  async function getConfig(folder) {
+        //alert ('folder = ' + folder);
+
+        const response = await fetch(folder.trim() + "/config.json?_=" + Date.now());
+
+      if (!response.ok) {
+            console.log("Cannot load " + folder + " config file");
+      }
+      try {
+        const config = await response.json();
+        //alert(1.1);	
+        if (!config || config.length === 0) {
+          alert("No config found");
+        }
+       // console.log(' config file folder ' + folder + ' dateActive = ' + config.dateActive);
+       /*
+        form_configTitle.value = config.title;
+        form_configDescription.value = config.description;
+        form_configTheme.value = config.theme;
+        form_configDate.value = config.dateActive;
+        form_configWebsite.value = config.website;
+        form_configAbout.value = config.about;
+        if (config.dateActive.trim()) {
+          form_configPublic.checked = true;
+          form_configDate.style.display = 'inline';
+        } else {
+          form_configDate.style.display = 'none';
+        }
+          */ 
+      console.log('config; ' + config);
+      return config;
+      } catch (error) {
+        alert(' error get config' + folder + ' config file ' + error);
+        return;
+      }
+    }
     function showAlert(message) {
       document.getElementById("alertText").innerHTML = message;
       document.getElementById("alertOverlayID").classList.remove("hidden");
     }
-
     function closeAlert() {
       document.getElementById("alertOverlayID").classList.add("hidden");
     }
@@ -83,7 +112,25 @@
     } else {
       alert("No slideshow data found in sessionStorage.");
     }
-    const projName = ssData.projName; const txtData = unescapeHTML(ssData.txtHTMLdata);
+    var myConfig = {};
+    var relatedConfig = {};
+    const projName = ssData.projName;
+    const txtData = unescapeHTML(ssData.txtHTMLdata);
+
+    var relatedShow = "";
+    var relatedShowTitle = "";
+    async function loadConfigs() {
+      myConfig = await getConfig(projName);
+      console.log('myConfig: ', myConfig);
+      if (myConfig.website && myConfig.website.length) {
+        relatedConfig = await getConfig(myConfig.website);
+        console.log('relatedConfig: ', relatedConfig);
+      }
+    }
+
+    loadConfigs();
+
+    //alert ('projName = ' + projName);
     var g_audioFailed = false;
     const text = txtData.trim().split('\n');
   </script>
@@ -156,16 +203,22 @@
     }
 
     // Example usage:
+    
+    async function tryAgain(msg, folder) {
+      const isConfirmed = await customConfirm(msg);
+          console.log("test confirm message " + msg);
+          console.log("test confirm folder " + folder);
 
-    async function testConfirm() {
-      const isConfirmed = await customConfirm("Are you sure you want to delete this item?");
       if (isConfirmed) {
-        alert("Item deleted!");
+        	// const url = `../Jokes/index.html`;
+        	const url = `../${folder}/index.html`;
+		    window.location.href = url + '&noCache=' + new Date().getTime();
       } else {
-        alert("Deletion cancelled.");
+        //history.go(-2);
       }
     }
-    // testConfirm();
+    console.log("test confirm message");
+  //testConfirm("Are you really sure you want to delete this item?");
   </script>
 
   <script>
@@ -177,6 +230,12 @@
       document.querySelector('.start-button').onclick = toggleMute;
       document.querySelector('.next').style.display = 'block';
       document.querySelector('.prev').style.display = 'block';
+      if (myConfig.website && myConfig.website.length) {
+        relatedShow = myConfig.website.trim();
+        relatedShowTitle = relatedConfig.title.trim();
+      }
+    //alert ('relatedShow = ' + relatedShow);
+    //alert ('relatedShowTitle = ' + relatedShowTitle);
       updateSlides(1); // Trigger first slide with audio
     }
   </script>
@@ -473,7 +532,7 @@
 
 
     function showMultichoiceResults() {
-      var message = correctAnswerCtr + ' Correct out of ' + multiChoiceCtr + ' Questions';
+      var message = correctAnswerCtr + ' Correct out of ' + multiChoiceCtr + ' Questions ';
       if (inCorrectAnswerCtr > 0) {
         message += ', ' + inCorrectAnswerCtr + ' Incorrect ';
       }
@@ -504,12 +563,19 @@
         scoreLevel = "try again";
       }
       const audio = new Audio(audioUrl);
+      message += ` ${scoreLevel},`;
       audio.play();
-      if (score > 50) {
-        message += `<span class="text-red blink-hard"> ${scoreLevel}</span></br>`;
-      }
+    
+       if (score > 90 && relatedShow && relatedShow.length) {
+        message += `\n would you like to try  ${relatedShowTitle}?`;
+        //tryAgain('"' + message + '", "' + relatedShow + '"'); 
+        tryAgain(message, relatedShow); 
 
-      showAlert(message);
+       } else {
+       //message += '</br> Try again?';
+        showAlert(message);
+       }
+      //
 
       inCorrectAnswerCtr = 0;
       correctAnswerCtr = 0;

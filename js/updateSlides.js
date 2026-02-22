@@ -232,7 +232,7 @@ function updateSlides(slideNo) {
 	if (isAudio) {
 		audio.src = slides[slideNo].audioSrc || ''; // Use hardcoded src or silence if not found
 	}
-	if (hasImage) {
+	if (hasImage || isVideo) {
 		setBackgroundImage(slideDiv, slides[slideNo].background);
 		document.getElementById('initSlide').style.opacity = '1.0';
 	} else {
@@ -291,7 +291,7 @@ function updateSlides(slideNo) {
 	var displayText = slides[slideNo].content;
 	if (slides[slideNo].type == "answer") {
 		if(currentAnswerCorrect) {
-			var newDisplayText = '<span class="text-red blink-hard"> Correct!</span></br>' + displayText
+			var newDisplayText = '<span class="text-red blink-hard"> Correct! </span></br>' + displayText
 			displayText = newDisplayText;
 		}
 		currentAnswerCorrect = null;
