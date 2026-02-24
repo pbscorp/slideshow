@@ -185,14 +185,28 @@ function createAndPlayVideo(file) {
 }
 
 function updateSlides(slideNo) {
+		document.getElementById('prevButton').title = "";
+		document.getElementById('nextButton').title = "";
 
 	if (slideNo == 0) {
 		 if (inCorrectAnswerCtr + correctAnswerCtr > 0) {
-			
             showMultichoiceResults();
 			isMedia = false;
           }
-	} 
+	} else {
+		document.getElementById('prevButton').title = `${slides[slideNo].slideKey}`;
+		document.getElementById('nextButton').title = `${slides[slideNo].slideKey}`;
+		try {
+			if ( `${slides[slideNo - 1].slideKey}` !== 'undefined') {
+				document.getElementById('prevButton').title += ` < ${slides[slideNo - 1].slideKey}`;
+			}
+			if (`${slides[slideNo + 1].slideKey}` !== 'undefined') {
+				document.getElementById('nextButton').title += ` > ${slides[slideNo + 1].slideKey}`;
+			}
+		} catch (error) {
+			console.log(error);
+		}
+	}
 	if (slideNo != currentSlide) {
 		alert("slideNo " + slideNo + " not = currentSlide " + currentSlide);
 	}

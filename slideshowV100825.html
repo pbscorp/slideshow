@@ -17,7 +17,7 @@
 
   <div id="overlay" class="overlay-text title-slide"></div>
 
-  <button class="nav-button prev" onclick="changeSlide(-1)">❮</button>
+  <button id="prevButton" class="nav-button prev" onclick="changeSlide(-1)">❮</button>
   <button id="nextButton" class="nav-button next" onclick="changeSlide(1)">❯</button>
   <button class="start-button mute-button" disabled id="start" onclick="startSlideshow()">open</button>
   <script src="js/escapeHTML.js"></script>
@@ -338,9 +338,11 @@
     slides.push({
       type: 'results',
       content: "",
+      slideKey: "result",
       background: resultBacground,
       audioSrc: resultAudio,
-      videoSrc: resultVideo
+      audioSrc2: "",
+      videoSrc: resultVideo,
     })
     text.forEach(text => {
 
@@ -406,6 +408,7 @@
         slides.push({
           type: 'multiQuestion',
           content: otherContent.trim(),
+          slideKey: slideKey.trim(),
           background: `${imageFilePath}`,
           audioSrc: `${soundFilePath}`,
           audioSrc2: `${sound2FilePath}`,
@@ -415,6 +418,7 @@
         slides.push({
           type: 'question',
           content: otherContent.trim(),
+          slideKey: slideKey.trim(),
           background: `${imageFilePath}`,
           audioSrc: `${soundFilePath}`,
           videoSrc: `${videoFilePath}`
@@ -432,6 +436,7 @@
         slides.push({
           type: 'answer',
           content: otherContent.trim(),
+          slideKey: slideKey.trim(),
           background: `${imageFilePath}`,
           audioSrc: `${soundFilePath}`,
           audioSrc2: `${sound2FilePath}`,
@@ -452,6 +457,7 @@
         slides.push({
           type: 'multi-choice',
           content: otherContent.trim(),
+          slideKey: slideKey.trim(),
           background: `${imageFilePath}`,
           audioSrc: `${soundFilePath}`,
           audioSrc2: `${sound2FilePath}`,
@@ -461,6 +467,7 @@
         slides.push({
           type: 'other',
           content: otherContent.trim(),
+          slideKey: slideKey.trim(),
           background: `${imageFilePath}`,
           audioSrc: `${soundFilePath}`,
           audioSrc2: "",
@@ -597,6 +604,7 @@
         } else if (currentSlide >= slides.length) {
           currentSlide = 0;
         }
+
         updateSlides(currentSlide);
         if (audioElements[prevSlide]) {
           audioElements[prevSlide].pause();
