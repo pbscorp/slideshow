@@ -2,10 +2,10 @@
 <html>
 <head>
  <!-- <meta http-equiv="refresh" content="0; url=/slideshow.html"> -->
-  <title>Redirecting...</title>
+  <title>edscode</title>
 </head>
 <body>
-  <p>Redirecting to slideshow.html........</p>
+  <p>Redirecting.......................</p>
   <SCRIPT>
 const queryString = window.location.search;
    		// Define the base URL and parameters

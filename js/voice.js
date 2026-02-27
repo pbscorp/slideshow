@@ -9,14 +9,14 @@ let voiceMenu = document.getElementById('contextMenu');
 let currentFolder = "test";
 let selectedText = '';
 let longPressTimer;
-let defaultPresenter = "default-wg3fvsjtsajw7wc-kn3k2a__mcfloon";
+let defaultPresenter = "default-wg3fvsjtsajw7wc-kn3k2a__edward";
 var recordKey = "voice";
 var selectedTextArray = [];
 var playListArry = [];
 var playerStarted = false;
 
 // Data source for the dropdown options
-const presenters = ['Clive', 'default-wg3fvsjtsajw7wc-kn3k2a__mcfloon', 'Ashley', 'Hades'];
+const presenters = ['Clive', 'default-wg3fvsjtsajw7wc-kn3k2a__edward', 'default-wg3fvsjtsajw7wc-kn3k2a__mcfloon', 'Ashley', 'Hades'];
 
 // Function to create and insert the dropdown
 function createVoiceDropdown() {
@@ -84,7 +84,7 @@ function createVoiceDropdown() {
 function getSelectionText() {
   return textarea.value.substring(
     textarea.selectionStart,
-    textarea.selectionEnd + 1
+    textarea.selectionEnd + 1  // need for record sound file looking for end of slidename.
   );
 }
 
@@ -107,7 +107,7 @@ function hideMenu() {
 function handleAction(action) {
   switch(action) {
     case 'copy':
-      navigator.clipboard.writeText(selectedText);
+      navigator.clipboard.writeText(selectedText.slice(0, -1));
       break;
 
     case 'paste':
@@ -159,9 +159,9 @@ async function handlePaste() {
 async function writeSoundFile (selectedTextSlected) {
   playListArry = [];
    playerStarted = false;
-
-  selectedTextArray = selectedTextSlected.trim().split('\n');
-  recordKeysText.innerText = " loading to your media folder ";
+  recordKeyCtr = 0;
+  selectedTextArray = selectedTextSlected.trim().slice(0, -1).split('\n');
+  recordKeysText.innerHTML = " loading to your media folder ";
 
   await selectedTextArray.forEach(selectedText => {
     writeEachSoundFile(selectedText);
@@ -203,11 +203,11 @@ async function writeEachSoundFile(selectedText) {
     console.log('text = ' + text + ' str = ' + str);
   }
 const result = str.replace(regex, replacement)
-  recordKeysText.innerHTML += recordKey + "&nbsp";
   const start = textarea.selectionStart;
   const folder = currentFolder;
   //console.log('recordKey = ' + recordKey + ' folder = ' + folder);
   if (!selectedText) return;
+  recordKeysText.innerHTML += recordKey + "&nbsp";
 
   try {
     const resp = await fetch('tts.php', {

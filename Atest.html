@@ -1,54 +1,417 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ceres · Inner solar system dwarf planet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        html, body {
+            width: 100%;
+            min-height: 100vh;
+            background-color: #0a0f1e;  /* deep space */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', 'Arial', system-ui, sans-serif;
+        }
 
+        /* full-browser card – fills viewport with a comfortable max */
+        .cosmic-canvas {
+            width: 100vw;
+            min-height: 100vh;
+            background: radial-gradient(circle at 20% 30%, #1a2440, #030514);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
 
+        /* main graphic panel — spacious, dark but vibrant */
+        .solar-poster {
+            max-width: 1400px;
+            width: 100%;
+            background: rgba(8, 12, 22, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid #3d4e6b;
+            border-radius: 3rem;
+            padding: 2.5rem 2rem 2.5rem 2rem;
+            box-shadow: 0 30px 45px -15px rgba(0, 0, 0, 0.9), 0 0 0 1px #5e7a9c inset, 0 0 30px #2a405e;
+        }
+
+        /* headline */
+        .headline {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .headline h1 {
+            font-size: clamp(2.2rem, 8vw, 4.2rem);
+            font-weight: 600;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #f6f9fc, #d9e6f2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px #7aaae0, 0 0 30px #2b4f77;
+            margin-bottom: 0.4rem;
+        }
+
+        .sub-line {
+            font-size: clamp(1.1rem, 3vw, 1.8rem);
+            color: #b3cef0;
+            font-weight: 300;
+            letter-spacing: 2px;
+            word-spacing: 6px;
+            border-bottom: 2px dashed #3d6180;
+            display: inline-block;
+            padding-bottom: 8px;
+        }
+
+        /* main visual: planets + asteroid belt */
+        .system-scape {
+            display: flex;
+            flex-direction: column;
+            margin: 1.8rem 0 2rem 0;
+        }
+
+        /* sun label (far left) + planet row */
+        .planet-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-evenly;
+            gap: 0.5rem 1rem;
+        }
+
+        .sun-tag {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 70px;
+        }
+
+        .sun-disk {
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle at 30% 30%, #fbe373, #e09412);
+            border-radius: 50%;
+            box-shadow: 0 0 45px #f8b730;
+            border: 2px solid #ffdd88;
+        }
+
+        .sun-tag span {
+            color: #febc5a;
+            margin-top: 8px;
+            font-weight: 500;
+            text-shadow: 0 0 6px #ff9f2e;
+        }
+
+        /* each planet capsule */
+        .planet-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 80px;
+            transition: transform 0.2s;
+        }
+
+        .planet-item:hover {
+            transform: translateY(-8px);
+        }
+
+        .planet {
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 20px -5px black, 0 0 15px #9bb8e6;
+        }
+
+        .merc { width: 28px; height: 28px; background: radial-gradient(circle at 35% 35%, #a9a9a9, #5a5a5a); }
+        .venus { width: 38px; height: 38px; background: radial-gradient(circle at 30% 30%, #e6b873, #b88a44); }
+        .earth { width: 40px; height: 40px; background: radial-gradient(circle at 25% 25%, #5a9eff, #1e4f8a); }
+        .mars { width: 32px; height: 32px; background: radial-gradient(circle at 30% 30%, #c0714b, #944c2c); }
+
+        /* — CERES (highlighted) — */
+        .ceres-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 100px;
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 20px #7ec8ff);
+        }
+
+        .ceres-glow {
+            background: radial-gradient(circle at 35% 35%, #d8d8d8, #9c9c9c);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 3px solid #b0e0ff;
+            box-shadow: 0 0 35px #8ecdf5, 0 0 8px 2px white;
+            position: relative;
+        }
+
+        .ceres-glow::after {
+            content: "⦾";
+            position: absolute;
+            font-size: 60px;
+            color: rgba(220, 240, 255, 0.45);
+            top: -24px;
+            left: -24px;
+            transform: rotate(10deg);
+            pointer-events: none;
+        }
+
+        .planet-label {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-top: 8px;
+            color: #d9ecff;
+            text-shadow: 0 2px 5px black;
+        }
+
+        .ceres-label {
+            font-size: 1.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff8e7, #ffe7b0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px #aad0ff;
+        }
+
+        .small-note {
+            font-size: 0.9rem;
+            color: #b9d4fc;
+            opacity: 0.8;
+            letter-spacing: 1px;
+        }
+
+        /* asteroid belt visual */
+        .belt-highlight {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .asteroid-svg {
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+            background: rgba(20, 30, 50, 0.7);
+            padding: 0.3rem 1.5rem;
+            border-radius: 60px;
+            border: 1px solid #6d8eb0;
+            box-shadow: 0 0 20px #3d6180 inset;
+        }
+
+        .astro-dot {
+            width: 8px;
+            height: 8px;
+            background: #bbccdd;
+            border-radius: 50%;
+            box-shadow: 0 0 10px white;
+        }
+        .astro-dot.medium { width: 12px; height: 12px; background: #c0b9a0; }
+        .astro-dot.large { width: 18px; height: 18px; background: #d4c4a8; }
+
+        .belt-text {
+            color: #d1dbe8;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            font-weight: 300;
+        }
+
+        .arrow-symbol {
+            font-size: 2rem;
+            color: #6f9fd3;
+            transform: scaleX(-1);
+        }
+
+        /* fact panel */
+        .fact-box {
+            background: linear-gradient(145deg, #0c1320, #01040a);
+            border-left: 8px solid #b8d0e8;
+            border-radius: 48px 16px 48px 16px;
+            padding: 1.8rem 2.2rem;
+            margin: 2rem 0 0 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 15px 30px -12px black;
+        }
+
+        .fact-highlight {
+            font-size: clamp(1.3rem, 4vw, 2.2rem);
+            font-weight: 700;
+            color: #fffbee;
+            max-width: 70%;
+        }
+
+        .fact-highlight span {
+            background: #1f405e;
+            padding: 0.1rem 0.8rem;
+            border-radius: 40px;
+            color: #ddf0ff;
+            font-size: 0.9em;
+            margin-right: 10px;
+            border: 1px solid #6d9ad0;
+        }
+
+        .dwarf-badge {
+            background: #3e576b;
+            border-radius: 60px;
+            padding: 0.7rem 2rem;
+            font-size: 1.8rem;
+            white-space: nowrap;
+            box-shadow: inset 0 -2px 5px #1f2f40, 0 10px 15px -5px #000;
+            border: 1px solid #b1d0f0;
+            color: #fffad4;
+        }
+
+        .dwarf-badge small {
+            font-size: 1.2rem;
+            color: #fce28b;
+        }
+
+        /* inner region footer */
+        .inner-tag {
+            text-align: right;
+            margin-top: 20px;
+            color: #869bb3;
+            font-size: 1.2rem;
+            border-top: 1px dashed #405e7c;
+            padding-top: 16px;
+        }
+
+        .inner-tag strong {
+            color: white;
+            background: #1b496b;
+            padding: 0.2rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 500;
+            margin-left: 12px;
+        }
+
+        /* responsiveness */
+        @media (max-width: 700px) {
+            .planet-row { gap: 1rem; }
+            .fact-box { flex-direction: column; text-align: center; gap: 1rem; }
+            .fact-highlight { max-width: 100%; }
+        }
+    </style>
 </head>
 <body>
-<div>
-<video id="myVideo" src="Jokes6.mov" type = "video/quicktime" width="480" >
-</video>
-<audio id="myAudio" src="Piano.m4a" > </audio> 
-<button id="playBtn">Play</button>
-</div>
-<script>
-const video = document.getElementById('myVideo');
-const audio = document.getElementById('myAudio');
-const btn = document.getElementById('playBtn');
-function getMimeType(filename) {
-      const ext = filename.split('.').pop().toLowerCase();
-      const mimeTypes = {
-        mp4: "video/mp4",
-        m4v: "video/x-m4v",
-        mov: "video/quicktime",
-        avi: "video/x-msvideo",
-        wmv: "video/x-ms-wmv",
-        flv: "video/x-flv",
-        webm: "video/webm",
-        ogv: "video/ogg",
-        "3gp": "video/3gpp",
-        "3g2": "video/3gpp2",
-        mkv: "video/x-matroska",
-        ts: "video/mp2t",
-        mts: "video/MP2T",
-        mpeg: "video/mpeg",
-        mpg: "video/mpeg"      };
-      return mimeTypes[ext] || "video/mp4";
-    }
+    <div class="cosmic-canvas">
+        <div class="solar-poster">
 
-  video.muted = true;
-btn.addEventListener('click', async () => {
-  try {
-    await video.play();
-    await audio.play();
+            <!-- headline -->
+            <div class="headline">
+                <h1>⚶ CERES · INNER SOLITAIRE</h1>
+                <div class="sub-line">the only dwarf planet in the inner solar system</div>
+            </div>
 
-    //btn.style.display = 'none'; // Hide button after play
-  } catch (err) {
-    alert('Playback error:', err);
-  }
-});
-</script>
+            <!-- main orrery-style row -->
+            <div class="system-scape">
+                <div class="planet-row">
+                    <!-- sun -->
+                    <div class="sun-tag">
+                        <div class="sun-disk"></div>
+                        <span>☀️ Sun</span>
+                    </div>
+
+                    <!-- inner planets -->
+                    <div class="planet-item">
+                        <div class="planet merc"></div>
+                        <span class="planet-label">Mercury</span>
+                    </div>
+                    <div class="planet-item">
+                        <div class="planet venus"></div>
+                        <span class="planet-label">Venus</span>
+                    </div>
+                    <div class="planet-item">
+                        <div class="planet earth"></div>
+                        <span class="planet-label">Earth</span>
+                    </div>
+                    <div class="planet-item">
+                        <div class="planet mars"></div>
+                        <span class="planet-label">Mars</span>
+                    </div>
+
+                    <!-- CERES – star of the show -->
+                    <div class="ceres-item">
+                        <div class="ceres-glow"></div>
+                        <span class="planet-label ceres-label">⚶ CERES</span>
+                        <span class="small-note">dwarf planet</span>
+                    </div>
+                </div>
+
+                <!-- asteroid belt visual cue with arrow to Ceres -->
+                <div class="belt-highlight">
+                    <div class="asteroid-svg">
+                        <span class="astro-dot large"></span>
+                        <span class="astro-dot medium"></span>
+                        <span class="astro-dot"></span>
+                        <span class="astro-dot large"></span>
+                        <span class="astro-dot"></span>
+                        <span class="astro-dot medium"></span>
+                        <span class="astro-dot"></span>
+                        <span class="astro-dot large"></span>
+                    </div>
+                    <span class="belt-text">⨘ ASTEROID BELT</span>
+                    <div class="asteroid-svg">
+                        <span class="astro-dot"></span>
+                        <span class="astro-dot large"></span>
+                        <span class="astro-dot medium"></span>
+                        <span class="astro-dot"></span>
+                        <span class="astro-dot large"></span>
+                        <span class="astro-dot"></span>
+                        <span class="astro-dot"></span>
+                    </div>
+                    <div class="arrow-symbol">🠖</div>
+                    <span style="color:#b1d1f0; font-size:1.3rem;">⚶</span>
+                </div>
+
+                <!-- additional context: where inner meets outer -->
+                <div style="display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 1.2rem; color: #b4cae2;">
+                    <span style="border-bottom: 2px dotted #658bb0;">Mars orbit</span>
+                    <span style="color:#e5cba0"> ➔ </span>
+                    <span style="background:#1e3553; padding:4px 12px; border-radius:40px;"><span style="color:#f2e09f;">Ceres</span> (main belt)</span>
+                    <span style="color:#e5cba0"> ➔ </span>
+                    <span style="border-bottom: 2px dotted #658bb0;">Jupiter (outer)</span>
+                </div>
+            </div>
+
+            <!-- powerful supporting fact box -->
+            <div class="fact-box">
+                <div class="fact-highlight">
+                    <span>✓</span> "Ceres is the only dwarf planet located inside the orbit of Neptune — the <strong>inner solar system's sole dwarf planet</strong>."
+                </div>
+                <div class="dwarf-badge">
+                    ⚶ <small>IAU recognized</small> 1
+                </div>
+            </div>
+
+            <!-- explicit confirmation line -->
+            <div class="inner-tag">
+                ⏺ between Mars and Jupiter · gravitationally rounded · <strong>only inner dwarf world</strong>
+            </div>
+
+            <!-- tiny note for correctness -->
+            <div style="text-align: center; margin-top: 1.5rem; color: #5b7392; font-size: 0.9rem; border-top: 1px solid #1f3249; padding-top: 0.8rem;">
+                <span>✦ According to NASA / IAU: Ceres comprises 40% of the asteroid belt's mass and is the sole inner dwarf planet ✦</span>
+            </div>
+        </div>
+    </div>
 </body>
-</html>	
+</html>
