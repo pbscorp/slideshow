@@ -100,7 +100,7 @@ async function editSlideshow(folder) {
             <button class="saveBtn" id="refreshMediaBtn" onclick="refreshMedia('${folder}')"  style="display: none;">Refresh-media</button>
        <div id="voiceControls" style = "display: none;">
         <br /><br /><audio id="player" controls></audio>
-        <br /><p id="recordKeysText" style = "display: inline;">  loading to your media folder&nbsp;</p>
+        <br /><p id="recordKeysText" class = "voiceKeys" style = "display: inline;">  loading to your media folder&nbsp;</p>
         <p id="voiceSelectionPara"> Your Presentor : <span id="voiceSelectionDropdown"></span></p>
         </div>
         <div id="contextMenu">

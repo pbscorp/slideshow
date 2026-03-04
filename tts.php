@@ -82,13 +82,11 @@ $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
 if ($response === false) {
     $error = curl_error($ch);
-    curl_close($ch);
     http_response_code(500);
     echo json_encode(['error' => 'cURL error: ' . $error]);
     exit;
 }
 
-curl_close($ch);
 
 // If Inworld returned an error status
 if ($httpCode < 200 || $httpCode >= 300) {
@@ -104,11 +102,49 @@ if (!isset($result['audioContent'])) {
     echo json_encode(['error' => 'No audioContent in response']);
     exit;
 }
-$audioContent = $result['audioContent'];
-$audioBuffer = base64_decode($audioContent);
+//
+//$audioContent = $result['audioContent'];
+//$audioBuffer = base64_decode($audioContent);
+//$audioUrl = "$folder/media/$recordKey.mp3";
+//file_put_contents("$folder/media/$recordKey.mp3", $audioBuffer);
 
-file_put_contents("$folder/media/$recordKey.mp3", $audioBuffer);
+//echo json_encode([
+//    'audioContent' => $result['audioContent'],
+//    'audioUrl' => $audioUrl,
+//    'audioSlideKey' => $recordKey,//
+//]);
+/////////
+try {
+    // 1. Decode with exception handling
+    $result = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
 
-echo json_encode([
-    'audioContent' => $result['audioContent'],
-]);
+    if (empty($result['audioContent'])) {
+        throw new Exception('No audioContent in response');
+    }
+
+    // 2. Strict decode to ensure data integrity
+    $audioBuffer = base64_decode($result['audioContent'], true);
+    if ($audioBuffer === false) {
+        throw new Exception('Invalid base64 encoding');
+    }
+
+    // 3. Define and secure the file path
+    $fileName = basename($recordKey) . ".mp3"; // Sanitize key
+    $audioPath = "$folder/media/$fileName";
+
+    // 4. Atomic write with locking to prevent corruption
+    if (file_put_contents($audioPath, $audioBuffer, LOCK_EX) === false) {
+        throw new Exception('Failed to write audio file');
+    }
+
+    echo json_encode([
+        'audioUrl' => $audioPath,
+        'audioSlideKey' => $recordKey,
+        'status' => 'success'
+    ]);
+
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode(['error' => $e->getMessage()]);
+    exit;
+}

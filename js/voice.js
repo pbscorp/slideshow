@@ -13,6 +13,7 @@ let defaultPresenter = "default-wg3fvsjtsajw7wc-kn3k2a__edward";
 var recordKey = "voice";
 var selectedTextArray = [];
 var playListArry = [];
+var recordsPlayed = 0;
 var playerStarted = false;
 
 // Data source for the dropdown options
@@ -128,7 +129,7 @@ function handleAction(action) {
       break;
       case 'writeSoundFile':
         voiceControls.style.display = "inline";
-        refreshMediaBtn.style.display = "inline";
+        //refreshMediaBtn.style.display = "inline";
         saveTextBtn.style.display = "none";
         writeSoundFile(selectedText);
         break;
@@ -160,16 +161,30 @@ async function writeSoundFile (selectedTextSlected) {
   playListArry = [];
    playerStarted = false;
   recordKeyCtr = 0;
+  recordsPlayed = 0;
   selectedTextArray = selectedTextSlected.trim().slice(0, -1).split('\n');
   recordKeysText.innerHTML = " loading to your media folder ";
-
+////////////////////////////////////////////////////
+  // setTimeout(startVoicePlayer(0), 10000);
+  await Promise.all(
+        selectedTextArray.map(async (selectedText) => {
+            await writeEachSoundFile(selectedText);
+        })
+    );
+    refreshMediaBtn.style.display = "inline";
+    saveTextBtn.style.display = "none";
+  startVoicePlayer(0); 
+  console.log(' Start playListArry = ' + JSON.stringify(playListArry));
+}
+/*//////////////////////////////
   await selectedTextArray.forEach(selectedText => {
     writeEachSoundFile(selectedText);
-    console.log('selectedTextArray.length = ' + selectedTextArray.length);
-  });
+  }).then(startVoicePlayer(0));
+  //await startVoicePlayer(0);
 }
-function startVoicePlayer(next) {
-  if (playListArry[next]){
+
+async function startVoicePlayer(next) {
+  if (playListArry[next].url){
     console.log( '>>>>>>>>>>next playing = ' + next +  ' url ' + playListArry[next]);
     voicePlayer.src = playListArry[next];
     voicePlayer.play(next);
@@ -179,9 +194,31 @@ function startVoicePlayer(next) {
     }
   }
 }
+*/
+async function startVoicePlayer(next) {
+  if (next > playListArry.length) {
+    return;
+  }
+  if (playListArry[next].url){
+    console.log( '>>>>>>>>>>next playing = ' + next +  ' url ' + playListArry[next]);
+    voicePlayer.src = playListArry[next].url;
+    voicePlayer.play();
+      next++;
+    voicePlayer.onended = () => {
+      startVoicePlayer(next);
+    }
+  }
+}
+
+
+
 async function writeEachSoundFile(selectedText) {
-  recordKey = "voice";
   recordKeyCtr++;
+
+  //if (recordKeyCtr == selectedTextArray.length ) {
+  //  startVoicePlayer(0);
+ // }
+  recordKey = "voice";
   let text = selectedText.trim();;
 
   let inx = selectedText.trim().indexOf(':');
@@ -207,7 +244,7 @@ const result = str.replace(regex, replacement)
   const folder = currentFolder;
   //console.log('recordKey = ' + recordKey + ' folder = ' + folder);
   if (!selectedText) return;
-  recordKeysText.innerHTML += recordKey + "&nbsp";
+  //recordKeysText.innerHTML += recordKey + "&nbsp";
 
   try {
     const resp = await fetch('tts.php', {
@@ -223,27 +260,45 @@ const result = str.replace(regex, replacement)
     }
 
     const data = await resp.json();
+
     const audioBase64 = data.audioContent;
+    const audioUrl = data.audioUrl;
+    const audioSlideKey = data.audioSlideKey;
+    recordKeysText.innerHTML += " " + data.audioSlideKey; + "&nbsp";
+    
 
     // Convert base64 to a Blob URL usable by <audio>
-    const byteChars = atob(audioBase64);
-    const byteNumbers = new Array(byteChars.length);
-    for (let i = 0; i < byteChars.length; i++) {
-      byteNumbers[i] = byteChars.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    const blob = new Blob([byteArray], { type: 'audio/mpeg' });
-    const url = URL.createObjectURL(blob);
-    console.log(' url = ' + url);
-    //voicePlayer.src = url;
-    playListArry.push(`${url}`);
-    if (!playerStarted) {
-      playerStarted = true;
-      console.log(' playerStarted = ' + playerStarted);
-      startVoicePlayer(0);
-    }
+    //const byteChars = atob(audioBase64);
+    //const byteNumbers = new Array(byteChars.length);
+    //for (let i = 0; i < byteChars.length; i++) {
+    //  byteNumbers[i] = byteChars.charCodeAt(i);
+    //}
+    //const byteArray = new Uint8Array(byteNumbers);
+    //const blob = new Blob([byteArray], { type: 'audio/mpeg' });
+    //const url = URL.createObjectURL(blob);
+        console.log(data);
 
-    //console.log(' recordKeyCtr = ' + recordKeyCtr  + ' selectedTextArray.length = ' + selectedTextArray.length);
+    playListArry.push({
+      slideKey: audioSlideKey,
+      url: audioUrl,
+      resolved: true,
+      loaded: false
+    })
+    
+    console.log(' playListArry = ' + JSON.stringify(playListArry));
+    //voicePlayer.src = url;
+
+
+
+    //playListArry.push(`${url}`);
+    //if (!playerStarted) {
+      //playerStarted = true;
+     // console.log(' recordKeyCtr = ' + recordKeyCtr);
+     // await startVoicePlayer(recordKeyCtr);
+
+   //}
+
+    console.log(' recordKeyCtr = ' + recordKeyCtr  + ' selectedTextArray.length = ' + selectedTextArray.length);
   } catch (e) {
     console.error(e);
     alert('Error calling TTS API ' + e);
