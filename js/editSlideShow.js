@@ -1,4 +1,28 @@
 
+    async function makeSortable() {
+      
+      document.querySelectorAll('th').forEach((header, index) => {
+        header.addEventListener('click', () => {
+          const table = header.closest('table');
+          const tbody = table.querySelector('tbody');
+          const rows = Array.from(tbody.querySelectorAll('tr'));
+          const isAscending = header.dataset.order === 'asc';
+          // Sort rows based on the text in the clicked column
+          const sortedRows = rows.sort((a, b) => {
+            const aText = a.cells[index].textContent.trim();
+            const bText = b.cells[index].textContent.trim();
+            // Natural sort (handles both strings and numbers)
+            return aText.localeCompare(bText, undefined, { numeric: true }) * (isAscending ? -1 : 1);
+          });
+
+          // Toggle sort order for next click
+          header.dataset.order = isAscending ? 'desc' : 'asc';
+
+          // Update table with sorted rows
+          tbody.append(...sortedRows);
+        });
+      });
+    }
   
   function openPopup(folder) {
     //alert ('textFromPopup ' + textFromPopup); 
@@ -180,6 +204,7 @@ async function editSlideshow(folder) {
   recordKeysText = document.getElementById('recordKeysText');
   saveTextBtn = document.getElementById('saveTextBtn');
   createVoiceDropdown();
+  
 
   textarea.addEventListener('contextmenu', e => {
     e.preventDefault();
@@ -213,7 +238,6 @@ async function updateProject(folder) {
   const website = document.getElementById("configWebsite").value.trim();
   const about = document.getElementById("configAbout").value.trim();
   const public = document.getElementById("configPublic").checked;
-
   if (!slideshow || !title) {
     alert("Please enter both folder name and title.");
     return;
@@ -405,8 +429,8 @@ async function loadMediaList(folder) {
   if (files.length === 0) {
     mediaDiv.innerHTML = "<p>No media uploaded.</p>";
   } else {
-    mediaDiv.innerHTML = "<table  class= 'fade-target' id = 'mediaListTable'><tr><th>file</th><th>re-name</th><th>remove</th></tr>" + files.map((f, index) =>
-      `<tr class = "newrow">
+    mediaDiv.innerHTML = "<table  class= 'fade-target' id = 'mediaListTable'><thead><tr><th>file</th><th>re-name</th><th>remove</th></tr></thead>" + files.map((f, index) =>
+      ` <tr class = "newrow">
                  <td> <input class='filename' size = "10" type = "text" readonly value = "${f}"></input></td>
                  <td> <input class = "newname" id = "newname${index}" size = "6" value = '${f.split('.')[0]}'</input>&nbsp;&nbsp;&nbsp;<button onclick="renameMedia('${folder}','${f}','${index}')">rename</button></td>
                 <td><button onclick="deleteMedia('${folder}','${f}')">delete</button></td>
@@ -417,6 +441,7 @@ async function loadMediaList(folder) {
     // `<li>${f} <button onclick="deleteMedia('${folder}','${f}')">Delete</button></li>`
     //).join("") + "</ul>";
   }
+  
   listMediaNodes = document.querySelectorAll('.filename');
 
   // 3. Create an empty array to store the text contents
@@ -431,7 +456,9 @@ async function loadMediaList(folder) {
   console.log(listMediaArray);
   const JsonMediaArray = JSON.stringify(listMediaArray);
   console.log(JsonMediaArray);
-  saveMediaList(folder);
+  await saveMediaList(folder);
+  //alert(JSON.stringify(mediaListTable));
+  //makeSortable();
 }
 
 async function saveMediaList(folder) {
@@ -441,7 +468,7 @@ async function saveMediaList(folder) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ project, list: listMediaArray })
   });
-  //alert(await response.text());
+
 }
 
 async function getList() {

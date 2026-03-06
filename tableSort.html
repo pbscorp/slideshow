@@ -1,0 +1,974 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slideshow Maker</title>
+  
+<style>
+    body {
+      background-color: #fff;
+      color: #000;
+      font-family: Arial, sans-serif;
+    }
+    .mediaButton { padding: 10px 20px; font-size: 18px; margin-right: 10px; }
+
+
+    #loginButton {
+      position: fixed;
+      top: 10px;
+      right: tttttt;
+      width: 48px;
+      height: 48px;
+      border-radius: 24px;
+      cursor: pointer;
+      background-image: url('media/signin_icon.jpeg');
+      /* your small icon */
+      background-size: cover;
+    }
+  </style>
+  <style>
+
+* {
+  box-sizing: border-box;
+}
+
+.flex-container {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  background-color: #f1f1f1;
+  max-height: 400px;;
+
+}
+
+.flex-item1 {
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 18px;
+  text-align: center;
+  flex: 1 1 50%;
+  overflow: scroll;
+  display: block;
+  max-height: inherit;
+
+}
+.flex-item2 {
+  background-color: #f1f1f1;
+  flex: 1 1 50%;
+  padding: 10px;
+  font-size: 14px;
+  text-align: left;
+  width: 100%;
+  max-height: inherit;
+  overflow: scroll;
+  display: block;
+}
+.flex-item2 h3 {
+    text-align: center;
+}
+button {
+  cursor: pointer;
+}
+label {
+  cursor: pointer;
+}
+@media (max-width: 600px) {
+  .flex-container {
+    flex-direction: column;
+  }
+}
+    table {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    td,
+    th {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    tr:hover {
+      background-color: #ddd;
+    }
+
+    th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background-color: #04AA6D;
+      color: white;
+    } 
+    .newEntry {
+      background-color: oklab(94.49% -0.03067 0.0074);
+      color: rgb(26, 88, 29);
+      border: 1px solid #ee0000;
+ 
+    }
+    .unused {
+      background-color: white(96.646% 0.00307 0.00084);
+      color: rgb(242, 18, 63);
+      border: 1px solid #ee0000;
+
+    }
+    .fade-target {
+    opacity: 0; /* Initially transparent */
+    transition: opacity 1.5s ease-in-out; /* Smooth transition over 1.5 seconds */
+    }
+
+    .fade-target.is-visible {
+      opacity: 1; /* Fully visible when this class is added */
+      
+    }
+
+    #mediaListTable tbody tr  th {
+      padding-top: 5px;
+      padding-bottom: 5px;
+      text-align: left;
+      background-color: #92d4d9;
+      color: rgb(93, 48, 48);
+    }
+    #mediaUpload {
+      display: none;
+    }
+    tr {
+      transition: all 0.5s ease-in-out; 
+    }
+  </style>
+  <style>
+   .modal {
+    visibility: hidden;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top of other elements */
+    top: 40px;
+    max-width: 75%; 
+    max-height: 75%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(139, 215, 238, 0.938); /* light background with some transparency */
+    /* Center the modal content */
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+ .show {
+  visibility: visible;
+  display: inline-block;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+.hidden {
+  visibility: hidden;
+  display: none;
+}
+
+.helpButton {
+    background-color: rgba(243, 227, 17, 0.958);
+    color-scheme: red;
+    border: 2px solid #c8f623;
+    border-radius: 50%;
+    font-weight: bold;
+}
+#authButton {
+  position:fixed;
+  top:10px;right:10px;
+  cursor:pointer;
+  font-size:25px;
+  background: #9acbb9;
+  color: #000;
+  border-radius: 50%; 
+  width: 35px;
+  height: 35px;
+  text-align: center;
+  vertical-align: middle;
+
+}
+</style>
+
+<style>
+#contextMenu {
+  position: absolute;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 10px rgba(0,0,0,.2);
+  display: none;
+  z-index: 9999;
+  min-width: 160px;
+}
+
+#contextMenu div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+#contextMenu div:hover {
+  background: #f0f0f0;
+}
+
+.voiceKeys {
+   width: 300px;
+}
+.saveBtn {
+  border-radius: 25px;
+  background-color: blue;
+  width: 90px;
+  color: white;
+  padding: 4px;
+  font-weight: bold;
+}
+.text-red {
+  color: red;
+}
+.text-green {
+  color: green;
+}
+</style>
+</head>
+<body>
+  <!--
+    <img id="authButton" src="media/signin_icon.jpeg" alt="Login/Logout"
+      style="position:fixed;top:10px;right:10px;width:40px;height:40px;cursor:pointer;" />
+  <span id="authButton">👤</span>
+  <ul id="authMenu" style="display:none;position:fixed;top:55px;right:10px;background:#fff;border:1px solid #ccc;padding:5px;">
+    <li id="loginOption" style="cursor:pointer;" title="login or create new account">Login as Creator</li>
+    <li id="playerOption" style="cursor:pointer;" title="login or create new account">Login as player</li>
+    <li id="logoutOption" style="cursor:pointer;">Logout</li>
+  </ul>
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.1/auth0-spa-js.production.js"></script>
+  <script src="js/initAuth0.js"></script>
+      -->
+
+  <div id="contentArea" style="margin-top:5px; padding:10px; font-family:sans-serif;">
+    <h2>👋🏻 Welcome under10mph@gmail.com</h2>
+    <p>Here are your slideshows:</p>
+    <p><button id="newBtn">➕ Add Another Slideshow</button></p>
+  </div>
+  <div id="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Slide Show</th>
+          <th>folder</th>
+          <th>email</th>
+          <th>edit</th>
+          <th>delete</th>
+        </tr>
+      </thead>
+      <tbody id = "tableBody">
+        <tr>
+          <td>
+            <p><a href="Jokes/index.html" target="_self">Jokes Slideshow</a></p>
+          </td>
+          <td>Jokes</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('Jokes')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('Jokes')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="xmas/index.html" target="_self">xmas Q and a</a></p>
+          </td>
+          <td>xmas</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('xmas')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('xmas')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="NY2026/index.html" target="_self">New Year 2026 Trivia</a></p>
+          </td>
+          <td>NY2026</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('NY2026')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('NY2026')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="resulstest/index.html" target="_self">Small xmas test</a></p>
+          </td>
+          <td>resulstest</td>
+          <td>aunder10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('resulstest')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('resulstest')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="planets/index.html" target="_self">Multi choice Q &amp; A Planets</a></p>
+          </td>
+          <td>planets</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('planets')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('planets')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="Universe/index.html" target="_self">Q &amp;.A multiple choice Universe</a></p>
+          </td>
+          <td>Universe</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('Universe')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('Universe')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="Mlk/index.html" target="_self">Martin Luther King Q&amp;A multichoice</a></p>
+          </td>
+          <td>Mlk</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('Mlk')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('Mlk')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="superBowl/index.html" target="_self">Super Bowl Trivia</a></p>
+          </td>
+          <td>superBowl</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('superBowl')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('superBowl')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="Valentine/index.html" target="_self">Valentines Day Trivia</a></p>
+          </td>
+          <td>Valentine</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('Valentine')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('Valentine')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="groundhog/index.html" target="_self">Groundhog Trivia</a></p>
+          </td>
+          <td>groundhog</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('groundhog')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('groundhog')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="stpatrick/index.html" target="_self">St. Patrick's Trivia 1</a></p>
+          </td>
+          <td>stpatrick</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('stpatrick')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('stpatrick')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="stpatricks2/index.html" target="_self">St. Patrick's Trivia</a></p>
+          </td>
+          <td>stpatricks2</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('stpatricks2')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('stpatricks2')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="Neils/index.html" target="_self">Neil 68th birthday trivia ng</a></p>
+          </td>
+          <td>Neils</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('Neils')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('Neils')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="NeilSullivan/index.html" target="_self">my brothers 68th birthday trivia</a></p>
+          </td>
+          <td>NeilSullivan</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('NeilSullivan')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('NeilSullivan')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="USCIS01/index.html" target="_self">USA Citizens Quiz 1 - 10</a></p>
+          </td>
+          <td>USCIS01</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('USCIS01')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('USCIS01')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="USCIS02/index.html" target="_self">USA Citizens Quiz 11 - 20</a></p>
+          </td>
+          <td>USCIS02</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('USCIS02')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('USCIS02')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="dwarf/index.html" target="_self">Dwarf Plantets Q&amp;A</a></p>
+          </td>
+          <td>dwarf</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('dwarf')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('dwarf')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="Presidents26/index.html" target="_self">President's Day Trivia</a></p>
+          </td>
+          <td>Presidents26</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('Presidents26')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('Presidents26')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="USCIS03/index.html" target="_self">USA Citizens Quiz 21 - 30</a></p>
+          </td>
+          <td>USCIS03</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('USCIS03')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('USCIS03')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="PresidentsQuotes/index.html" target="_self">Presidents Quotes Quiz</a></p>
+          </td>
+          <td>PresidentsQuotes</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('PresidentsQuotes')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('PresidentsQuotes')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="LunarNY/index.html" target="_self">Lunar New Year’s</a></p>
+          </td>
+          <td>LunarNY</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('LunarNY')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('LunarNY')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="english1/index.html" target="_self">English Quiz</a></p>
+          </td>
+          <td>english1</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('english1')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('english1')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="Englishlevel1/index.html" target="_self">English Level 1</a></p>
+          </td>
+          <td>Englishlevel1</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('Englishlevel1')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('Englishlevel1')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="Englishlevel2/index.html" target="_self">English Level 2</a></p>
+          </td>
+          <td>Englishlevel2</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('Englishlevel2')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('Englishlevel2')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="Englishlevel3/index.html" target="_self">English Level 3</a></p>
+          </td>
+          <td>Englishlevel3</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('Englishlevel3')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('Englishlevel3')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="Englishlevel4/index.html" target="_self">English Level 4</a></p>
+          </td>
+          <td>Englishlevel4</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('Englishlevel4')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('Englishlevel4')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="Englishlevel5/index.html" target="_self">English Level 5</a></p>
+          </td>
+          <td>Englishlevel5</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('Englishlevel5')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('Englishlevel5')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="Englishlevel6/index.html" target="_self">English Level 6</a></p>
+          </td>
+          <td>Englishlevel6</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('Englishlevel6')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('Englishlevel6')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="test2/index.html" target="_self">test2</a></p>
+          </td>
+          <td>test2</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('test2')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('test2')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="homonyms/index.html" target="_self">English Homonyms</a></p>
+          </td>
+          <td>homonyms</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('homonyms')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('homonyms')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="USCIS04/index.html" target="_self">USA Citisens Quiz 31 - 40</a></p>
+          </td>
+          <td>USCIS04</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('USCIS04')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('USCIS04')">delete</button></p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p><a href="USCIS05/index.html" target="_self">USA Citizens Quiz 41 - 50</a></p>
+          </td>
+          <td>USCIS05</td>
+          <td>under10mph@gmail.com</td>
+          <td>
+            <p><button onclick="editSlideshow('USCIS05')">Edit</button></p>
+          </td>
+          <td>
+            <p><button onclick="deleteFolder('USCIS05')">delete</button></p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <script>
+    /*
+    function openPopup(folder) {
+      //alert ('textFromPopup ' + textFromPopup); 
+      const popupWindow = window.open(`recordAudio.html?folder=${folder}`, 'Recorder', 'width=700, height=400');
+      console.log('open popup folder ' + folder);
+     // popupWindow.project = folder;
+    }
+    async function responseFromPopup(result) {
+       console.log('result from Recorder: ' + result);
+       const response = result.split(':');
+       if (response[0].trim() != "Success") {
+          alert('response from Recorder: ' + result);
+       } else {
+        await loadMediaList(response[2].split('/')[0].trim());
+        await hilightUnused();
+    
+       }   
+    }
+    */
+   document.querySelectorAll('th').forEach((header, index) => {
+    header.addEventListener('click', () => {
+        const table = header.closest('table');
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        const isAscending = header.dataset.order === 'asc';
+
+        // Sort rows based on the text in the clicked column
+        const sortedRows = rows.sort((a, b) => {
+            const aText = a.cells[index].textContent.trim();
+            const bText = b.cells[index].textContent.trim();
+
+            // Natural sort (handles both strings and numbers)
+            return aText.localeCompare(bText, undefined, { numeric: true }) * (isAscending ? -1 : 1);
+        });
+
+        // Toggle sort order for next click
+        header.dataset.order = isAscending ? 'desc' : 'asc';
+
+        // Update table with sorted rows
+        tbody.append(...sortedRows);
+    });
+});
+/*
+    function sortTableByColumn(columnIndex) {
+    const tableBody = document.getElementById("tableBody");
+    // Convert NodeList of rows to an array
+    const rows = Array.from(tableBody.querySelectorAll("tr"));
+    // Keep track of the current sort direction (toggle between asc/desc)
+    let sortDirection = tableBody.getAttribute('data-sort-direction-col-' + columnIndex) || 'asc';
+    const newSortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+
+    // Sort the rows array
+    rows.sort((rowA, rowB) => {
+        const cellA = rowA.cells[columnIndex].textContent.trim();
+        const cellB = rowB.cells[columnIndex].textContent.trim();
+
+        // Use Intl.Collator for natural sorting of text and numbers
+        const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: 'base' });
+
+        let comparison = collator.compare(cellA, cellB);
+        
+        // Apply sorting direction
+        if (newSortDirection === 'desc') {
+            comparison *= -1;
+        }
+
+        return comparison;
+    });
+
+    // Remove existing rows
+    while (tableBody.firstChild) {
+        tableBody.removeChild(tableBody.firstChild);
+    }
+
+    // Append sorted rows back to the table body
+    rows.forEach(row => tableBody.appendChild(row));
+
+    // Update the sort direction attribute for next click
+    tableBody.setAttribute('data-sort-direction-col-' + columnIndex, newSortDirection);
+}
+
+      async function createDynamicTable(type, headers, headersTitles, containerId, user) {
+        myUserType = type;
+        console.log('type = ' + myUserType);
+        console.log('player = ' + currentPlayer);
+        const container = document.getElementById(containerId);
+        if (!container) {
+          console.error(`Container with ID "${containerId}" not found.`);
+          return;
+        }
+        //alert(1.1);    
+        // Clear any existing content in the container
+        container.innerHTML = "";
+        const table = document.createElement('table');
+    
+        const thead = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+    
+        headersTitles.forEach(headerText => {
+          const th = document.createElement('th');
+          th.textContent = headerText;
+          headerRow.appendChild(th);
+        });
+        if (user != "all") {
+          let th = document.createElement('th');
+          th.textContent = 'edit';
+          headerRow.appendChild(th);
+          th = document.createElement('th');
+          th.textContent = 'delete';
+          headerRow.appendChild(th);
+        };
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+        const tbody = document.createElement('tbody');
+        
+        if (!slidesExist || 1 ==1) {
+            slidesExist = await buildSlideshowArray();
+            console.log(slidesExist);
+            console.log(AllUsersArry.length);
+        }
+        let prevEmail = "";
+        let rowIndex = 0;
+        AllUsersArry.forEach(rowData => {
+          if (rowData.usersEmail != prevEmail) {
+            prevEmail = rowData.usersEmail;
+            rowIndex = 0;
+          }
+          const row = document.createElement('tr');
+          headers.forEach(headerText => {
+            const td = document.createElement('td');
+            if (headerText == "title") {
+              td.innerHTML = `<p><a href="${rowData.folder}/index.html" target="_self">${rowData.title}</a></p>`
+            } else {
+              td.textContent = rowData[headerText]; // 
+              console.log(' header text ' + headerText);
+              console.log(' td.textContent ' + td.textContent);
+            };
+            row.appendChild(td);
+          });
+          console.log(' td ' + td);
+          console.log(' user ' + user);
+          if (user != "all") {
+            var td = document.createElement('td');
+            td.innerHTML = `<p><button onclick="editSlideshow('${rowData.folder}')">Edit</button></p>`;
+            row.appendChild(td);
+            td = document.createElement('td');
+            td.innerHTML = `<p><button onclick="deleteFolder('${rowData.folder}')">delete</button></p>`;
+            row.appendChild(td);
+            console.log(' window.myUserIndex is ' + window.myUserIndex);
+          }
+          if (((user != "all") && (user != rowData.usersEmail))
+             || ((user == "all") && (!rowData.dateActive.trim() ))) {
+            console.log('ignoreing ' + user + ' ' + rowData.usersEmail);
+          } else {
+            tbody.appendChild(row);
+            noOfShows++;
+          }
+          rowIndex++;
+        });
+        table.appendChild(tbody);
+        // Append the table to the container
+        container.appendChild(table);
+        return true;
+      }
+        */
+  </script>
+  <script src="js/voice.js"></script>
+  <script src="js/getHelp.js"></script>
+  <script defer="" src="js/editSlideShow.js"></script>
+  <script>
+    async function showPublicSlideshows() {
+      const content = document.getElementById("contentArea");
+      content.innerHTML = "<h2>🌐 Published Slideshows</h2>";
+      const myHeaders = ['title', 'folder', 'usersEmail'];
+      const myHeadersTitles = ['Slide Show', 'Name', 'by'];
+      await createDynamicTable('public', myHeaders, myHeadersTitles, 'table-container', 'all');
+    };
+    
+    let currentUser = "";
+    
+    async function showUserDashboard(user) {
+      //alert("hey  10");
+      currentUser = user;
+      const content = document.getElementById("contentArea");
+          content.innerHTML = `<h2>👋🏻 Welcome ${user}</h2>
+            <p>Here are your slideshows:</p>`;
+          content.innerHTML += `
+            <p><button id='newBtn'>➕ Add Another Slideshow</button></p>`;
+      document.getElementById("newBtn").onclick = () => showProjectForm(user); 
+      const myHeaders = ['title', 'folder', 'usersEmail'];
+      const myHeadersTitles = ['Slide Show', 'folder', 'email'];
+      const response = await createDynamicTable('creator', myHeaders, myHeadersTitles, 'table-container', currentUser);
+    }
+    let currentPlayer = "";
+    
+    async function showPlayerSlideshows(player) {
+      //alert("hey  10");
+      currentPlayer = player;
+    
+      const content = document.getElementById("contentArea");
+          content.innerHTML = `<h2>👋🏻 Welcome Player ${player}</h2>
+            <p>Here are your slideshows:</p>`;
+         console.log('user = ' + currentUser);
+      const myHeaders = ['title', 'folder', 'usersEmail'];
+      const myHeadersTitles = ['Slide Show', 'folder', 'email'];
+      const response = await createDynamicTable('player', myHeaders, myHeadersTitles, 'table-container', 'all');
+    }
+    
+  </script>
+  <script>
+    var AllUsersArry = []; // start empty
+    var userIndex = -1;
+    var myUserIndex;
+    var myUserIndexString = "999";
+    var usersEmail = "";
+    var slidesExist = false;
+    var noOfShows = 0;
+    var newUser = "true";
+    
+    async function buildSlideshowArray() {
+      var usersArry = [];
+      var usersConfigArry = [];
+      var usersListArry = [];
+      AllUsersArry = []; // start empty
+      const response = await fetch("edscode-config-public.json?_=" + Date.now());
+      if (!response.ok) console.log("Cannot load config file ");
+      try {
+        const config = await response.json();
+        //alert(1.1);	
+        if (!config || config.length === 0) {
+          alert("No users found");
+        }
+        usersConfigArry = config.users;
+    
+      } catch (error) {
+        alert(' error fetching public config file ' + error);
+      }
+      for (let i = 0; i < usersConfigArry.length; i++) {
+        //usersFolderArry = usersFoldersList.replace(/["']/g, '').split(',');
+    
+        usersFolderArry = usersConfigArry[i].slideshowFoldersArray;
+        usersEmail = usersConfigArry[i].email;
+        if (currentUser == usersEmail) {
+          newUser = "false";
+          myUserIndex = i;
+    
+        }
+          userIndex++;
+        for (let j = 0; j < usersFolderArry.length; j++) {
+          await getFolderConfilFile(usersFolderArry[j]);
+        };
+      };
+      console.log('return complete' + JSON.stringify(AllUsersArry));
+      return true;
+    
+    }
+    async function getFolderConfilFile(folder) {
+      const response = await fetch(folder.trim() + "/config.json?_=" + Date.now());
+    
+      if (!response.ok) console.log("Cannot load " + folder + " config file");
+      try {
+        const config = await response.json();
+        //alert(1.1);	
+        if (!config || config.length === 0) {
+          alert("No config found");
+        }
+        console.log(' config file folder ' + folder + ' email = ' + config.email + ' array ' + userIndex);
+        await addFolderArry(config);
+      } catch (error) {
+        //console.log(' error fetching directory ' + folder + ' config file ' + error);
+        return;
+      }
+      console.log('added to AllUsersArry ' + userIndex);
+      // console.log('AllUsersArry now ' + JSON.stringify(AllUsersArry));
+    
+    }
+    
+    async function addFolderArry(folderArray) {
+    console.log("Work object:", JSON.stringify(folderArray));
+    
+    // Add userIndex as a property to the object
+    folderArray.userIndex = userIndex;
+    folderArray.usersEmail = `${usersEmail}`;
+    
+    console.log("Updated work object:", JSON.stringify(folderArray));
+    
+    // Add it to the global work array
+    AllUsersArry.push(folderArray);
+    
+    console.log("New object added:", JSON.stringify(folderArray));
+    }
+  </script>
+</body>
+</html>
