@@ -285,7 +285,7 @@ function updateSlides(slideNo) {
 					changeSlide(1);
 			}
 		};
-	} else if (slides[slideNo].type == "multi-choice") {
+	} else if (slides[slideNo].type == "multi-choice" && !isMuted) {
 		audio.play();
 			audio.onended = () => {
 				inCorrectAnswer();
