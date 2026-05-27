@@ -570,11 +570,11 @@
         scoreLevel = "try again";
       }
       const audio = new Audio(audioUrl);
-      message += ` ${scoreLevel},`;
+      message += ` ${scoreLevel}`;
       audio.play();
     
        if (score > 90 && relatedShow && relatedShow.length) {
-        message += `\n would you like to try  ${relatedShowTitle}?`;
+        message += `,\n would you like to try  ${relatedShowTitle}?`;
         //tryAgain('"' + message + '", "' + relatedShow + '"'); 
         tryAgain(message, relatedShow); 
 
