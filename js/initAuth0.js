@@ -29,7 +29,7 @@ async function handleRedirect() {
 }
 var userType = "empty";
 var isCreator = false
-var isPlayer = false
+var isPresenter = false
 async function updateAuthState() {
   const isAuth = await auth0Client.isAuthenticated();
   userType = sessionStorage.getItem("userType");
@@ -37,7 +37,7 @@ async function updateAuthState() {
   const menu = document.getElementById("authMenu");
   const loginOption = document.getElementById("loginOption");
   const logoutOption = document.getElementById("logoutOption");
-  const playerOption = document.getElementById("playerOption");
+  const presenterOption = document.getElementById("presenterOption");
   try {
     if (isAuth) {
       //userType = "creator";
@@ -46,8 +46,8 @@ async function updateAuthState() {
       //alert("Welcome " + userType + ' ' + currentUserArray.email);
       if (userType == "creator") {
           showUserDashboard(currentUserArray.email);
-      } else if (userType == "player") {
-          showPlayerSlideshows(currentUserArray.email);
+      } else if (userType == "presenter") {
+          showPresenterSlideshows(currentUserArray.email);
       } 
   } else {      
       currentUserArray = null;
@@ -64,10 +64,10 @@ async function updateAuthState() {
   userType = sessionStorage.getItem("userType");
   const loginOption = document.getElementById("loginOption");
   const logoutOption = document.getElementById("logoutOption");
-  const playerOption = document.getElementById("playerOption");
+  const presenterOption = document.getElementById("presenterOption");
   loginOption.onclick = login;
   logoutOption.onclick = logout;
-  playerOption.onclick = player;
+  presenterOption.onclick = presenter;
   const menu = document.getElementById("authMenu");
  //alert('userType starts at ' + userType);
 
@@ -77,11 +77,11 @@ async function updateAuthState() {
 
      if (userType == "creator") {
         loginOption.style.display = "none";
-        playerOption.style.display = "block";
+        presenterOption.style.display = "block";
 
      }
-     if (userType == "player") {
-        playerOption.style.display = "none";
+     if (userType == "presenter") {
+        presenterOption.style.display = "none";
         loginOption.style.display = "block";
 
      }
@@ -93,7 +93,7 @@ async function login() {
        //alert('userType now ' + userType);
       sessionStorage.setItem("userType", "creator");
 
-  if (userType != "creator" && userType != "player") {
+  if (userType != "creator" && userType != "presenter") {
           //alert('getting auth0 ');
 
       await auth0Client.loginWithRedirect({ authorizationParams: { redirect_uri: REDIRECT_URI } });
@@ -107,18 +107,18 @@ async function logout() {
   await auth0Client.logout({ logoutParams: { returnTo: REDIRECT_URI } });
 }
 
-async function player() {
+async function presenter() {
       userType = sessionStorage.getItem("userType");
        //alert('userType now ' + userType);
-      sessionStorage.setItem("userType", "player");
+      sessionStorage.setItem("userType", "presenter");
 
-     if (userType != "creator" && userType != "player") {
+     if (userType != "creator" && userType != "presenter") {
       //alert('getting auth0 ');
       await auth0Client.loginWithRedirect({ authorizationParams: { redirect_uri: REDIRECT_URI } });
     }
-    sessionStorage.setItem("userType", "player");
+    sessionStorage.setItem("userType", "presenter");
     menu.style.display = "none";
-    showPlayerSlideshows(currentUserArray.email);
+    showPresenterSlideshows(currentUserArray.email);
 }
 
 	window.onload = initAuth0;

@@ -239,7 +239,7 @@ label {
   <ul id="authMenu"
     style="display:none;position:fixed;top:55px;right:10px;background:#fff;border:1px solid #ccc;padding:5px;">
     <li id="loginOption" style="cursor:pointer;" title="login or create new account" >Login as Creator</li>
-    <li id="playerOption" style="cursor:pointer;" title="login or create new account" >Login as player</li>
+    <li id="presenterOption" style="cursor:pointer;" title="login or create new account" >Login as presenter</li>
     <li id="logoutOption" style="cursor:pointer;">Logout</li>
 
   </ul>
@@ -251,7 +251,7 @@ label {
     async function createDynamicTable(type, headers, headersTitles, containerId, user) {
       myUserType = type;
       console.log('type = ' + myUserType);
-      console.log('player = ' + currentPlayer);
+      console.log(' type = ' + myUserType  + ' currentUser = ' + currentUser + ' presenter = ' + currentPresenter );
       const container = document.getElementById(containerId);
       if (!container) {
         console.error(`Container with ID "${containerId}" not found.`);
@@ -270,7 +270,7 @@ label {
         th.textContent = headerText;
         headerRow.appendChild(th);
       });
-      if (user != "all") {
+      if (type ==  "creator") {
         let th = document.createElement('th');
         th.textContent = 'edit';
         headerRow.appendChild(th);
@@ -308,7 +308,7 @@ label {
         });
         console.log(' td ' + td);
         console.log(' user ' + user);
-        if (user != "all") {
+        if (type ==  "creator") {
           var td = document.createElement('td');
           td.innerHTML = `<p><button onclick="editSlideshow('${rowData.folder}')">Edit</button></p>`;
           row.appendChild(td);
@@ -317,8 +317,8 @@ label {
           row.appendChild(td);
           console.log(' window.myUserIndex is ' + window.myUserIndex);
         }
-        if (((user != "all") && (user != rowData.usersEmail))
-           || ((user == "all") && (!rowData.dateActive.trim() ))) {
+        if (((type ==  "creator") && (user != rowData.usersEmail))
+           || ((type !=  "creator") && (!rowData.dateActive.trim() ))) {
           console.log('ignoreing ' + user + ' ' + rowData.usersEmail);
         } else {
           tbody.appendChild(row);
@@ -338,18 +338,23 @@ label {
   <script src="js/getHelp.js"></script>
   <script defer src="js/editSlideShow.js"></script>
 
+ 
 
   <script>
+
+    let currentUser = "";
+    let currentPresenter = "";
+    let currentTheme = "";
+    
     async function showPublicSlideshows() {
       const content = document.getElementById("contentArea");
+      currentPresenter = "";
       content.innerHTML = "<h2>🌐 Published Slideshows</h2>";
       const myHeaders = ['title', 'folder', 'usersEmail'];
       const myHeadersTitles = ['Slide Show', 'Name', 'by'];
       await createDynamicTable('public', myHeaders, myHeadersTitles, 'table-container', 'all');
     };
 
-    let currentUser = "";
-    
     async function showUserDashboard(user) {
       //alert("hey  10");
       currentUser = user;
@@ -363,20 +368,46 @@ label {
       const myHeadersTitles = ['Slide Show', 'folder', 'email'];
       const response = await createDynamicTable('creator', myHeaders, myHeadersTitles, 'table-container', currentUser);
     }
-    let currentPlayer = "";
+    
 
-    async function showPlayerSlideshows(player) {
+    async function showPresenterSlideshows(presenter) {
       //alert("hey  10");
-      currentPlayer = player;
-
-      const content = document.getElementById("contentArea");
-          content.innerHTML = `<h2>👋🏻 Welcome Player ${player}</h2>
-            <p>Here are your slideshows:</p>`;
-         console.log('user = ' + currentUser);
+      currentPresenter = presenter;
+      currentUser = "";
       const myHeaders = ['title', 'folder', 'usersEmail'];
       const myHeadersTitles = ['Slide Show', 'folder', 'email'];
-      const response = await createDynamicTable('player', myHeaders, myHeadersTitles, 'table-container', 'all');
+      const content = document.getElementById("contentArea");
+          content.innerHTML = `<h2>👋🏻 Welcome presenter ${presenter}</h2>
+          <label for="configTheme">theme:</label>
+            <select name="slideshowTheme" id="slideshowTheme">
+                  <option value="">Choose a themee...</option>
+                <option value="Trivia Presentation">Trivia Presentation</option>
+                <option value="show" >show</option></select><br><br>
+            <p>Presentation slideshows:</p>`;
+
+      document.getElementById('table-container').innerHTML = "";
+      async function handleSelectionChange(event) {
+        const selectedValue = event.target.value;
+         const slideshowTheme = document.getElementById('slideshowTheme');
+         currentTheme = slideshowTheme.value;
+        // Exit early if the default/empty option is chosen
+        if (!selectedValue) return;
+        try {
+          const response = await createDynamicTable('presentation', myHeaders, myHeadersTitles, 'table-container', 'all');
+        } catch (error) {
+          console.error('Fetch failed:', error);
+          output.textContent = 'Failed to load data. Please try again.';
+        }
+      }
+
+
+      console.log('user = ' + currentUser + ' currentPresenter = ' + currentPresenter);
+     
+      slideshowTheme.addEventListener('change', handleSelectionChange);
+      
+      //const response = //await createDynamicTable('presenter', myHeaders, myHeadersTitles, 'table-container', 'all');
     }
+
 
   </script>
 

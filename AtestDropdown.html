@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ceres · Inner solar system dwarf planet</title>
+    <style>
+    </style>
+</head>
+<body>
+ <label>Folder name:<br><input type="text" id="slideshowName" required></label><br><br>
+
+        <label>Slideshow title:<br><input type="text" id="slideshowTitle" required></label><br><br>
+        <label>Description:<br><textarea id="slideshowDescription"></textarea></label><br><br>
+        <label for="configTheme">theme:</label>
+            <select name="configTheme" id="configTheme">
+              <option value="TP">Trivia Presentation</option>
+              <option value="show" selected >show</option></select>
+        <input type="hidden" id="noOfShows" value=noOfShows>
+        <button type="submit">Create Slideshow</button>
+        <button type="button" onclick="showUserDashboard(currentUser)">Cancel</button> 
+</body>
+</html>

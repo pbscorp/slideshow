@@ -125,7 +125,7 @@ async function editSlideshow(folder) {
        <div id="voiceControls" style = "display: none;">
         <br /><br /><audio id="player" controls></audio>
         <br /><p id="recordKeysText" class = "voiceKeys" style = "display: inline;">  loading to your media folder&nbsp;</p>
-        <p id="voiceSelectionPara"> Your Presentor : <span id="voiceSelectionDropdown"></span></p>
+        <p id="voiceSelectionPara"> Voice Presentor : <span id="voiceSelectionDropdown"></span></p>
         </div>
         <div id="contextMenu">
           <div onclick="handleAction('copy')">📋 Copy</div>
@@ -160,15 +160,18 @@ async function editSlideshow(folder) {
                     <td><textarea id="configDescription"></textarea></td>
                 </tr>
                 <tr>
-                    <td><label for="configTheme">Theme:</label></td>
-                    <td><input type="text" id="configTheme" value="default"></td>
+                    <td><label for="configTheme">theme:</label></td>
+                    <td><select name="configTheme" id="configTheme">
+                      <option value="default" selected >default</option>
+                      <option value="Trivia Presentation">Trivia Presentation</option>
+                      <option value="show" >show</option></select></td>
                 </tr>
                 <tr>
                     <td><label for="configDate">Date Active:&nbsp;&nbsp;&nbsp;</label></td>
                     <td><input type="date" readonly id="configDate" style="display:none" value=""></input></td>
                 </tr>
                 <tr>
-                    <td><label for="configWebsite">related Website:</label></td>
+                    <td><label for="configWebsite">Related Website:</label></td>
                     <td><input type="text" id="configWebsite" value=""></input></td>
                 </tr>
                 <tr>
@@ -515,7 +518,11 @@ async function showProjectForm(user) {
         <label>Folder name:<br><input type="text" id="slideshowName" required></label><br><br>
         <label>Slideshow title:<br><input type="text" id="slideshowTitle" required></label><br><br>
         <label>Description:<br><textarea id="slideshowDescription"></textarea></label><br><br>
-        <label>Theme:<br><input type="text" id="slideshowTheme" value="default"></label><br><br>
+        <label for="configTheme">theme:</label><br>
+            <select name="slideshowTheme" id="slideshowTheme">
+                <option value="default" selected >default</option>
+                <option value="Trivia Presentation">Trivia Presentation</option>
+                <option value="show" >show</option></select><br><br>
         <input type="hidden" id="noOfShows" value=noOfShows>
         <button type="submit">Create Slideshow</button>
         <button type="button" onclick="showUserDashboard(currentUser)">Cancel</button> 
