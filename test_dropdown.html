@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction CRUD Example</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; }
+        form { display: grid; gap: 15px; }
+        label { font-weight: bold; }
+        input, select, button { padding: 10px; font-size: 16px; }
+        button { background: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .delete-btn { background: #dc3545; }
+        .delete-btn:hover { background: #c82333; }
+        #result { margin-top: 20px; padding: 15px; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+<!-- === TRANSACTION CRUD FORM === -->
+<h2>Transaction Management</h2>
+
+<form id="transactionForm">
+    <div>
+        <label>Operation:</label>
+        <select id="operation" name="operation" required>
+            <option value="insert">Insert New Transaction</option>
+            <option value="update">Update Transaction</option>
+            <option value="delete">Delete Transaction</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="transCode">Transaction Code (Key):</label>
+        <input type="text" id="transCode" name="transCode" placeholder="e.g. TXN-20260612-001" required>
+    </div>
+
+    <div id="dataFields">
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username">
+        </div>
+        <div>
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description">
+        </div>
+        <div>
+            <label for="transDate">Transaction Date:</label>
+            <input type="date" id="transDate" name="transDate">
+        </div>
+        <div>
+            <label for="category">Category:</label>
+            <select id="category" name="category">
+                <option value="">-- Select --</option>
+                <option value="deposit">Deposit</option>
+                <option value="withdrawal">Withdrawal</option>
+                <option value="transfer">Transfer</option>
+                <option value="payment">Payment</option>
+            </select>
+        </div>
+    </div>
+
+    <button type="submit" id="submitBtn">Submit</button>
+</form>
+
+<div id="result"></div>
+
+<style>
+    #transactionForm { display: grid; gap: 15px; max-width: 700px; }
+    #transactionForm label { font-weight: bold; }
+    #transactionForm input, #transactionForm select, #transactionForm button { 
+        padding: 10px; font-size: 16px; 
+    }
+    #transactionForm button { 
+        background: #007bff; color: white; border: none; cursor: pointer; 
+    }
+    #transactionForm button:hover { background: #0056b3; }
+    .delete-btn { background: #dc3545 !important; }
+    .delete-btn:hover { background: #c82333 !important; }
+    #result { margin-top: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+</style>
+
+<script>
+// Submit handler
+document.getElementById('transactionForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+
+    const resultDiv = document.getElementById('result');
+
+   // Inside the submit listener
+try {
+    const response = await fetch('test_transaction.php', {   // ← Make sure this name and path are correct
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    if (result.code === 200) {
+        resultDiv.style.borderColor = 'green';
+        resultDiv.innerHTML = `<strong>✅ Success!</strong><br>${result.message}`;
+    } else {
+        resultDiv.style.borderColor = 'red';
+        resultDiv.innerHTML = `<strong>❌ Error (${result.code})</strong><br>${result.message}`;
+    }
+} catch (error) {
+    console.error('Fetch error:', error);   // ← Check browser console (F12)
+    resultDiv.style.borderColor = 'red';
+    resultDiv.innerHTML = `<strong>❌ Network Error</strong><br>${error.message}<br>Check console (F12) for details.`;
+}
+});
+
+// Show/hide fields for Delete operation
+document.getElementById('operation').addEventListener('change', function() {
+    const dataFields = document.getElementById('dataFields');
+    const submitBtn = document.getElementById('submitBtn');
+
+    if (this.value === 'delete') {
+        dataFields.style.display = 'none';
+        submitBtn.classList.add('delete-btn');
+        submitBtn.textContent = 'Delete Transaction';
+    } else {
+        dataFields.style.display = 'grid';
+        submitBtn.classList.remove('delete-btn');
+        submitBtn.textContent = this.value === 'insert' ? 'Insert Transaction' : 'Update Transaction';
+    }
+});
+
+// Default date
+document.getElementById('transDate').value = new Date().toISOString().split('T')[0];
+</script>
+<!-- === END TRANSACTION FORM === -->
+</body>
+</html>
