@@ -1,21 +1,29 @@
 <?php
+// process_transaction.php
 header('Content-Type: application/json');
 ob_clean();
 
-$host = 'localhost';
-$db   = 'slideshow';
-$user = 'root';
-$pass = 'Mpatrick#1';
+// Load configuration
+require_once '../edscode-config/slideshow.php';
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-    ]);
+    $pdo = new PDO(
+        "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8mb4",
+        DB_USER,
+        DB_PASS,
+        [
+            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES   => false,
+        ]
+    );
 } catch (PDOException $e) {
-    echo json_encode(['code' => 500, 'message' => 'DB connection failed']);
+    error_log("DB Error: " . $e->getMessage());
+    echo json_encode(['code' => 500, 'message' => 'Service temporarily unavailable']);
     exit;
 }
 
+// ... rest of your existing code (list, get, insert, update, delete) stays the same
 $action = $_GET['action'] ?? '';
 
 if ($action === 'list') {

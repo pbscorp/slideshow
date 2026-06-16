@@ -18,7 +18,7 @@
 </head>
 <body>
 <!-- === TRANSACTION CRUD FORM === -->
-<h2>Transaction Management</h2>
+ <h2>Transaction Management</h2>
 
 <form id="transactionForm">
     <div>
@@ -30,15 +30,29 @@
         </select>
     </div>
 
-    <div>
-        <label for="transCode">Transaction Code (Key):</label>
-        <input type="text" id="transCode" name="transCode" placeholder="e.g. TXN-20260612-001" required>
+    <!-- Dropdown for existing transactions (shown for Update/Delete) -->
+    <div id="selectContainer" style="display: none;">
+        <label for="transSelect">Select Transaction:</label>
+        <select id="transSelect" name="transSelect">
+            <option value="">-- Load Transactions --</option>
+        </select>
+    </div>
+
+    <!-- Hidden field that holds the real database ID -->
+    <input type="hidden" id="recordId" name="recordId" >
+
+    <!-- For Insert only -->
+    <div id="insertFields"  style="display:none">
+        <div>
+            <label for="transCode">Transaction Code (optional):</label>
+            <input type="text" id="transCode" name="transCode" placeholder="Will be auto-generated">
+        </div>
     </div>
 
     <div id="dataFields">
         <div>
             <label for="username">Username:</label>
-            <input type="text" id="username" name="username">
+            <input type="text" id="username" name="username" required>
         </div>
         <div>
             <label for="description">Description:</label>
@@ -46,7 +60,7 @@
         </div>
         <div>
             <label for="transDate">Transaction Date:</label>
-            <input type="date" id="transDate" name="transDate">
+            <input type="date" id="transDate" name="transDate" required>
         </div>
         <div>
             <label for="category">Category:</label>
@@ -65,6 +79,8 @@
 
 <div id="result"></div>
 
+<div id="result"></div>
+
 <style>
     #transactionForm { display: grid; gap: 15px; max-width: 700px; }
     #transactionForm label { font-weight: bold; }
@@ -80,15 +96,50 @@
     #result { margin-top: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
 </style>
 <script>
-// Improved submit handler with better error handling
+// Load transactions into dropdown
+async function loadTransactions() {
+    try {
+        const res = await fetch('process_transaction.php?action=list');
+        const data = await res.json();
+        const select = document.getElementById('transSelect');
+        select.innerHTML = '<option value="">-- Select Transaction --</option>';
+
+        data.forEach(t => {
+            const opt = document.createElement('option');
+            opt.value = t.id;                    // database auto-increment ID
+            opt.textContent = `${t.trans_code} - ${t.username} - ${t.description.substring(0,30)}`;
+            select.appendChild(opt);
+        });
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+// Populate form when selecting a transaction
+document.getElementById('transSelect').addEventListener('change', async function() {
+    if (!this.value) return;
+    
+    try {
+        const res = await fetch(`process_transaction.php?action=get&id=${this.value}`);
+        const txn = await res.json();
+        
+        document.getElementById('recordId').value = txn.id;
+        document.getElementById('username').value = txn.username || '';
+        document.getElementById('description').value = txn.description || '';
+        document.getElementById('transDate').value = txn.trans_date || '';
+        document.getElementById('category').value = txn.category || '';
+    } catch (e) {
+        console.error(e);
+    }
+});
+
+// Form submit
 document.getElementById('transactionForm').addEventListener('submit', async function(e) {
     e.preventDefault();
-
     const formData = new FormData(this);
     const data = Object.fromEntries(formData.entries());
 
     const resultDiv = document.getElementById('result');
-    resultDiv.style.borderColor = '#ddd';
     resultDiv.innerHTML = 'Processing...';
 
     try {
@@ -98,35 +149,54 @@ document.getElementById('transactionForm').addEventListener('submit', async func
             body: JSON.stringify(data)
         });
 
-        // First check if response is ok
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-
-        // Get raw text first to debug
         const text = await response.text();
-        console.log('Raw server response:', text);   // ← Check this in console (F12)
-
-        let result;
-        try {
-            result = JSON.parse(text);
-        } catch (parseErr) {
-            throw new Error('Server did not return valid JSON. See console.');
-        }
+        console.log('Raw:', text);
+        const result = JSON.parse(text);
 
         if (result.code === 200) {
             resultDiv.style.borderColor = 'green';
             resultDiv.innerHTML = `<strong>✅ Success!</strong><br>${result.message}`;
+            // Refresh dropdown after insert/update/delete
+            if (data.operation !== 'insert') loadTransactions();
         } else {
             resultDiv.style.borderColor = 'red';
-            resultDiv.innerHTML = `<strong>❌ Error (${result.code})</strong><br>${result.message || 'Unknown error'}`;
+            resultDiv.innerHTML = `<strong>❌ Error</strong><br>${result.message}`;
         }
     } catch (error) {
-        console.error('Fetch error:', error);
+        console.error(error);
         resultDiv.style.borderColor = 'red';
-        resultDiv.innerHTML = `<strong>❌ Network / Server Error</strong><br>${error.message}<br><small>Check browser Console (F12) → Raw server response</small>`;
+        resultDiv.innerHTML = `<strong>❌ Error</strong><br>${error.message}`;
     }
 });
+
+// Operation change handler
+document.getElementById('operation').addEventListener('change', function() {
+    const op = this.value;
+    const selectContainer = document.getElementById('selectContainer');
+    const insertFields = document.getElementById('insertFields');
+    const dataFields = document.getElementById('dataFields');
+    const submitBtn = document.getElementById('submitBtn');
+
+    if (op === 'insert') {
+        selectContainer.style.display = 'none';
+        insertFields.style.display = 'none';
+        dataFields.style.display = 'grid';
+        submitBtn.textContent = 'Insert Transaction';
+        submitBtn.classList.remove('delete-btn');
+    } else {
+        selectContainer.style.display = 'block';
+        insertFields.style.display = 'none';
+        dataFields.style.display = 'grid';
+        loadTransactions();
+        
+        submitBtn.textContent = op === 'update' ? 'Update Transaction' : 'Delete Transaction';
+        if (op === 'delete') submitBtn.classList.add('delete-btn');
+        else submitBtn.classList.remove('delete-btn');
+    }
+});
+
+// Initial setup
+document.getElementById('transDate').value = new Date().toISOString().split('T')[0];
 </script>
 <!-- === END TRANSACTION FORM === -->
 </body>

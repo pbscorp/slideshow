@@ -1,103 +1,90 @@
 <?php
-ob_clean(); // Clear any output before JSON
-error_reporting(E_ALL);
-ini_set('display_errors', 0); // Don't show errors in output
-
-// process_transaction.php
 header('Content-Type: application/json');
+ob_clean();
 
 $host = 'localhost';
 $db   = 'slideshow';
 $user = 'root';
 $pass = 'Mpatrick#1';
-$charset = 'utf8mb4';
-
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-];
 
 try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
+    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+    ]);
 } catch (PDOException $e) {
-    http_response_code(500);
-    echo json_encode(['code' => 500, 'message' => 'Database connection failed']);
+    echo json_encode(['code' => 500, 'message' => 'DB connection failed']);
     exit;
 }
 
+$action = $_GET['action'] ?? '';
+
+if ($action === 'list') {
+    $stmt = $pdo->query("SELECT id, trans_code, username, description FROM transactions ORDER BY created_at DESC");
+    echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+    exit;
+}
+
+if ($action === 'get' && isset($_GET['id'])) {
+    $stmt = $pdo->prepare("SELECT * FROM transactions WHERE id = ?");
+    $stmt->execute([$_GET['id']]);
+    echo json_encode($stmt->fetch(PDO::FETCH_ASSOC) ?: []);
+    exit;
+}
+
+// === POST operations ===
 $input = json_decode(file_get_contents('php://input'), true);
-
-if (empty($input['transCode']) || empty($input['operation'])) {
-    http_response_code(400);
-    echo json_encode(['code' => 400, 'message' => 'Transaction Code and Operation are required']);
-    exit;
-}
-
-$operation = strtolower(trim($input['operation']));
-$transCode = trim($input['transCode']);
+$operation = strtolower($input['operation'] ?? '');
 
 try {
     switch ($operation) {
         case 'insert':
-            $username    = trim($input['username'] ?? '');
-            $description = trim($input['description'] ?? '');
-            $transDate   = !empty($input['transDate']) ? $input['transDate'] : date('Y-m-d');
-            $category    = $input['category'] ?? null;
-
-            $stmt = $pdo->prepare("
-                INSERT INTO transactions 
+            $transCode = !empty($input['transCode']) ? trim($input['transCode']) : 'TXN-' . date('Ymd') . '-' . strtoupper(substr(uniqid(), -6));
+            
+            $stmt = $pdo->prepare("INSERT INTO transactions 
                 (trans_code, username, description, trans_date, category, created_at)
-                VALUES (?, ?, ?, ?, ?, NOW())
-            ");
-            $stmt->execute([$transCode, $username, $description, $transDate, $category]);
-
-            echo json_encode([
-                'code'    => 200,
-                'message' => "Transaction {$transCode} inserted successfully."
+                VALUES (?, ?, ?, ?, ?, NOW())");
+            $stmt->execute([
+                $transCode,
+                trim($input['username'] ?? ''),
+                trim($input['description'] ?? ''),
+                $input['transDate'] ?? date('Y-m-d'),
+                $input['category'] ?? null
             ]);
+
+            echo json_encode(['code' => 200, 'message' => "Transaction $transCode inserted successfully."]);
             break;
 
         case 'update':
-            $username    = trim($input['username'] ?? '');
-            $description = trim($input['description'] ?? '');
-            $transDate   = !empty($input['transDate']) ? $input['transDate'] : null;
-            $category    = $input['category'] ?? null;
+            $id = $input['recordId'] ?? null;
+            if (!$id) throw new Exception('Record ID required');
 
-            $stmt = $pdo->prepare("
-                UPDATE transactions 
-                SET username = ?, 
-                    description = ?, 
-                    trans_date = COALESCE(?, trans_date), 
-                    category = COALESCE(?, category)
-                WHERE trans_code = ?
-            ");
-            $stmt->execute([$username, $description, $transDate, $category, $transCode]);
+            $stmt = $pdo->prepare("UPDATE transactions SET 
+                username = ?, description = ?, trans_date = ?, category = ?
+                WHERE id = ?");
+            $stmt->execute([
+                trim($input['username'] ?? ''),
+                trim($input['description'] ?? ''),
+                $input['transDate'] ?? null,
+                $input['category'] ?? null,
+                $id
+            ]);
 
-            if ($stmt->rowCount() > 0) {
-                echo json_encode(['code' => 200, 'message' => "Transaction {$transCode} updated successfully."]);
-            } else {
-                echo json_encode(['code' => 404, 'message' => "Transaction {$transCode} not found or no changes made."]);
-            }
+            echo json_encode(['code' => 200, 'message' => 'Transaction updated successfully.']);
             break;
 
         case 'delete':
-            $stmt = $pdo->prepare("DELETE FROM transactions WHERE trans_code = ?");
-            $stmt->execute([$transCode]);
+            $id = $input['recordId'] ?? null;
+            if (!$id) throw new Exception('Record ID required');
 
-            if ($stmt->rowCount() > 0) {
-                echo json_encode(['code' => 200, 'message' => "Transaction {$transCode} deleted successfully."]);
-            } else {
-                echo json_encode(['code' => 404, 'message' => "Transaction {$transCode} not found."]);
-            }
+            $stmt = $pdo->prepare("DELETE FROM transactions WHERE id = ?");
+            $stmt->execute([$id]);
+            echo json_encode(['code' => 200, 'message' => 'Transaction deleted successfully.']);
             break;
 
         default:
-            http_response_code(400);
             echo json_encode(['code' => 400, 'message' => 'Invalid operation']);
     }
-} catch (PDOException $e) {
-    http_response_code(500);
-    echo json_encode(['code' => 500, 'message' => 'Database error: ' . $e->getMessage()]);
+} catch (Exception $e) {
+    echo json_encode(['code' => 500, 'message' => $e->getMessage()]);
 }
 ?>
