@@ -1,6 +1,22 @@
 
-    async function makeSortable() {
-      
+    function emailToSafeFolder(email) {
+  // 1. Convert to lowercase, remove spaces, and replace @ and . with hyphens
+  const cleaned = email
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]/g, '-'); // Replaces any character that isn't a letter or number
+
+  // 2. Remove duplicate consecutive hyphens (e.g., "---" becomes "-")
+  const slug = cleaned.replace(/-+/g, '-').replace(/^-|-$/g, '');
+
+  // 3. Generate a 5-character random alphanumeric string for uniqueness
+  const uniqueId = Math.random().toString(36).substring(2, 7);
+
+  // 4. Combine them
+  return `${slug}-${uniqueId}`;
+}
+
+    async function makeSortable() { 
       document.querySelectorAll('th').forEach((header, index) => {
         header.addEventListener('click', () => {
           const table = header.closest('table');

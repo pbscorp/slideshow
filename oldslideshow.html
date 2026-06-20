@@ -250,27 +250,17 @@ label {
 <script>
     async function createDynamicTable(type, headers, headersTitles, containerId, user) {
       myUserType = type;
-      /*
-    alert('createDynamicTable entered');
-    alert('type=' + type);
-    alert('myUserType=' + myUserType);
-
-    alert('recordId=' + document.getElementById('form-recordId'));
-    alert('email=' + document.getElementById('form-presenterEmail'));
-    alert('folder=' + document.getElementById('form-presenterFolder'));
-      */
-
       console.log('type = ' + myUserType);
       console.log(' type = ' + myUserType  + ' currentUser = ' + currentUser + ' presenter = ' + currentPresenter );
       const container = document.getElementById(containerId);
       if (myUserType == "presentation") {
-              const formPresenterId = document.getElementById('form-recordId');
-              const formPrresenterEmail = document.getElementById('form-presenterEmail');
-              const formPresenterFolder = document.getElementById('form-presenterFolder');
+              const formPresenterId = document.getElementById('form-recordId').value;
+              const formPrresenterEmail = document.getElementById('form-presenterEmail').value;
+              const formPrresenterFolder = document.getElementById('form-presenterFolder').value;
 
-              console.log(' form-presenterEmail = ' + formPrresenterEmail.value);
-              console.log(' form-presenterFolder = ' + formPresenterFolder.value);
-              console.log('form-presenterId = ' + formPresenterId.value);
+              console.log(' form-presenterEmail = ' + formPrresenterEmai);
+              console.log(' form-presenterFolder = ' + formPrresenterFolder);
+              console.log('form-presenterId = ' + formPrresenterId);
       }   
       if (!container) {
         console.error(`Container with ID "${containerId}" not found.`);
@@ -295,11 +285,6 @@ label {
         headerRow.appendChild(th);
         th = document.createElement('th');
         th.textContent = 'delete';
-        headerRow.appendChild(th);
-      };
-      if (type ==  "presentation") {
-        let th = document.createElement('th');
-        th.textContent = 'edit presentation';
         headerRow.appendChild(th);
       };
       thead.appendChild(headerRow);
@@ -340,20 +325,11 @@ label {
           td.innerHTML = `<p><button onclick="deleteFolder('${rowData.folder}')">delete</button></p>`;
           row.appendChild(td);
           console.log(' window.myUserIndex is ' + window.myUserIndex);
-        } 
-        if (type ==  "presentation") {
-          var td = document.createElement('td');
-          td.innerHTML = `<p><button onclick="editSlideshow('${rowData.folder}')">Edit show</button></p>`;
-          row.appendChild(td);
-          console.log(' window.myUserIndex is ' + window.myUserIndex);
         }
         if (((type ==  "creator") && (user != rowData.usersEmail))
            || ((type !=  "creator") && (!rowData.dateActive.trim() ))) {
           console.log('ignoreing ' + user + ' ' + rowData.usersEmail);
-        } else { if (((type ==  "presentation") && (currentTheme != rowData.theme))
-           || ((type !=  "creator") && (!rowData.dateActive.trim() ))) {
-          console.log('ignoreing ' + currentTheme + ' ' + rowData.theme);
-        } 
+        } else {
           tbody.appendChild(row);
           noOfShows++;
         }
@@ -420,7 +396,6 @@ label {
             <p>Presentation slideshows:</p>`;
 
       document.getElementById('table-container').innerHTML = "";
-      
       async function handleSelectionChange(event) {
         const selectedValue = event.target.value;
          const slideshowTheme = document.getElementById('slideshowTheme');
@@ -428,17 +403,23 @@ label {
         // Exit early if the default/empty option is chosen
         if (!selectedValue) return;
         try {
-          await editPresenter(presenter);
-          const response = await createDynamicTable('presentation', myHeaders, myHeadersTitles, 'table-container', 'all');
+          await editPresenter(presenter).then(
+            await createDynamicTable('presentation', myHeaders, myHeadersTitles, 'table-container', 'all'));
+         
+
+       
         } catch (error) {
           console.error('Fetch failed:', error);
-         // output.textContent = 'Failed to load data. Please try again.';
+          output.textContent = 'Failed to load data. Please try again.';
         }
       }
+
+
       console.log('user = ' + currentUser + ' currentPresenter = ' + currentPresenter);
      
       slideshowTheme.addEventListener('change', handleSelectionChange);
       
+      //const response = //await createDynamicTable('presenter', myHeaders, myHeadersTitles, 'table-container', 'all');
     }
 
 

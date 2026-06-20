@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Host presentation</title>
+</head>
+<body>
+// editPresenter 
+<div id="contentArea">
+<script>
+async function editPresenter(folder) {
+  currentFolder = folder;
+    const content = document.getElementById("contentArea");
+
+  content.innerHTML = `<h2>Editing folder ${folder}</h2>
+            <h2>Presenter Management</h2>
+
+<form id="presenterForm">
+    <table>
+    <tr>
+        <td>
+            <label>Operation:</label>
+        </td>
+        <td>
+         <select id="operation" name="operation">
+            <option value="insert">Insert New Transaction</option>
+            <option value="update">Update Transaction</option>
+            <option value="delete">Delete Transaction</option>
+        </select>
+     <!-- Hidden field that id the presenter  -->
+            <input type="hidden" id="form-recordId" name="form-recordId" >
+            <input type="hidden" id="form-presenterEmail" name="form-presenterEmail" >
+            <input type="hidden" id="form-presenterFolder" name="form-presenterEmail" >
+        </td>
+    </tr>
+    <tr>
+        <td>
+    <!-- For Insert only -->
+            <label for="form-presenterName">Name:</label>
+        </td>
+        <td>
+            <input type="text" id="form-presenterName" name="form-presenterName" required>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label for="form-presenterPhone">Phone:</label>
+        </td>
+        <td>
+            <input type="text" id="form-presenterPhone" name="form-presenterPhone" required>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label for="form-presenterAddressLine1">Address:</label>
+        </td>
+        <td>
+            <input type="text" id="form-presenterAddressLine1" name="form-presenterAddressLine1">
+        </td>
+    </tr>
+    <tr>
+        <td>     
+            <label for="form-presenterAddressLine2">line2:</label>
+        </td>
+        <td>
+            <input type="text" id="form-presenterAddressLine2" name="form-presenterAddressLine2">
+        </td>
+    </tr>
+    <tr>
+        <td>     
+            <label for="cityStateZip">City:</label>
+        </td>
+        <td>
+            <input type="text" size="10" id="form-presenterCity" name="form-presenterCity" style="display: inline;">&nbsp
+            State: &nbsp: <input type="text" size="2" id="form-presenterState" name="form-presenterState" style="display: inline;">&nbsp
+            Zip: &nbsp: <input type="text" size="7" id="form-presenterZip" name="form-presenterZip"style="display: inline;">&nbsp
+       </td>
+    </tr>
+    <tr>
+        <td>     
+            <label for="form-presenterAbout">Abut:</label>
+        </td>
+        <td> 
+            <textarea id="form-presenterAbout" name="form-presenterAbout"></textarea>
+       </td>
+    </tr>
+    <tr>
+        <td>     
+            <label for="form-presenterWebsite">Website:</label>
+        </td>
+        <td>
+            <input type="text" id="form-presenterAbout" name="form-presenterWebsite" >
+         </td>
+    </tr>
+    <tr>
+        <td>     
+            <label for="form-presenterDateAdded">Website:</label>
+        </td>
+        <td>
+            <input type="datetime" readonly id="form-presenterDateAdded" name="form-presenterDateAdded" >
+       </td>
+       
+    </tr>
+    <tr>
+        <td>
+            <button type="submit" id="presenterUpdateBtn">Update</button>
+        </td>
+        <td>
+            <button type="submit" id="presenterDeletetBtn">Delete</button>
+        </td>
+    </tr>
+    </table>
+
+</form>
+          `;
+window.addEventListener('load', (event) => {
+  editPresenter('xxxxx')
+});
+}
+</script>
+</body>
+</html>

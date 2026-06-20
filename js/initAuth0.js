@@ -47,7 +47,7 @@ async function updateAuthState() {
       if (userType == "creator") {
           showUserDashboard(currentUserArray.email);
       } else if (userType == "presenter") {
-          showPresenterSlideshows(currentUserArray.email);
+          showPresenterSlideshows(currentUserArray.email.trim());
       } 
   } else {      
       currentUserArray = null;

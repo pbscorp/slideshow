@@ -4,22 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Transaction CRUD Example</title>
-    <style>
-        body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; }
-        form { display: grid; gap: 15px; }
-        label { font-weight: bold; }
-        input, select, button { padding: 10px; font-size: 16px; }
-        button { background: #007bff; color: white; border: none; cursor: pointer; }
-        button:hover { background: #0056b3; }
-        .delete-btn { background: #dc3545; }
-        .delete-btn:hover { background: #c82333; }
-        #result { margin-top: 20px; padding: 15px; border: 1px solid #ddd; }
-    </style>
 </head>
 <body>
 <!-- === TRANSACTION CRUD FORM === -->
- <h2>Transaction Management</h2>
+ <h2>Presenter Management</h2>
 
+<form id="presenterForm">
+    <table>
+    <tr><td>
+        <label>Operation:</label></td><td>
+        <select id="operation" name="operation" required>
+            <option value="insert">Insert New Transaction</option>
+            <option value="update">Update Transaction</option>
+            <option value="delete">Delete Transaction</option>
+        </select>
+     <!-- Hidden field that id the presenter  -->
+        <input type="hidden" id="form-recordId" name="form-recordId" >
+        <input type="hidden" id="form-presenterEmail" name="form-presenterEmail" >
+        <input type="hidden" id="form-presenterFolder" name="form-presenterEmail" >
+    </td></tr>
+    <tr><td>
+    <!-- For Insert only -->
+    
+            <label for="form-presenterName">Name:</label> </td><td>
+            <input type="text" id="form-presenterName" name="form-presenterName" required>
+    </td></tr>
+    <tr><td>
+            <label for="form-presenterPhone">Phone:</label></td><td>
+            <input type="text" id="form-presenterPhone" name="form-presenterPhone" required>
+    </td></tr>
+    <tr></td>
+            <label for="form-presenterAddressLine1">Address:</label> </td><td>
+            <input type="text" id="form-presenterAddressLine1" name="form-presenterAddressLine1">
+   </td></tr>
+    <tr></td>     
+            <label for="form-presenterAddressLine2">line2:</label>
+            <input type="text" id="form-presenterAddressLine2" name="form-presenterAddressLine2">
+            </td></tr>
+    <tr></td>     
+            <label for="cityStateZip">City / State / zip:</label>
+            <input type="text" size="40" id="form-presenterCity" name="form-presenterCity" style="display: inline;">&nbsp
+            State: &nbsp: <input type="text" size="2" id="form-presenterState" name="form-presenterState" style="display: inline;">&nbsp
+            Zip: &nbsp: <input type="text" size="7" id="form-presenterZip" name="form-presenterZip"style="display: inline;">&nbsp
+       </td></tr>
+    <tr></td>     
+            <label for="form-presenterAbout">Abut:</label>
+            <input type="text" id="form-presenterAbout" name="form-presenterAbout">
+       </td></tr>
+    <tr></td>     
+            <label for="form-presenterWebsite">Website:</label>
+            <input type="text" id="form-presenterAbout" name="form-presenterWebsite" >
+      </td></tr>
+    <tr></td>     
+            <label for="form-presenterDateAdded">Website:</label>
+            <input type="datetime" readonly id="form-presenterDateAdded" name="form-presenterDateAdded" >
+       </td></tr>
+    <button type="submit" id="presenterSubmitBtn">Submit</button>
+</form>
+    </table>
+ <!--       
+
+ <h2>Transaction Management</h2>
 <form id="transactionForm">
     <div>
         <label>Operation:</label>
@@ -30,7 +75,7 @@
         </select>
     </div>
 
-    <!-- Dropdown for existing transactions (shown for Update/Delete) -->
+    Dropdown for existing transactions (shown for Update/Delete)
     <div id="selectContainer" style="display: none;">
         <label for="transSelect">Select Transaction:</label>
         <select id="transSelect" name="transSelect">
@@ -38,10 +83,10 @@
         </select>
     </div>
 
-    <!-- Hidden field that holds the real database ID -->
+    <!-- Hidden field that holds the real database ID
     <input type="hidden" id="recordId" name="recordId" >
 
-    <!-- For Insert only -->
+    <!-- For Insert only
     <div id="dataFields">
         <div>
             <label for="username">Username:</label>
@@ -68,10 +113,7 @@
     </div>
 
     <button type="submit" id="submitBtn">Submit</button>
-</form>
-
-<div id="result"></div>
-
+</fo -->
 <div id="result"></div>
 
 <style>
