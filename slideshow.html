@@ -83,6 +83,14 @@ label {
       border-collapse: collapse;
       width: 100%;
     }
+    tbody {
+      font-family: Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    tr {
+      width: 100%;
+    }
 
     td,
     th {
@@ -250,15 +258,15 @@ label {
 <script>
     async function createDynamicTable(type, headers, headersTitles, containerId, user) {
       myUserType = type;
-      /*
-    alert('createDynamicTable entered');
-    alert('type=' + type);
-    alert('myUserType=' + myUserType);
+          /*
+        alert('createDynamicTable entered');
+        alert('type=' + type);
+        alert('myUserType=' + myUserType);
 
-    alert('recordId=' + document.getElementById('form-recordId'));
-    alert('email=' + document.getElementById('form-presenterEmail'));
-    alert('folder=' + document.getElementById('form-presenterFolder'));
-      */
+        alert('recordId=' + document.getElementById('form-recordId'));
+        alert('email=' + document.getElementById('form-presenterEmail'));
+        alert('folder=' + document.getElementById('form-presenterFolder'));
+          */
 
       console.log('type = ' + myUserType);
       console.log(' type = ' + myUserType  + ' currentUser = ' + currentUser + ' presenter = ' + currentPresenter );
@@ -280,7 +288,7 @@ label {
       // Clear any existing content in the container
       container.innerHTML = "";
       const table = document.createElement('table');
-
+      table.id = "slideshowTable";
       const thead = document.createElement('thead');
       const headerRow = document.createElement('tr');
 
@@ -306,7 +314,7 @@ label {
       table.appendChild(thead);
       const tbody = document.createElement('tbody');
       
-      if (!slidesExist || 1 ==1) {
+      if (!slidesExist || 1 == 1) {
           slidesExist = await buildSlideshowArray();
           console.log(slidesExist);
           console.log(AllUsersArry.length);
@@ -330,41 +338,70 @@ label {
           };
           row.appendChild(td);
         });
-        console.log(' td ' + td);
-        console.log(' user ' + user);
+        console.log(' td = ' + td);
+        console.log(' user = ' + user);
         if (type ==  "creator") {
           var td = document.createElement('td');
-          td.innerHTML = `<p><button onclick="editSlideshow('${rowData.folder}')">Edit</button></p>`;
+          td.innerHTML = `<p><button onclick="editSlideshow('${rowData.folder}')" >
+          Edit</button></p>`;
           row.appendChild(td);
           td = document.createElement('td');
-          td.innerHTML = `<p><button onclick="deleteFolder('${rowData.folder}')">delete</button></p>`;
+          td.innerHTML = `<p><button onclick="deleteFolder('${rowData.folder}')">
+          delete</button></p>`;
           row.appendChild(td);
           console.log(' window.myUserIndex is ' + window.myUserIndex);
         } 
         if (type ==  "presentation") {
           var td = document.createElement('td');
-          td.innerHTML = `<p><button onclick="editSlideshow('${rowData.folder}')">Edit show</button></p>`;
+          td.innerHTML = `<p><button onclick="editSlideshow('${rowData.folder}')">
+          Edit show</button></p>`;
           row.appendChild(td);
           console.log(' window.myUserIndex is ' + window.myUserIndex);
         }
-        if (((type ==  "creator") && (user != rowData.usersEmail))
-           || ((type !=  "creator") && (!rowData.dateActive.trim() ))) {
-          console.log('ignoreing ' + user + ' ' + rowData.usersEmail);
-        } else { if (((type ==  "presentation") && (currentTheme != rowData.theme))
-           || ((type !=  "creator") && (!rowData.dateActive.trim() ))) {
-          console.log('ignoreing ' + currentTheme + ' ' + rowData.theme);
-        } 
+        if ((type == "creator" && user != rowData.usersEmail) ||
+          (type != "creator" && !rowData.dateActive.trim())
+      ) {
+
+          console.log('ignoring ' + user + ' ' + rowData.usersEmail);
+
+      } else if (
+          type == "presentation" &&
+          (
+              currentTheme != rowData.theme ||
+              !rowData.dateActive.trim()
+          )
+      ) {
+
+          console.log('ignoring theme ' + currentTheme + ' ' + rowData.theme);
+
+      } else {
           tbody.appendChild(row);
           noOfShows++;
         }
         rowIndex++;
       });
+/*
+        if (type ==  "creator" && user != rowData.usersEmail
+           || type !=  "creator" && !rowData.dateActive.trim() ) {
+          console.log('ignoreing ' + user + ' ' + rowData.usersEmail);
+        } else  {if (type ==  "presentation" && currentTheme != rowData.theme
+           || type ==  "presentation" && !rowData.dateActive.trim() ) {
+          console.log('ignoreing theme ' + currentTheme + ' ' + rowData.theme);
+        }  else {
+          tbody.appendChild(row);
+          noOfShows++;
+          rowIndex++;
+        }
+      };
+                */
+
       table.appendChild(tbody);
       // Append the table to the container
       container.appendChild(table);
-      makeSortable();
-      return true;
-    }
+      makeSortable('slideshowTable');
+      return true; 
+    };
+   
   </script>
 
   <script src="js/voice.js"></script>
@@ -384,8 +421,8 @@ label {
       const content = document.getElementById("contentArea");
       currentPresenter = "";
       content.innerHTML = "<h2>🌐 Published Slideshows</h2>";
-      const myHeaders = ['title', 'folder', 'usersEmail'];
-      const myHeadersTitles = ['Slide Show', 'Name', 'by'];
+      const myHeaders = ['title', 'folder', 'theme', 'usersEmail'];
+      const myHeadersTitles = ['Slide Show', 'Name', 'theme', 'by'];
       await createDynamicTable('public', myHeaders, myHeadersTitles, 'table-container', 'all');
     };
 
@@ -398,8 +435,8 @@ label {
           content.innerHTML += `
             <p><button id='newBtn'>➕ Add Another Slideshow</button></p>`;
       document.getElementById("newBtn").onclick = () => showProjectForm(user); 
-      const myHeaders = ['title', 'folder', 'usersEmail'];
-      const myHeadersTitles = ['Slide Show', 'folder', 'email'];
+      const myHeaders = ['title', 'folder', 'theme', 'usersEmail'];
+      const myHeadersTitles = ['Slide Show', 'folder', 'theme', 'email'];
       const response = await createDynamicTable('creator', myHeaders, myHeadersTitles, 'table-container', currentUser);
     }
     
@@ -408,8 +445,8 @@ label {
       //alert("hey  10");
       currentPresenter = presenter;
       currentUser = "";
-      const myHeaders = ['title', 'folder', 'usersEmail'];
-      const myHeadersTitles = ['Slide Show', 'folder', 'email'];
+      const myHeaders = ['title', 'folder', 'theme', 'usersEmail'];
+      const myHeadersTitles = ['Slide Show', 'folder', 'theme', 'email'];
       const content = document.getElementById("contentArea");
           content.innerHTML = `<h2>👋🏻 Welcome presenter ${presenter}</h2>
           <label for="configTheme">theme:</label>
@@ -439,7 +476,7 @@ label {
      
       slideshowTheme.addEventListener('change', handleSelectionChange);
       
-    }
+    };
 
 
   </script>

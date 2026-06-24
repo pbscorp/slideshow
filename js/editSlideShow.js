@@ -15,31 +15,51 @@
   // 4. Combine them
   return `${slug}-${uniqueId}`;
 }
-
-    async function makeSortable() { 
-      document.querySelectorAll('th').forEach((header, index) => {
-        header.addEventListener('click', () => {
-          const table = header.closest('table');
-          const tbody = table.querySelector('tbody');
-          const rows = Array.from(tbody.querySelectorAll('tr'));
-          const isAscending = header.dataset.order === 'asc';
-          // Sort rows based on the text in the clicked column
-          const sortedRows = rows.sort((a, b) => {
-            const aText = a.cells[index].textContent.trim();
-            const bText = b.cells[index].textContent.trim();
-            // Natural sort (handles both strings and numbers)
-            return aText.localeCompare(bText, undefined, { numeric: true }) * (isAscending ? -1 : 1);
-          });
-
-          // Toggle sort order for next click
-          header.dataset.order = isAscending ? 'desc' : 'asc';
-
-          // Update table with sorted rows
-          tbody.append(...sortedRows);
-        });
-      });
-    }
+function toggleVisibility(myContent) {
+  const element = document.getElementById(myContent);
   
+  if (element.style.display === "none") {
+    element.style.display = "block";
+  } else {
+    element.style.display = "none";
+  }
+}
+async function makeSortable(myTable) {
+    const table = document.getElementById(myTable);
+    const header = table.querySelector('thead');
+
+    header.dataset.order = 'asc';
+
+    header.addEventListener('click', (event) => {
+
+        const th = event.target.closest('th');
+        if (!th) return;
+
+        const columnIndex = th.cellIndex;
+
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+
+        const isAscending = header.dataset.order === 'asc';
+
+        rows.sort((a, b) => {
+
+            const aText = a.cells[columnIndex].textContent.trim();
+            const bText = b.cells[columnIndex].textContent.trim();
+
+            return aText.localeCompare(
+                bText,
+                undefined,
+                { numeric: true, sensitivity: 'base' }
+            ) * (isAscending ? 1 : -1);
+
+        });
+
+        header.dataset.order = isAscending ? 'desc' : 'asc';
+
+        tbody.append(...rows);
+    });
+}
   function openPopup(folder) {
     //alert ('textFromPopup ' + textFromPopup); 
     const popupWindow = window.open(`recordAudio.html?folder=${folder}`, 'Recorder', 'width=700, height=400');
