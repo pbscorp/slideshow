@@ -236,6 +236,20 @@ label {
   color: green;
 }
 </style>
+<style>
+ #result { margin-top: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+
+.divButton {
+  background-color: blue;
+  color: white;
+  padding: 4px;
+  font-weight: bold;
+  padding: 10px;
+  cursor: pointer;
+  text-align: center;
+}
+ </style>
+
 </head>
 
 <body>
@@ -271,7 +285,7 @@ label {
       console.log('type = ' + myUserType);
       console.log(' type = ' + myUserType  + ' currentUser = ' + currentUser + ' presenter = ' + currentPresenter );
       const container = document.getElementById(containerId);
-      if (myUserType == "presentation") {
+      if (myUserType == "xxpresentation") {
               const formPresenterId = document.getElementById('form-recordId');
               const formPrresenterEmail = document.getElementById('form-presenterEmail');
               const formPresenterFolder = document.getElementById('form-presenterFolder');
@@ -353,7 +367,7 @@ label {
         } 
         if (type ==  "presentation") {
           var td = document.createElement('td');
-          td.innerHTML = `<p><button onclick="editSlideshow('${rowData.folder}')">
+          td.innerHTML = `<p><button onclick="editPresentation('${currentPresenter}','${rowData.folder}')" >
           Edit show</button></p>`;
           row.appendChild(td);
           console.log(' window.myUserIndex is ' + window.myUserIndex);
@@ -441,7 +455,7 @@ label {
     }
     
 
-    async function showPresenterSlideshows(presenter) {
+    async function getThemeSlideshows(presenter) {
       //alert("hey  10");
       currentPresenter = presenter;
       currentUser = "";
@@ -454,7 +468,7 @@ label {
                   <option value="">Choose a themee...</option>
                 <option value="Trivia Presentation">Trivia Presentation</option>
                 <option value="show" >show</option></select><br><br>
-            <p>Presentation slideshows:</p>`;
+            <div id = "presentationArea"></div>`;
 
       document.getElementById('table-container').innerHTML = "";
       
@@ -466,6 +480,9 @@ label {
         if (!selectedValue) return;
         try {
           await editPresenter(presenter);
+          await addSubmitPresenter();
+
+          const presentationForm = document.getElementById('presentationForm');
           const response = await createDynamicTable('presentation', myHeaders, myHeadersTitles, 'table-container', 'all');
         } catch (error) {
           console.error('Fetch failed:', error);
@@ -474,10 +491,13 @@ label {
       }
       console.log('user = ' + currentUser + ' currentPresenter = ' + currentPresenter);
      
-      slideshowTheme.addEventListener('change', handleSelectionChange);
+      slideshowTheme.addEventListener('change', await handleSelectionChange);
       
     };
 
+    async function showPresenterSlideshows(presenter) {
+       getThemeSlideshows(presenter)
+    }
 
   </script>
 
